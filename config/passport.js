@@ -8,7 +8,7 @@ import {
   validateUser,
   findOrCreateOAuthUser,
 } from "../services/authService.js";
-import User from "../models/User.js";
+import User from "../models/user.model.js";
 
 // Local (Email & Password)
 passport.use(
