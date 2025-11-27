@@ -1,0 +1,312 @@
+County,City/Town,ZIP Code,Type
+Beaver County,Beaver,84713,City
+Beaver County,Milford,84751,City
+Beaver County,Minersville,84752,Town
+Box Elder County,Bear River City,84301,City
+Box Elder County,Brigham City,84302,City
+Box Elder County,Corinne,84307,City
+Box Elder County,Deweyville,84309,Town
+Box Elder County,Elwood,84337,Town
+Box Elder County,Fielding,84311,Town
+Box Elder County,Garland,84312,City
+Box Elder County,Honeyville,84314,City
+Box Elder County,Howell,84316,Town
+Box Elder County,Mantua,84324,Town
+Box Elder County,Perry,84302,City
+Box Elder County,Plymouth,84330,Town
+Box Elder County,Portage,84331,Town
+Box Elder County,Snowville,84336,Town
+Box Elder County,Tremonton,84337,City
+Box Elder County,Willard,84340,City
+Cache County,Amalga,84335,Town
+Cache County,Clarkston,84305,Town
+Cache County,Cornish,84308,Town
+Cache County,Hyde Park,84318,City
+Cache County,Hyrum,84319,City
+Cache County,Lewiston,84320,City
+Cache County,Logan,84321,City
+Cache County,Logan,84322,City
+Cache County,Logan,84323,City
+Cache County,Logan,84341,City
+Cache County,Mendon,84325,Town
+Cache County,Millville,84326,City
+Cache County,Newton,84327,Town
+Cache County,Nibley,84321,City
+Cache County,North Logan,84341,City
+Cache County,Paradise,84328,Town
+Cache County,Providence,84332,City
+Cache County,Richmond,84333,City
+Cache County,River Heights,84321,City
+Cache County,Smithfield,84335,City
+Cache County,Trenton,84338,Town
+Cache County,Wellsville,84339,City
+Carbon County,East Carbon,84520,City
+Carbon County,Helper,84526,City
+Carbon County,Price,84501,City
+Carbon County,Scofield,84526,Town
+Carbon County,Wellington,84542,City
+Daggett County,Dutch John,84023,Town
+Daggett County,Manila,84046,Town
+Davis County,Bountiful,84010,City
+Davis County,Bountiful,84011,City
+Davis County,Centerville,84014,City
+Davis County,Clearfield,84015,City
+Davis County,Clearfield,84016,City
+Davis County,Clinton,84015,City
+Davis County,Farmington,84025,City
+Davis County,Fruit Heights,84037,City
+Davis County,Kaysville,84037,City
+Davis County,Layton,84040,City
+Davis County,Layton,84041,City
+Davis County,North Salt Lake,84054,City
+Davis County,South Weber,84405,City
+Davis County,Sunset,84015,City
+Davis County,Syracuse,84075,City
+Davis County,West Bountiful,84087,City
+Davis County,West Point,84015,City
+Davis County,Woods Cross,84010,City
+Duchesne County,Altamont,84001,Town
+Duchesne County,Duchesne,84021,City
+Duchesne County,Myton,84052,City
+Duchesne County,Roosevelt,84066,City
+Duchesne County,Tabiona,84072,Town
+Emery County,Castle Dale,84513,City
+Emery County,Clawson,84516,Town
+Emery County,Cleveland,84518,Town
+Emery County,Elmo,84521,Town
+Emery County,Emery,84522,Town
+Emery County,Ferron,84523,City
+Emery County,Green River,84525,City
+Emery County,Huntington,84528,City
+Emery County,Orangeville,84537,City
+Garfield County,Antimony,84712,Town
+Garfield County,Boulder,84716,Town
+Garfield County,Bryce Canyon City,84764,Town
+Garfield County,Cannonville,84718,Town
+Garfield County,Escalante,84726,City
+Garfield County,Hatch,84735,Town
+Garfield County,Henrieville,84736,Town
+Garfield County,Panguitch,84759,City
+Garfield County,Tropic,84776,Town
+Grand County,Castle Valley,84532,Town
+Grand County,Moab,84532,City
+Iron County,Brian Head,84719,Town
+Iron County,Cedar City,84720,City
+Iron County,Cedar City,84721,City
+Iron County,Enoch,84721,City
+Iron County,Kanarraville,84742,Town
+Iron County,Paragonah,84760,Town
+Iron County,Parowan,84761,City
+Juab County,Eureka,84628,City
+Juab County,Levan,84639,Town
+Juab County,Mona,84645,City
+Juab County,Nephi,84648,City
+Kane County,Alton,84710,Town
+Kane County,Big Water,84741,Town
+Kane County,Glendale,84729,Town
+Kane County,Kanab,84741,City
+Kane County,Orderville,84758,Town
+Millard County,Delta,84624,City
+Millard County,Fillmore,84631,City
+Millard County,Hinckley,84635,Town
+Millard County,Holden,84636,Town
+Millard County,Kanosh,84637,Town
+Millard County,Leamington,84638,Town
+Millard County,Lynndyl,84640,Town
+Millard County,Meadow,84644,Town
+Millard County,Oak City,84649,Town
+Millard County,Scipio,84656,Town
+Morgan County,Morgan,84050,City
+Piute County,Circleville,84723,Town
+Piute County,Junction,84740,Town
+Piute County,Kingston,84743,Town
+Piute County,Marysvale,84750,Town
+Rich County,Garden City,84028,Town
+Rich County,Laketown,84038,Town
+Rich County,Randolph,84064,Town
+Rich County,Woodruff,84086,Town
+Salt Lake County,Alta,84092,Town
+Salt Lake County,Bluffdale,84065,City
+Salt Lake County,Copperton,84006,City
+Salt Lake County,Cottonwood Heights,84047,City
+Salt Lake County,Cottonwood Heights,84093,City
+Salt Lake County,Cottonwood Heights,84121,City
+Salt Lake County,Draper,84020,City
+Salt Lake County,Draper,84043,City
+Salt Lake County,Emigration Canyon,84108,City
+Salt Lake County,Herriman,84065,City
+Salt Lake County,Herriman,84096,City
+Salt Lake County,Holladay,84117,City
+Salt Lake County,Holladay,84121,City
+Salt Lake County,Kearns,84118,City
+Salt Lake County,Magna,84044,City
+Salt Lake County,Midvale,84047,City
+Salt Lake County,Millcreek,84106,City
+Salt Lake County,Millcreek,84107,City
+Salt Lake County,Millcreek,84109,City
+Salt Lake County,Murray,84107,City
+Salt Lake County,Murray,84123,City
+Salt Lake County,Riverton,84065,City
+Salt Lake County,Salt Lake City,84101,City
+Salt Lake County,Salt Lake City,84102,City
+Salt Lake County,Salt Lake City,84103,City
+Salt Lake County,Salt Lake City,84104,City
+Salt Lake County,Salt Lake City,84105,City
+Salt Lake County,Salt Lake City,84106,City
+Salt Lake County,Salt Lake City,84108,City
+Salt Lake County,Salt Lake City,84109,City
+Salt Lake County,Salt Lake City,84110,City
+Salt Lake County,Salt Lake City,84111,City
+Salt Lake County,Salt Lake City,84112,City
+Salt Lake County,Salt Lake City,84113,City
+Salt Lake County,Salt Lake City,84115,City
+Salt Lake County,Salt Lake City,84116,City
+Salt Lake County,Salt Lake City,84117,City
+Salt Lake County,Salt Lake City,84118,City
+Salt Lake County,Salt Lake City,84119,City
+Salt Lake County,Salt Lake City,84120,City
+Salt Lake County,Sandy,84070,City
+Salt Lake County,Sandy,84092,City
+Salt Lake County,Sandy,84093,City
+Salt Lake County,Sandy,84094,City
+Salt Lake County,South Jordan,84009,City
+Salt Lake County,South Jordan,84095,City
+Salt Lake County,South Salt Lake,84115,City
+Salt Lake County,Taylorsville,84118,City
+Salt Lake County,Taylorsville,84123,City
+Salt Lake County,West Jordan,84081,City
+Salt Lake County,West Jordan,84084,City
+Salt Lake County,West Valley City,84119,City
+Salt Lake County,West Valley City,84120,City
+Salt Lake County,White City,84047,City
+San Juan County,Blanding,84511,City
+San Juan County,Bluff,84512,City
+San Juan County,Monticello,84535,City
+Sanpete County,Centerfield,84622,Town
+Sanpete County,Chester,84623,Town
+Sanpete County,Ephraim,84627,City
+Sanpete County,Fairview,84629,City
+Sanpete County,Fayette,84630,Town
+Sanpete County,Fountain Green,84632,City
+Sanpete County,Gunnison,84634,City
+Sanpete County,Manti,84642,City
+Sanpete County,Mayfield,84643,Town
+Sanpete County,Moroni,84646,City
+Sanpete County,Mount Pleasant,84647,City
+Sanpete County,Spring City,84662,City
+Sanpete County,Sterling,84665,Town
+Sanpete County,Wales,84667,Town
+Sevier County,Annabella,84711,Town
+Sevier County,Aurora,84620,Town
+Sevier County,Central Valley,84754,Town
+Sevier County,Elsinore,84724,Town
+Sevier County,Glenwood,84730,Town
+Sevier County,Joseph,84739,Town
+Sevier County,Koosharem,84744,Town
+Sevier County,Monroe,84754,City
+Sevier County,Redmond,84652,Town
+Sevier County,Richfield,84701,City
+Sevier County,Salina,84654,City
+Sevier County,Sevier,84766,Town
+Summit County,Coalville,84017,City
+Summit County,Francis,84036,Town
+Summit County,Henefer,84033,Town
+Summit County,Kamas,84036,City
+Summit County,Oakley,84055,Town
+Summit County,Park City,84060,City
+Summit County,Park City,84068,City
+Summit County,Park City,84098,City
+Tooele County,Grantsville,84029,City
+Tooele County,Ophir,84071,Town
+Tooele County,Rush Valley,84069,Town
+Tooele County,Stockton,84071,Town
+Tooele County,Tooele,84074,City
+Tooele County,Vernon,84080,Town
+Tooele County,Wendover,84083,City
+Uintah County,Ballard,84066,Town
+Uintah County,Naples,84078,Town
+Uintah County,Vernal,84078,City
+Utah County,Alpine,84004,City
+Utah County,American Fork,84003,City
+Utah County,Benjamin,84660,Town
+Utah County,Cedar Fort,84013,Town
+Utah County,Cedar Hills,84062,City
+Utah County,Eagle Mountain,84005,City
+Utah County,Elk Ridge,84651,City
+Utah County,Fairfield,84013,Town
+Utah County,Genola,84655,Town
+Utah County,Goshen,84633,Town
+Utah County,Highland,84003,City
+Utah County,Lehi,84043,City
+Utah County,Lehi,84045,City
+Utah County,Lehi,84048,City
+Utah County,Lindon,84042,City
+Utah County,Mapleton,84664,City
+Utah County,Orem,84057,City
+Utah County,Orem,84058,City
+Utah County,Orem,84097,City
+Utah County,Payson,84651,City
+Utah County,Pleasant Grove,84062,City
+Utah County,Provo,84601,City
+Utah County,Provo,84602,City
+Utah County,Provo,84603,City
+Utah County,Provo,84604,City
+Utah County,Provo,84605,City
+Utah County,Provo,84606,City
+Utah County,Salem,84653,City
+Utah County,Santaquin,84655,City
+Utah County,Saratoga Springs,84043,City
+Utah County,Spanish Fork,84660,City
+Utah County,Springville,84663,City
+Utah County,Vineyard,84059,City
+Utah County,Woodland Hills,84653,City
+Wasatch County,Charleston,84032,Town
+Wasatch County,Daniel,84032,Town
+Wasatch County,Heber City,84032,City
+Wasatch County,Hideout,84036,Town
+Wasatch County,Independence,84057,Town
+Wasatch County,Interlaken,84032,Town
+Wasatch County,Midway,84049,City
+Wasatch County,Wallsburg,84082,Town
+Washington County,Apple Valley,84737,Town
+Washington County,Enterprise,84725,City
+Washington County,Hildale,84784,City
+Washington County,Hurricane,84737,City
+Washington County,Ivins,84738,City
+Washington County,La Verkin,84745,City
+Washington County,Leeds,84746,Town
+Washington County,New Harmony,84757,Town
+Washington County,Rockville,84763,Town
+Washington County,Santa Clara,84765,City
+Washington County,St. George,84770,City
+Washington County,St. George,84790,City
+Washington County,Toquerville,84774,Town
+Washington County,Virgin,84779,Town
+Washington County,Washington,84780,City
+Wayne County,Bicknell,84715,Town
+Wayne County,Loa,84747,Town
+Wayne County,Lyman,84749,Town
+Wayne County,Torrey,84775,Town
+Weber County,Farr West,84404,City
+Weber County,Harrisville,84404,City
+Weber County,Hooper,84315,City
+Weber County,Huntsville,84317,Town
+Weber County,Marriott-Slaterville,84404,City
+Weber County,North Ogden,84414,City
+Weber County,Ogden,84201,City
+Weber County,Ogden,84244,City
+Weber County,Ogden,84401,City
+Weber County,Ogden,84402,City
+Weber County,Ogden,84403,City
+Weber County,Ogden,84404,City
+Weber County,Ogden,84405,City
+Weber County,Ogden,84407,City
+Weber County,Ogden,84408,City
+Weber County,Pleasant View,84414,City
+Weber County,Plain City,84404,City
+Weber County,Riverdale,84405,City
+Weber County,Roy,84067,City
+Weber County,South Ogden,84403,City
+Weber County,Uintah,84405,Town
+Weber County,Washington Terrace,84405,City
+Weber County,West Haven,84401,City

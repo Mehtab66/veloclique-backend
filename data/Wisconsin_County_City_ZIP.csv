@@ -1,0 +1,664 @@
+County,City,ZIP
+Adams,Adams,53910
+Adams,Wisconsin Dells,53965
+Ashland,Ashland,54806
+Ashland,Butternut,54514
+Ashland,Mellen,54546
+Barron,Barron,54812
+Barron,Cameron,54822
+Barron,Chetek,54728
+Barron,Cumberland,54829
+Barron,Rice Lake,54868
+Barron,Turtle Lake,54889
+Bayfield,Ashland,54806
+Bayfield,Bayfield,54814
+Bayfield,Washburn,54891
+Brown,De Pere,54115
+Brown,Green Bay,54301
+Brown,Green Bay,54302
+Brown,Green Bay,54303
+Brown,Green Bay,54304
+Brown,Green Bay,54311
+Brown,Green Bay,54313
+Buffalo,Alma,54610
+Buffalo,Buffalo City,54622
+Buffalo,Cochrane,54622
+Buffalo,Fountain City,54629
+Buffalo,Mondovi,54755
+Burnett,Grantsburg,54840
+Burnett,Siren,54872
+Burnett,Webster,54893
+Calumet,Brillion,54110
+Calumet,Chilton,53014
+Calumet,Hilbert,54129
+Calumet,Kaukauna,54130
+Calumet,Kiel,53042
+Calumet,Menasha,54952
+Calumet,New Holstein,53061
+Calumet,Potter,54160
+Calumet,Sherwood,54169
+Calumet,Stockbridge,53088
+Chippewa,Bloomer,54724
+Chippewa,Cadott,54727
+Chippewa,Chippewa Falls,54729
+Chippewa,Cornell,54732
+Chippewa,Eau Claire,54701
+Chippewa,Stanley,54768
+Clark,Abbotsford,54405
+Clark,Colby,54421
+Clark,Curtiss,54422
+Clark,Dorchester,54425
+Clark,Greenwood,54437
+Clark,Loyal,54446
+Clark,Neillsville,54456
+Clark,Owen,54460
+Clark,Stanley,54768
+Clark,Thorp,54771
+Clark,Withee,54498
+Columbia,Columbus,53925
+Columbia,Lodi,53555
+Columbia,Pardeeville,53954
+Columbia,Portage,53901
+Columbia,Poynette,53955
+Columbia,Rio,53960
+Columbia,Wisconsin Dells,53965
+Columbia,Wyocena,53969
+Crawford,De Soto,54624
+Crawford,Eastman,54626
+Crawford,Ferryville,54628
+Crawford,Gays Mills,54631
+Crawford,Lynxville,54640
+Crawford,Mount Sterling,54645
+Crawford,Prairie du Chien,53821
+Crawford,Soldiers Gro
+
+ve,54655
+Crawford,Steuben,54657
+Crawford,Wauzeka,53826
+Dane,Belleville,53508
+Dane,Cross Plains,53528
+Dane,Dane,53529
+Dane,DeForest,53532
+Dane,Deerfield,53531
+Dane,Edgerton,53534
+Dane,Fitchburg,53711
+Dane,Madison,53701
+Dane,Madison,53703
+Dane,Madison,53704
+Dane,Madison,53705
+Dane,Madison,53706
+Dane,Madison,53711
+Dane,Madison,53713
+Dane,Madison,53714
+Dane,Madison,53715
+Dane,Madison,53716
+Dane,Madison,53717
+Dane,Madison,53718
+Dane,Madison,53719
+Dane,Marshall,53559
+Dane,McFarland,53558
+Dane,Middleton,53562
+Dane,Monona,53716
+Dane,Mount Horeb,53572
+Dane,Oregon,53575
+Dane,Stoughton,53589
+Dane,Sun Prairie,53590
+Dane,Verona,53593
+Dane,Waunakee,53597
+Dodge,Beaver Dam,53916
+Dodge,Columbus,53925
+Dodge,Dodgeville,53533
+Dodge,Fox Lake,53933
+Dodge,Hartford,53027
+Dodge,Horicon,53032
+Dodge,Hustisford,53034
+Dodge,Iron Ridge,53035
+Dodge,Juneau,53039
+Dodge,Lomira,53048
+Dodge,Mayville,53050
+Dodge,Randolph,53956
+Dodge,Reeseville,53579
+Dodge,Theresa,53091
+Dodge,Watertown,53094
+Dodge,Watertown,53098
+Dodge,Waupun,53963
+Door,Sturgeon Bay,54235
+Douglas,Lake Nebagamon,54849
+Douglas,Oliver,54880
+Douglas,Poplar,54864
+Douglas,Solon Springs,54873
+Douglas,South Range,54874
+Douglas,Superior,54880
+Dunn,Boyceville,54725
+Dunn,Colfax,54730
+Dunn,Downing,54734
+Dunn,Elk Mound,54739
+Dunn,Knapp,54749
+Dunn,Menomonie,54751
+Dunn,Ridgeland,54763
+Eau Claire,Altoona,54720
+Eau Claire,Augusta,54722
+Eau Claire,Eau Claire,54701
+Eau Claire,Eau Claire,54702
+Eau Claire,Eau Claire,54703
+Eau Claire,Fairchild,54741
+Eau Claire,Fall Creek,54742
+Florence,Florence,54121
+Fond du Lac,Brandon,53919
+Fond du Lac,Campbellsport,53010
+Fond du Lac,Fond du Lac,54935
+Fond du Lac,Fond du Lac,54937
+Fond du Lac,Kewaskum,53040
+Fond du Lac,Mount Calvary,53057
+Fond du Lac,North Fond du Lac,54935
+Fond du Lac,Oakfield,54065
+Fond du Lac,Ripon,54971
+Fond du Lac,Rosendale,54974
+Fond du Lac,Saint Cloud,53079
+Fond du Lac,Waupun,53963
+Forest,Crandon,54520
+Grant,Bagley,53801
+Grant,Bloomington,53804
+Grant,Boscobel,53805
+Grant,Cassville,53806
+Grant,Cuba City,53807
+Grant,Dickeyville,53808
+Grant,Fennimore,53809
+Grant,Lancaster,53813
+Grant,Montfort,53569
+Grant,Mount Hope,53816
+Grant,Muscoda,53573
+Grant,Patch Grove,53817
+Grant,Platteville,53818
+Grant,Potosi,53820
+Grant,Tennyson,53897
+Grant,Woodman,53827
+Green,Albany,53502
+Green,Belleville,53508
+Green,Brodhead,53520
+Green,Brooklyn,53521
+Green,Browntown,53522
+Green,Monroe,53566
+Green,Monticello,53570
+Green,New Glarus,53574
+Iowa,Arena,53503
+Iowa,Avoca,53506
+Iowa,Barneveld,53507
+Iowa,Cobb,53526
+Iowa,Dodgeville,53533
+Iowa,Highland,53543
+Iowa,Hollandale,53544
+Iowa,Linden,53553
+Iowa,Livingston,53554
+Iowa,Mineral Point,53565
+Iowa,Montfort,53569
+Iowa,Rewey,53580
+Iowa,Ridgeway,53582
+Iron,Hurley,54534
+Iron,Montreal,54550
+Jackson,Alma Center,54611
+Jackson,Black River Falls,54615
+Jackson,Hixton,54635
+Jackson,Merrillan,54754
+Jackson,Melrose,54642
+Jackson,Taylor,54659
+Jefferson,Fort Atkinson,53538
+Jefferson,Jefferson,53549
+Jefferson,Johnson Creek,53038
+Jefferson,Lake Mills,53551
+Jefferson,Palmyra,53156
+Jefferson,Waterloo,53594
+Jefferson,Watertown,53094
+Jefferson,Watertown,53098
+Jefferson,Whitewater,53190
+Juneau,Camp Douglas,54618
+Juneau,Elroy,53929
+Juneau,Hustler,54637
+Juneau,Lyndon Station,53944
+Juneau,Mauston,53948
+Juneau,Necedah,54646
+Juneau,New Lisbon,53950
+Juneau,Union Center,53962
+Juneau,Wonewoc,53968
+Juneau,Wisconsin Dells,53965
+Kenosha,Genoa City,53128
+Kenosha,Kenosha,53140
+Kenosha,Kenosha,53142
+Kenosha,Kenosha,53143
+Kenosha,Kenosha,53144
+Kenosha,Pleasant Prairie,53158
+Kenosha,Salem Lakes,53168
+Kenosha,Twin Lakes,53181
+Kewaunee,Algoma,54201
+Kewaunee,Kewaunee,54216
+Kewaunee,Luxemburg,54217
+LaCrosse,Bangor,54614
+LaCrosse,Holmen,54636
+LaCrosse,La Crosse,54601
+LaCrosse,La Crosse,54602
+LaCrosse,La Crosse,54603
+LaCrosse,Onalaska,54650
+LaCrosse,Rockland,54653
+LaCrosse,West Salem,54669
+Lafayette,Argyle,53504
+Lafayette,Belmont,53510
+Lafayette,Benton,53803
+Lafayette,Blanchardville,53516
+Lafayette,Cuba City,53807
+Lafayette,Darlington,53530
+Lafayette,Gratiot,53541
+Lafayette,Hazel Green,53811
+Lafayette,Shullsburg,53586
+Lafayette,South Wayne,53587
+Langlade,Antigo,54409
+Langlade,White Lake,54491
+Lincoln,Merrill,54452
+Lincoln,Tomahawk,54487
+Manitowoc,Cleveland,53015
+Manitowoc,Francis Creek,54214
+Manitowoc,Kiel,53042
+Manitowoc,Manitowoc,54220
+Manitowoc,Manitowoc,54221
+Manitowoc,Maribel,54227
+Manitowoc,Mishicot,54228
+Manitowoc,Reedsville,54230
+Manitowoc,Saint Nazianz,54232
+Manitowoc,Two Rivers,54241
+Manitowoc,Valders,54245
+Manitowoc,Whitelaw,54247
+Marathon,Abbotsford,54405
+Marathon,Athens,54411
+Marathon,Colby,54421
+Marathon,Dorchester,54425
+Marathon,Edgar,54426
+Marathon,Hatley,54440
+Marathon,Kronenwetter,54455
+Marathon,Marathon,54448
+Marathon,Marshfield,54449
+Marathon,Mosinee,54455
+Marathon,Rothschild,54474
+Marathon,Schofield,54476
+Marathon,Spencer,54479
+Marathon,Stratford,54484
+Marathon,Unity,54488
+Marathon,Wausau,54401
+Marathon,Wausau,54402
+Marathon,Wausau,54403
+Marinette,Coleman,54112
+Marinette,Crivitz,54114
+Marinette,Marinette,54143
+Marinette,Niagara,54151
+Marinette,Peshtigo,54157
+Marinette,Pound,54161
+Marinette,Wausaukee,54177
+Marquette,Endeavor,53930
+Marquette,Markesan,53946
+Marquette,Marquette,53947
+Marquette,Montello,53949
+Marquette,Neshkoro,54960
+Marquette,Oxford,53952
+Marquette,Westfield,53964
+Menominee,Keshena,54135
+Menominee,Neopit,54150
+Milwaukee,Cudahy,53110
+Milwaukee,Franklin,53132
+Milwaukee,Glendale,53209
+Milwaukee,Greendale,53129
+Milwaukee,Greenfield,53219
+Milwaukee,Hales Corners,53130
+Milwaukee,Milwaukee,53201
+Milwaukee,Milwaukee,53202
+Milwaukee,Milwaukee,53203
+Milwaukee,Milwaukee,53204
+Milwaukee,Milwaukee,53205
+Milwaukee,Milwaukee,53206
+Milwaukee,Milwaukee,53207
+Milwaukee,Milwaukee,53208
+Milwaukee,Milwaukee,53209
+Milwaukee,Milwaukee,53210
+Milwaukee,Milwaukee,53211
+Milwaukee,Milwaukee,53212
+Milwaukee,Milwaukee,53213
+Milwaukee,Milwaukee,53214
+Milwaukee,Milwaukee,53215
+Milwaukee,Milwaukee,53216
+Milwaukee,Milwaukee,53217
+Milwaukee,Milwaukee,53218
+Milwaukee,Milwaukee,53219
+Milwaukee,Milwaukee,53220
+Milwaukee,Milwaukee,53221
+Milwaukee,Milwaukee,53222
+Milwaukee,Milwaukee,53223
+Milwaukee,Milwaukee,53224
+Milwaukee,Milwaukee,53225
+Milwaukee,Milwaukee,53226
+Milwaukee,Milwaukee,53227
+Milwaukee,Milwaukee,53228
+Milwaukee,Oak Creek,53154
+Milwaukee,Saint Francis,53235
+Milwaukee,South Milwaukee,53172
+Milwaukee,Wauwatosa,53213
+Milwaukee,West Allis,53214
+Milwaukee,West Milwaukee,53214
+Monroe,Cashton,54619
+Monroe,Kendall,54638
+Monroe,Melvina,54642
+Monroe,Norwalk,54648
+Monroe,Oakdale,54649
+Monroe,Ontario,54651
+Monroe,Rockland,54653
+Monroe,Sparta,54656
+Monroe,Tomah,54660
+Monroe,Warrens,54666
+Monroe,Wilton,54670
+Oconto,Gillett,54124
+Oconto,Lena,54139
+Oconto,Oconto,54153
+Oconto,Oconto Falls,54154
+Oconto,Suring,54174
+Oneida,Hazelhurst,54531
+Oneida,Minocqua,54548
+Oneida,Rhinelander,54501
+Oneida,Three Lakes,54562
+Outagamie,Appleton,54911
+Outagamie,Appleton,54913
+Outagamie,Appleton,54914
+Outagamie,Appleton,54915
+Outagamie,Bear Creek,54922
+Outagamie,Black Creek,54106
+Outagamie,Combined Locks,54113
+Outagamie,Hortonville,54944
+Outagamie,Kaukauna,54130
+Outagamie,Kimberly,54136
+Outagamie,Little Chute,54140
+Outagamie,New London,54961
+Outagamie,Seymour,54165
+Outagamie,Shiocton,54170
+Ozaukee,Belgium,53004
+Ozaukee,Cedarburg,53012
+Ozaukee,Fredonia,53021
+Ozaukee,Grafton,53024
+Ozaukee,Mequon,53092
+Ozaukee,Mequon,53097
+Ozaukee,Port Washington,53074
+Ozaukee,Saukville,53080
+Pepin,Durand,54736
+Pepin,Pepin,54759
+Pepin,Stockholm,54769
+Pierce,Bay City,54723
+Pierce,Ellsworth,54011
+Pierce,Maiden Rock,54750
+Pierce,Plum City,54761
+Pierce,Prescott,54021
+Pierce,River Falls,54022
+Pierce,Spring Valley,54767
+Polk,Amery,54001
+Polk,Balsam Lake,54810
+Polk,Centuria,54824
+Polk,Clayton,54004
+Polk,Clear Lake,54005
+Polk,Dresser,54009
+Polk,Frederic,54837
+Polk,Luck,54853
+Polk,Milltown,54858
+Polk,Osceola,54020
+Polk,Saint Croix Falls,54024
+Portage,Almond,54909
+Portage,Amherst,54406
+Portage,Junction City,54443
+Portage,Nelsonville,54458
+Portage,Park Ridge,54960
+Portage,Plover,54467
+Portage,Rosholt,54473
+Portage,Stevens Point,54481
+Portage,Stevens Point,54482
+Portage,Whiting,54481
+Price,Catawba,54515
+Price,Kennan,54537
+Price,Park Falls,54552
+Price,Phillips,54555
+Price,Prentice,54556
+Racine,Burlington,53105
+Racine,Caledonia,53108
+Racine,Elmwood Park,53405
+Racine,Mount Pleasant,53403
+Racine,North Bay,53177
+Racine,Racine,53401
+Racine,Racine,53402
+Racine,Racine,53403
+Racine,Racine,53404
+Racine,Racine,53405
+Racine,Racine,53406
+Racine,Rochester,53167
+Racine,Sturtevant,53177
+Racine,Union Grove,53182
+Racine,Waterford,53185
+Racine,Wind Point,53402
+Richland,Boaz,53805
+Richland,Cazenovia,53924
+Richland,Lone Rock,53556
+Richland,Richland Center,53581
+Richland,Viola,54664
+Richland,Yuba,54634
+Rock,Avalon,53505
+Rock,Beloit,53511
+Rock,Beloit,53512
+Rock,Brodhead,53520
+Rock,Clinton,53525
+Rock,Edgerton,53534
+Rock,Evansville,53536
+Rock,Footville,53537
+Rock,Janesville,53545
+Rock,Janesville,53546
+Rock,Janesville,53547
+Rock,Janesville,53548
+Rock,Milton,53563
+Rock,Orfordville,53576
+Rusk,Bruce,54819
+Rusk,Conrath,54731
+Rusk,Glen Flora,54526
+Rusk,Hawkins,54530
+Rusk,Ingram,54526
+Rusk,Ladysmith,54848
+Rusk,Sheldon,54766
+Rusk,Tony,54563
+Rusk,Weyerhaeuser,54895
+Saint Croix,Baldwin,54002
+Saint Croix,Deer Park,54007
+Saint Croix,Glenwood City,54013
+Saint Croix,Hammond,54015
+Saint Croix,Hudson,54016
+Saint Croix,New Richmond,54017
+Saint Croix,River Falls,54022
+Saint Croix,Roberts,54023
+Saint Croix,Saint Croix Falls,54024
+Saint Croix,Somerset,54025
+Saint Croix,Star Prairie,54026
+Saint Croix,Wilson,54027
+Saint Croix,Woodville,54028
+Sauk,Baraboo,53913
+Sauk,Cazenovia,53924
+Sauk,Ironton,53941
+Sauk,La Valle,53941
+Sauk,Lake Delton,53940
+Sauk,Lime Ridge,53942
+Sauk,Loganville,53943
+Sauk,Merrimac,53561
+Sauk,North Freedom,53951
+Sauk,Plain,53577
+Sauk,Prairie du Sac,53578
+Sauk,Reedsburg,53958
+Sauk,Reedsburg,53959
+Sauk,Rock Springs,53961
+Sauk,Sauk City,53583
+Sauk,Spring Green,53588
+Sauk,West Baraboo,53913
+Sauk,Wisconsin Dells,53965
+Sawyer,Couderay,54828
+Sawyer,Exeland,54835
+Sawyer,Hayward,54843
+Sawyer,Ojibwa,54862
+Sawyer,Radisson,54867
+Shawano,Birnamwood,54414
+Shawano,Bonduel,54107
+Shawano,Bowler,54416
+Shawano,Cecil,54111
+Shawano,Eland,54427
+Shawano,Gresham,54128
+Shawano,Marion,54950
+Shawano,Pulaski,54162
+Shawano,Shawano,54166
+Shawano,Tigerton,54486
+Shawano,Wittenberg,54499
+Sheboygan,Adell,53001
+Sheboygan,Cascade,53011
+Sheboygan,Cedar Grove,53013
+Sheboygan,Cleveland,53015
+Sheboygan,Elkhart Lake,53020
+Sheboygan,Glenbeulah,53023
+Sheboygan,Howards Grove,53083
+Sheboygan,Kohler,53044
+Sheboygan,Oostburg,53070
+Sheboygan,Plymouth,53073
+Sheboygan,Random Lake,53075
+Sheboygan,Sheboygan,53081
+Sheboygan,Sheboygan,53082
+Sheboygan,Sheboygan Falls,53085
+Sheboygan,Waldo,53093
+Taylor,Gilman,54433
+Taylor,Greenwood,54437
+Taylor,Lublin,54447
+Taylor,Medford,54451
+Taylor,Rib Lake,54470
+Taylor,Stetsonville,54480
+Taylor,Westboro,54490
+Trempealeau,Arcadia,54612
+Trempealeau,Blair,54616
+Trempealeau,Eleva,54738
+Trempealeau,Ettrick,54627
+Trempealeau,Galesville,54630
+Trempealeau,Independence,54747
+Trempealeau,Osseo,54758
+Trempealeau,Strum,54770
+Trempealeau,Trempealeau,54661
+Trempealeau,Whitehall,54773
+Vernon,Chaseburg,54621
+Vernon,Coon Valley,54623
+Vernon,De Soto,54624
+Vernon,Genoa,54632
+Vernon,Hillsboro,54634
+Vernon,La Farge,54639
+Vernon,Ontario,54651
+Vernon,Readstown,54652
+Vernon,Stoddard,54658
+Vernon,Viola,54664
+Vernon,Viroqua,54665
+Vernon,Westby,54667
+Vilas,Boulder Junction,54512
+Vilas,Conover,54519
+Vilas,Eagle River,54521
+Vilas,Lac du Flambeau,54538
+Vilas,Land O Lakes,54540
+Vilas,Manitowish Waters,54545
+Vilas,Phelps,54554
+Vilas,Presque Isle,54557
+Vilas,Saint Germain,54558
+Vilas,Sayner,54560
+Vilas,Star Lake,54561
+Walworth,Burlington,53105
+Walworth,Darien,53114
+Walworth,Delavan,53115
+Walworth,East Troy,53120
+Walworth,Elkhorn,53121
+Walworth,Fontana,53125
+Walworth,Genoa City,53128
+Walworth,Lake Geneva,53147
+Walworth,Sharon,53585
+Walworth,Walworth,53184
+Walworth,Whitewater,53190
+Walworth,Williams Bay,53191
+Washburn,Birchwood,54817
+Washburn,Minong,54859
+Washburn,Shell Lake,54871
+Washburn,Spooner,54801
+Washburn,Trego,54888
+Washington,Allenton,53002
+Washington,Colgate,53017
+Washington,Germantown,53022
+Washington,Hartford,53027
+Washington,Jackson,53037
+Washington,Kewaskum,53040
+Washington,Milwaukee,53201
+Washington,Richfield,53076
+Washington,Slinger,53086
+Washington,West Bend,53090
+Washington,West Bend,53095
+Waukesha,Big Bend,53103
+Waukesha,Brookfield,53005
+Waukesha,Brookfield,53008
+Waukesha,Brookfield,53045
+Waukesha,Butler,53007
+Waukesha,Chenequa,53058
+Waukesha,Delafield,53018
+Waukesha,Dousman,53118
+Waukesha,Eagle,53119
+Waukesha,Elm Grove,53122
+Waukesha,Genesee Depot,53127
+Waukesha,Hartland,53029
+Waukesha,Lannon,53046
+Waukesha,Merton,53056
+Waukesha,Milwaukee,53201
+Waukesha,Mukwonago,53149
+Waukesha,Muskego,53150
+Waukesha,Nashotah,53058
+Waukesha,New Berlin,53146
+Waukesha,New Berlin,53151
+Waukesha,North Prairie,53153
+Waukesha,Oconomowoc,53066
+Waukesha,Oconomowoc Lake,53066
+Waukesha,Pewaukee,53072
+Waukesha,Sussex,53089
+Waukesha,Wales,53183
+Waukesha,Waukesha,53186
+Waukesha,Waukesha,53187
+Waukesha,Waukesha,53188
+Waukesha,Waukesha,53189
+Waupaca,Clintonville,54929
+Waupaca,Embarrass,54933
+Waupaca,Fremont,54940
+Waupaca,Iola,54945
+Waupaca,Manawa,54949
+Waupaca,Marion,54950
+Waupaca,New London,54961
+Waupaca,Ogdensburg,54962
+Waupaca,Readfield,54969
+Waupaca,Scandinavia,54977
+Waupaca,Waupaca,54981
+Waupaca,Weyauwega,54983
+Waushara,Berlin,54923
+Waushara,Coloma,54930
+Waushara,Hancock,54943
+Waushara,Neshkoro,54960
+Waushara,Plainfield,54966
+Waushara,Redgranite,54970
+Waushara,Wautoma,54982
+Waushara,Wild Rose,54984
+Winnebago,Appleton,54911
+Winnebago,Menasha,54952
+Winnebago,Neenah,54956
+Winnebago,Neenah,54957
+Winnebago,Omro,54963
+Winnebago,Oshkosh,54901
+Winnebago,Oshkosh,54902
+Winnebago,Oshkosh,54904
+Winnebago,Winneconne,54986
+Wood,Auburndale,54412
+Wood,Hewitt,54441
+Wood,Marshfield,54449
+Wood,Nekoosa,54457
+Wood,Pittsville,54466
+Wood,Port Edwards,54469
+Wood,Rudolph,54475
+Wood,Vesper,54489
+Wood,Wisconsin Rapids,54494
+Wood,Wisconsin Rapids,54495

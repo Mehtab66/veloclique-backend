@@ -1,0 +1,567 @@
+County,City,ZIP
+Atlantic,Absecon,08201
+Atlantic,Atlantic City,08401
+Atlantic,Brigantine,08203
+Atlantic,Buena,08310
+Atlantic,Buena Vista Township,08360
+Atlantic,Corbin City,08270
+Atlantic,Egg Harbor City,08215
+Atlantic,Egg Harbor Township,08234
+Atlantic,Estell Manor,08319
+Atlantic,Folsom,08037
+Atlantic,Galloway Township,08205
+Atlantic,Hamilton Township,08330
+Atlantic,Hammonton,08037
+Atlantic,Linwood,08221
+Atlantic,Longport,08403
+Atlantic,Margate City,08402
+Atlantic,Mullica Township,08215
+Atlantic,Northfield,08225
+Atlantic,Pleasantville,08232
+Atlantic,Port Republic,08241
+Atlantic,Somers Point,08244
+Atlantic,Ventnor City,08406
+Atlantic,Weymouth Township,08327
+Bergen,Allendale,07401
+Bergen,Alpine,07620
+Bergen,Bergenfield,07621
+Bergen,Bogota,07603
+Bergen,Carlstadt,07072
+Bergen,Cliffside Park,07010
+Bergen,Closter,07624
+Bergen,Cresskill,07626
+Bergen,Demarest,07627
+Bergen,Dumont,07628
+Bergen,East Rutherford,07073
+Bergen,Edgewater,07020
+Bergen,Elmwood Park,07407
+Bergen,Emerson,07630
+Bergen,Englewood,07631
+Bergen,Englewood Cliffs,07632
+Bergen,Fair Lawn,07410
+Bergen,Fairview,07022
+Bergen,Fort Lee,07024
+Bergen,Franklin Lakes,07417
+Bergen,Garfield,07026
+Bergen,Glen Rock,07452
+Bergen,Hackensack,07601
+Bergen,Harrington Park,07640
+Bergen,Hasbrouck Heights,07604
+Bergen,Haworth,07641
+Bergen,Hillsdale,07642
+Bergen,Ho-Ho-Kus,07423
+Bergen,Leonia,07605
+Bergen,Little Ferry,07643
+Bergen,Lodi,07644
+Bergen,Lyndhurst,07071
+Bergen,Mahwah,07430
+Bergen,Maywood,07607
+Bergen,Midland Park,07432
+Bergen,Montvale,07645
+Bergen,Moonachie,07074
+Bergen,New Milford,07646
+Bergen,North Arlington,07031
+Bergen,Northvale,07647
+Bergen,Norwood,07648
+Bergen,Oakland,07436
+Bergen,Old Tappan,07675
+Bergen,Oradell,07649
+Bergen,Palisades Park,07650
+Bergen,Paramus,07652
+Bergen,Park Ridge,07656
+Bergen,Ramsey,07446
+Bergen,Ridgefield,07657
+Bergen,Ridgefield Park,07660
+Bergen,Ridgewood,07450
+Bergen,River Edge,07661
+Bergen,River Vale,07675
+Bergen,Rochelle Park,07662
+Bergen,Rutherford,07070
+Bergen,Saddle Brook,07663
+Bergen,Saddle River,07458
+Bergen,South Hackensack,07606
+Bergen,Teaneck,07666
+Bergen,Tenafly,07670
+Bergen,Teterboro,07608
+Bergen,Upper Saddle River,07458
+Bergen,Waldwick,07463
+Bergen,Wallington,07057
+Bergen,Washington Township,07676
+Bergen,Westwood,07675
+Bergen,Woodcliff Lake,07677
+Bergen,Wood-Ridge,07075
+Bergen,Wyckoff,07481
+Burlington,Bass River Township,08232
+Burlington,Beverly,08010
+Burlington,Bordentown,08505
+Burlington,Bordentown Township,08505
+Burlington,Burlington,08016
+Burlington,Burlington Township,08016
+Burlington,Chesterfield Township,08515
+Burlington,Cinnaminson Township,08077
+Burlington,Delanco Township,08075
+Burlington,Delran Township,08075
+Burlington,Eastampton Township,08060
+Burlington,Edgewater Park Township,08010
+Burlington,Evesham Township,08053
+Burlington,Fieldsboro,08505
+Burlington,Florence Township,08518
+Burlington,Hainesport Township,08036
+Burlington,Lumberton Township,08048
+Burlington,Mansfield Township,08022
+Burlington,Maple Shade Township,08052
+Burlington,Medford Lakes,08055
+Burlington,Medford Township,08055
+Burlington,Moorestown Township,08057
+Burlington,Mount Holly Township,08060
+Burlington,Mount Laurel Township,08054
+Burlington,New Hanover Township,08511
+Burlington,North Hanover Township,08562
+Burlington,Palmyra,08065
+Burlington,Pemberton Borough,08068
+Burlington,Pemberton Township,08068
+Burlington,Riverside Township,08075
+Burlington,Riverton,08077
+Burlington,Shamong Township,08088
+Burlington,Southampton Township,08088
+Burlington,Springfield Township,08046
+Burlington,Tabernacle Township,08088
+Burlington,Washington Township,08562
+Burlington,Westampton Township,08060
+Burlington,Willingboro Township,08046
+Burlington,Woodland Township,08092
+Burlington,Wrightstown,08562
+Camden,Audubon,08106
+Camden,Audubon Park,08106
+Camden,Barrington,08007
+Camden,Bellmawr,08031
+Camden,Berlin Borough,08009
+Camden,Berlin Township,08091
+Camden,Brooklawn,08030
+Camden,Camden,08101
+Camden,Cherry Hill Township,08002
+Camden,Chesilhurst,08089
+Camden,Clementon,08021
+Camden,Collingswood,08108
+Camden,Gibbsboro,08026
+Camden,Gloucester City,08030
+Camden,Gloucester Township,08012
+Camden,Haddon Heights,08035
+Camden,Haddon Township,08108
+Camden,Haddonfield,08033
+Camden,Hi-Nella,08083
+Camden,Laurel Springs,08021
+Camden,Lawnside,08045
+Camden,Lindenwold,08021
+Camden,Magnolia,08049
+Camden,Merchantville,08109
+Camden,Mount Ephraim,08059
+Camden,Oaklyn,08107
+Camden,Pennsauken Township,08110
+Camden,Pine Hill,08021
+Camden,Pine Valley,08021
+Camden,Runnemede,08078
+Camden,Somerdale,08083
+Camden,Stratford,08084
+Camden,Tavistock,08033
+Camden,Voorhees Township,08043
+Camden,Waterford Township,08089
+Camden,Winslow Township,08081
+Camden,Woodlynne,08107
+Cape May,Avalon,08202
+Cape May,Cape May,08204
+Cape May,Cape May Point,08212
+Cape May,Dennis Township,08210
+Cape May,Lower Township,08204
+Cape May,Middle Township,08210
+Cape May,North Wildwood,08260
+Cape May,Ocean City,08226
+Cape May,Sea Isle City,08243
+Cape May,Stone Harbor,08247
+Cape May,Upper Township,08270
+Cape May,West Cape May,08204
+Cape May,West Wildwood,08260
+Cape May,Wildwood,08260
+Cape May,Wildwood Crest,08260
+Cape May,Woodbine,08270
+Cumberland,Bridgeton,08302
+Cumberland,Commercial Township,08349
+Cumberland,Deerfield Township,08302
+Cumberland,Downe Township,08349
+Cumberland,Fairfield Township,08302
+Cumberland,Greenwich Township,08323
+Cumberland,Hopewell Township,08302
+Cumberland,Lawrence Township,08343
+Cumberland,Maurice River Township,08329
+Cumberland,Millville,08332
+Cumberland,Shiloh,08353
+Cumberland,Stow Creek Township,08346
+Cumberland,Upper Deerfield Township,08302
+Cumberland,Vineland,08360
+Essex,Belleville,07109
+Essex,Bloomfield,07003
+Essex,Caldwell,07006
+Essex,Cedar Grove Township,07009
+Essex,East Orange,07017
+Essex,Essex Fells,07021
+Essex,Fairfield Township,07004
+Essex,Glen Ridge,07028
+Essex,Irvington,07111
+Essex,Livingston Township,07039
+Essex,Maplewood Township,07040
+Essex,Millburn Township,07041
+Essex,Montclair Township,07042
+Essex,Newark,07102
+Essex,North Caldwell,07006
+Essex,Nutley Township,07110
+Essex,Orange Township,07050
+Essex,Roseland,07068
+Essex,South Orange Village Township,07079
+Essex,Verona Township,07044
+Essex,West Caldwell Township,07006
+Essex,West Orange Township,07052
+Gloucester,Clayton,08312
+Gloucester,Deptford Township,08096
+Gloucester,East Greenwich Township,08020
+Gloucester,Elk Township,08322
+Gloucester,Franklin Township,08322
+Gloucester,Glassboro,08028
+Gloucester,Greenwich Township,08323
+Gloucester,Harrison Township,08062
+Gloucester,Logan Township,08085
+Gloucester,Mantua Township,08051
+Gloucester,Monroe Township,08094
+Gloucester,National Park,08063
+Gloucester,Newfield,08344
+Gloucester,Paulsboro,08066
+Gloucester,Pitman,08071
+Gloucester,South Harrison Township,08062
+Gloucester,Swedesboro,08085
+Gloucester,Washington Township,08080
+Gloucester,Wenonah,08090
+Gloucester,West Deptford Township,08096
+Gloucester,Westville,08093
+Gloucester,Woodbury,08096
+Gloucester,Woodbury Heights,08097
+Gloucester,Woolwich Township,08085
+Hudson,Bayonne,07002
+Hudson,East Newark,07029
+Hudson,Guttenberg,07093
+Hudson,Harrison,07029
+Hudson,Hoboken,07030
+Hudson,Jersey City,07302
+Hudson,Kearny,07032
+Hudson,North Bergen Township,07047
+Hudson,Secaucus,07094
+Hudson,Union City,07087
+Hudson,Weehawken Township,07086
+Hudson,West New York,07093
+Hunterdon,Alexandria Township,08825
+Hunterdon,Bethlehem Township,08827
+Hunterdon,Bloomsbury,08804
+Hunterdon,Califon,07830
+Hunterdon,Clinton,08809
+Hunterdon,Clinton Township,08809
+Hunterdon,Delaware Township,08559
+Hunterdon,East Amwell Township,08551
+Hunterdon,Flemington,08822
+Hunterdon,Franklin Township,08802
+Hunterdon,Frenchtown,08825
+Hunterdon,Glen Gardner,08826
+Hunterdon,Hampton,08827
+Hunterdon,High Bridge,08829
+Hunterdon,Holland Township,08848
+Hunterdon,Kingwood Township,08825
+Hunterdon,Lambertville,08530
+Hunterdon,Lebanon Borough,08833
+Hunterdon,Lebanon Township,08833
+Hunterdon,Milford,08848
+Hunterdon,Raritan Township,08822
+Hunterdon,Readington Township,08889
+Hunterdon,Stockton,08559
+Hunterdon,Tewksbury Township,08833
+Hunterdon,Union Township,08802
+Hunterdon,West Amwell Township,08530
+Mercer,East Windsor Township,08520
+Mercer,Ewing Township,08638
+Mercer,Hamilton Township,08609
+Mercer,Hightstown,08520
+Mercer,Hopewell Borough,08525
+Mercer,Hopewell Township,08534
+Mercer,Lawrence Township,08648
+Mercer,Pennington,08534
+Mercer,Princeton,08540
+Mercer,Robbinsville Township,08691
+Mercer,Trenton,08608
+Mercer,West Windsor Township,08550
+Mercer,Windsor Township,08561
+Middlesex,Carteret,07008
+Middlesex,Cranbury Township,08512
+Middlesex,Dunellen,08812
+Middlesex,East Brunswick Township,08816
+Middlesex,Edison Township,08817
+Middlesex,Helmetta,08828
+Middlesex,Highland Park,08904
+Middlesex,Jamesburg,08831
+Middlesex,Metuchen,08840
+Middlesex,Middlesex,08846
+Middlesex,Milltown,08850
+Middlesex,Monroe Township,08831
+Middlesex,New Brunswick,08901
+Middlesex,North Brunswick Township,08902
+Middlesex,Old Bridge Township,08857
+Middlesex,Perth Amboy,08861
+Middlesex,Piscataway Township,08854
+Middlesex,Plainsboro Township,08536
+Middlesex,Sayreville,08872
+Middlesex,South Amboy,08879
+Middlesex,South Brunswick Township,08810
+Middlesex,South Plainfield,07080
+Middlesex,South River,08882
+Middlesex,Spotswood,08884
+Middlesex,Woodbridge Township,07095
+Monmouth,Allenhurst,07711
+Monmouth,Allentown,08501
+Monmouth,Asbury Park,07712
+Monmouth,Atlantic Highlands,07716
+Monmouth,Avon-by-the-Sea,07717
+Monmouth,Belmar,07719
+Monmouth,Bradley Beach,07720
+Monmouth,Brielle,08730
+Monmouth,Colts Neck Township,07722
+Monmouth,Deal,07723
+Monmouth,Eatontown,07724
+Monmouth,Englishtown,07726
+Monmouth,Fair Haven,07704
+Monmouth,Farmingdale,07727
+Monmouth,Freehold Borough,07728
+Monmouth,Freehold Township,07728
+Monmouth,Hazlet Township,07730
+Monmouth,Highlands,07732
+Monmouth,Holmdel Township,07733
+Monmouth,Howell Township,07731
+Monmouth,Interlaken,07712
+Monmouth,Keansburg,07734
+Monmouth,Keyport,07735
+Monmouth,Lake Como,07719
+Monmouth,Little Silver,07739
+Monmouth,Loch Arbour,07711
+Monmouth,Long Branch,07740
+Monmouth,Manalapan Township,07726
+Monmouth,Manasquan,08736
+Monmouth,Marlboro Township,07746
+Monmouth,Matawan,07747
+Monmouth,Middletown Township,07748
+Monmouth,Millstone Township,08510
+Monmouth,Monmouth Beach,07750
+Monmouth,Neptune Township,07753
+Monmouth,Neptune City,07753
+Monmouth,Oceanport,07757
+Monmouth,Ocean Township,07712
+Monmouth,Red Bank,07701
+Monmouth,Roosevelt,08555
+Monmouth,Rumson,07760
+Monmouth,Sea Bright,07760
+Monmouth,Sea Girt,08750
+Monmouth,Shrewsbury Borough,07702
+Monmouth,Shrewsbury Township,07724
+Monmouth,South Belmar,07719
+Monmouth,Spring Lake,07762
+Monmouth,Spring Lake Heights,07762
+Monmouth,Tinton Falls,07724
+Monmouth,Union Beach,07735
+Monmouth,Upper Freehold Township,08514
+Monmouth,Wall Township,07719
+Monmouth,West Long Branch,07764
+Morris,Boonton,07005
+Morris,Boonton Township,07005
+Morris,Butler,07405
+Morris,Chatham Borough,07928
+Morris,Chatham Township,07928
+Morris,Chester Borough,07930
+Morris,Chester Township,07930
+Morris,Denville Township,07834
+Morris,Dover,07801
+Morris,East Hanover Township,07936
+Morris,Florham Park,07932
+Morris,Hanover Township,07927
+Morris,Harding Township,07976
+Morris,Jefferson Township,07438
+Morris,Kinnelon,07405
+Morris,Lincoln Park,07035
+Morris,Long Hill Township,07946
+Morris,Madison,07940
+Morris,Mendham Borough,07945
+Morris,Mendham Township,07945
+Morris,Mine Hill Township,07803
+Morris,Montville Township,07045
+Morris,Morris Township,07960
+Morris,Morris Plains,07950
+Morris,Morristown,07960
+Morris,Mountain Lakes,07046
+Morris,Mount Arlington,07856
+Morris,Mount Olive Township,07828
+Morris,Netcong,07857
+Morris,Parsippany-Troy Hills Township,07054
+Morris,Pequannock Township,07440
+Morris,Randolph Township,07869
+Morris,Riverdale,07457
+Morris,Rockaway Borough,07866
+Morris,Rockaway Township,07866
+Morris,Roxbury Township,07850
+Morris,Victory Gardens,07801
+Morris,Washington Township,07853
+Morris,Wharton,07885
+Ocean,Barnegat Township,08005
+Ocean,Barnegat Light,08006
+Ocean,Bay Head,08742
+Ocean,Beach Haven,08008
+Ocean,Beachwood,08722
+Ocean,Berkeley Township,08721
+Ocean,Brick Township,08723
+Ocean,Eagleswood Township,08087
+Ocean,Harvey Cedars,08008
+Ocean,Island Heights,08732
+Ocean,Jackson Township,08527
+Ocean,Lacey Township,08731
+Ocean,Lakehurst,08733
+Ocean,Lakewood Township,08701
+Ocean,Lavallette,08735
+Ocean,Little Egg Harbor Township,08087
+Ocean,Long Beach Township,08008
+Ocean,Manchester Township,08759
+Ocean,Mantoloking,08738
+Ocean,Ocean Gate,08740
+Ocean,Ocean Township,08758
+Ocean,Pine Beach,08741
+Ocean,Plumsted Township,08533
+Ocean,Point Pleasant,08742
+Ocean,Point Pleasant Beach,08742
+Ocean,Seaside Heights,08751
+Ocean,Seaside Park,08752
+Ocean,Ship Bottom,08008
+Ocean,South Toms River,08757
+Ocean,Stafford Township,08050
+Ocean,Surf City,08008
+Ocean,Toms River Township,08753
+Ocean,Tuckerton,08087
+Passaic,Bloomingdale,07403
+Passaic,Clifton,07011
+Passaic,Haledon,07508
+Passaic,Hawthorne,07506
+Passaic,Little Falls Township,07424
+Passaic,North Haledon,07508
+Passaic,Passaic,07055
+Passaic,Paterson,07501
+Passaic,Pompton Lakes,07442
+Passaic,Prospect Park,07508
+Passaic,Ringwood,07456
+Passaic,Totowa,07512
+Passaic,Wanaque,07465
+Passaic,Wayne Township,07470
+Passaic,West Milford Township,07480
+Passaic,Woodland Park,07424
+Salem,Alloway Township,08001
+Salem,Carneys Point Township,08069
+Salem,Elmer,08318
+Salem,Elsinboro Township,08079
+Salem,Lower Alloways Creek Township,08079
+Salem,Mannington Township,08079
+Salem,Oldmans Township,08070
+Salem,Penns Grove,08069
+Salem,Pennsville Township,08070
+Salem,Pilesgrove Township,08098
+Salem,Pittsgrove Township,08318
+Salem,Quinton Township,08072
+Salem,Salem,08079
+Salem,Upper Pittsgrove Township,08318
+Salem,Woodstown,08098
+Somerset,Bedminster Township,07921
+Somerset,Bernards Township,07920
+Somerset,Bernardsville,07924
+Somerset,Bound Brook,08805
+Somerset,Branchburg Township,08876
+Somerset,Bridgewater Township,08807
+Somerset,Far Hills,07931
+Somerset,Franklin Township,08873
+Somerset,Green Brook Township,08812
+Somerset,Hillsborough Township,08844
+Somerset,Manville,08835
+Somerset,Millstone,08844
+Somerset,Montgomery Township,08502
+Somerset,North Plainfield,07060
+Somerset,Peapack-Gladstone,07977
+Somerset,Raritan,08869
+Somerset,Rocky Hill,08553
+Somerset,Somerville,08876
+Somerset,South Bound Brook,08880
+Somerset,Warren Township,07059
+Somerset,Watchung,07069
+Sussex,Andover Borough,07821
+Sussex,Andover Township,07821
+Sussex,Branchville,07826
+Sussex,Byram Township,07821
+Sussex,Frankford Township,07822
+Sussex,Franklin,07416
+Sussex,Fredon Township,07860
+Sussex,Green Township,07821
+Sussex,Hamburg,07419
+Sussex,Hampton Township,07860
+Sussex,Hardyston Township,07419
+Sussex,Hopatcong,07843
+Sussex,Lafayette Township,07848
+Sussex,Montague Township,07827
+Sussex,Newton,07860
+Sussex,Ogdensburg,07439
+Sussex,Sandyston Township,07826
+Sussex,Sparta Township,07871
+Sussex,Stanhope,07874
+Sussex,Stillwater Township,07875
+Sussex,Sussex,07461
+Sussex,Vernon Township,07462
+Sussex,Walpack Township,07881
+Sussex,Wantage Township,07461
+Union,Berkeley Heights Township,07922
+Union,Clark Township,07066
+Union,Cranford Township,07016
+Union,Elizabeth,07201
+Union,Fanwood,07023
+Union,Garwood,07027
+Union,Hillside Township,07205
+Union,Kenilworth,07033
+Union,Linden,07036
+Union,Mountainside,07092
+Union,New Providence,07974
+Union,Plainfield,07060
+Union,Rahway,07065
+Union,Roselle,07203
+Union,Roselle Park,07204
+Union,Scotch Plains Township,07076
+Union,Springfield Township,07081
+Union,Summit,07901
+Union,Union Township,07083
+Union,Westfield,07090
+Union,Winfield Township,07036
+Warren,Allamuchy Township,07820
+Warren,Alpha,08865
+Warren,Belvidere,07823
+Warren,Blairstown Township,07825
+Warren,Franklin Township,07882
+Warren,Frelinghuysen Township,07825
+Warren,Greenwich Township,08886
+Warren,Hackettstown,07840
+Warren,Hardwick Township,07825
+Warren,Harmony Township,07823
+Warren,Hope Township,07844
+Warren,Independence Township,07840
+Warren,Knowlton Township,07832
+Warren,Liberty Township,07838
+Warren,Lopatcong Township,08865
+Warren,Mansfield Township,07865
+Warren,Oxford Township,07863
+Warren,Pahaquary Township,07832
+Warren,Phillipsburg,08865
+Warren,Pohatcong Township,08865
+Warren,Washington Borough,07882
+Warren,Washington Township,07882
+Warren,White Township,07823

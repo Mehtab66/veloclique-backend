@@ -1,0 +1,518 @@
+County,City,ZIP
+Arkansas,Almyra,72003
+Arkansas,Arkansas City,71630
+Arkansas,Crocketts Bluff,72038
+Arkansas,DeWitt,72042
+Arkansas,Gillett,72055
+Arkansas,Humphrey,72073
+Arkansas,St. Charles,72140
+Arkansas,Stuttgart,72160
+Ashley,Crossett,71635
+Ashley,Fountain Hill,71642
+Ashley,Hamburg,71646
+Ashley,Montrose,71658
+Ashley,North Crossett,71635
+Ashley,Parkdale,71661
+Ashley,Portland,71663
+Ashley,Wilmot,71676
+Baxter,Big Flat,72617
+Baxter,Briarcliff,72658
+Baxter,Cotter,72626
+Baxter,Gassville,72635
+Baxter,Lakeview,72642
+Baxter,Mountain Home,72653
+Baxter,Mountain Home,72654
+Baxter,Norfork,72658
+Benton,Avoca,72711
+Benton,Bella Vista,72714
+Benton,Bella Vista,72715
+Benton,Bentonville,72712
+Benton,Bentonville,72713
+Benton,Cave Springs,72718
+Benton,Centerton,72719
+Benton,Decatur,72722
+Benton,Garfield,72732
+Benton,Gateway,72733
+Benton,Gentry,72734
+Benton,Gravette,72736
+Benton,Highfill,72745
+Benton,Little Flock,72756
+Benton,Lowell,72745
+Benton,Pea Ridge,72751
+Benton,Rogers,72756
+Benton,Rogers,72757
+Benton,Rogers,72758
+Benton,Siloam Springs,72761
+Benton,Springtown,72762
+Benton,Sulphur Springs,72768
+Boone,Alpena,72611
+Boone,Bellefonte,72617
+Boone,Bergman,72615
+Boone,Diamond City,72630
+Boone,Everton,72633
+Boone,Harrison,72601
+Boone,Harrison,72602
+Boone,Lead Hill,72644
+Boone,Omaha,72662
+Boone,Valley Springs,72682
+Boone,Zinc,72682
+Bradley,Banks,71631
+Bradley,Hermitage,71647
+Bradley,Warren,71671
+Calhoun,Hampton,71744
+Calhoun,Harrell,71745
+Calhoun,Thornton,71766
+Carroll,Berryville,72616
+Carroll,Eureka Springs,72631
+Carroll,Eureka Springs,72632
+Carroll,Green Forest,72638
+Chicot,Dermott,71638
+Chicot,Eudora,71640
+Chicot,Lake Village,71653
+Clark,Alpine,71920
+Clark,Arkadelphia,71923
+Clark,Arkadelphia,71998
+Clark,Caddo Valley,71923
+Clark,Curtis,71728
+Clark,Gurdon,71743
+Cleburne,Concord,72523
+Cleburne,Greers Ferry,72067
+Cleburne,Heber Springs,72543
+Cleburne,Quitman,72131
+Cleveland,Kingsland,71652
+Cleveland,Rison,71665
+Conway,Morrilton,72110
+Conway,Oppelo,72110
+Conway,Plumerville,72127
+Conway,Menifee,72107
+Craighead,Bay,72411
+Craighead,Bono,72416
+Craighead,Brookland,72417
+Craighead,Caraway,72419
+Craighead,Cash,72421
+Craighead,Jonesboro,72401
+Craighead,Jonesboro,72403
+Craighead,Jonesboro,72404
+Craighead,Lake City,72437
+Craighead,Monette,72447
+Crawford,Alma,72921
+Crawford,Cedarville,72932
+Crawford,Dyer,72935
+Crawford,Kibler,72947
+Crawford,Mountainburg,72946
+Crawford,Mulberry,72947
+Crawford,Van Buren,72956
+Crawford,Van Buren,72957
+Crittenden,Anthonyville,72350
+Crittenden,Crawfordsville,72327
+Crittenden,Earle,72331
+Crittenden,Edmondson,72332
+Crittenden,Gilmore,72339
+Crittenden,Jennette,72351
+Crittenden,Jericho,72359
+Crittenden,Marion,72364
+Crittenden,Sunset,72364
+Crittenden,Turrell,72384
+Crittenden,West Memphis,72301
+Crittenden,West Memphis,72303
+Cross,Cherry Valley,72324
+Cross,Hickory Ridge,72347
+Cross,Parkin,72373
+Cross,Wynne,72396
+Dallas,Carthage,71725
+Dallas,Fordyce,71742
+Dallas,Sparkman,71763
+Desha,Arkansas City,71630
+Desha,Dumas,71639
+Desha,McGehee,71654
+Desha,Mitchellville,71655
+Desha,Reed,71670
+Desha,Watson,71674
+Drew,Jerome,71640
+Drew,Monticello,71655
+Drew,Monticello,71656
+Drew,Wilmar,71675
+Faulkner,Bee Branch,72013
+Faulkner,Conway,72032
+Faulkner,Conway,72034
+Faulkner,Conway,72035
+Faulkner,Enola,72047
+Faulkner,Greenbrier,72058
+Faulkner,Guy,72061
+Faulkner,Mayflower,72106
+Faulkner,Mount Vernon,72111
+Faulkner,Vilonia,72173
+Faulkner,Wooster,72181
+Franklin,Altus,72821
+Franklin,Branch,72928
+Franklin,Charleston,72933
+Franklin,Coal Hill,72832
+Franklin,Ozark,72949
+Franklin,Wiederkehr Village,72821
+Fulton,Camp,72520
+Fulton,Cherokee Village,72529
+Fulton,Mammoth Spring,72554
+Fulton,Salem,72576
+Garland,Hot Springs,71901
+Garland,Hot Springs,71902
+Garland,Hot Springs,71903
+Garland,Hot Springs,71913
+Garland,Hot Springs Village,71909
+Garland,Lonsdale,72087
+Garland,Mountain Pine,71956
+Grant,Leola,72084
+Grant,Poyen,72128
+Grant,Prattsville,72129
+Grant,Sheridan,72150
+Grant,Tull,72015
+Greene,Beech Grove,72412
+Greene,Browns Chapel,72416
+Greene,Delaplaine,72425
+Greene,Lafe,72436
+Greene,Light,72439
+Greene,Marmaduke,72443
+Greene,Oak Grove Heights,72450
+Greene,Paragould,72450
+Greene,Paragould,72451
+Greene,Peach Orchard,72453
+Greene,Pollard,72456
+Hempstead,Blevins,71825
+Hempstead,Fulton,71838
+Hempstead,Hope,71801
+Hempstead,Hope,71802
+Hempstead,McCaskill,71847
+Hempstead,McNab,71838
+Hempstead,Oakhaven,71838
+Hempstead,Ozan,71855
+Hempstead,Patmos,71857
+Hempstead,Washington,71862
+Hot Spring,Donaldson,71941
+Hot Spring,Friendship,71942
+Hot Spring,Malvern,72104
+Howard,Dierks,71833
+Howard,Lockesburg,71846
+Howard,Mineral Springs,71851
+Howard,Nashville,71852
+Independence,Batesville,72501
+Independence,Batesville,72503
+Independence,Cord,72524
+Independence,Cushman,72526
+Independence,Desha,72527
+Independence,Magness,72553
+Independence,Moorefield,72558
+Independence,Newark,72562
+Independence,Oil Trough,72564
+Independence,Pleasant Plains,72568
+Independence,Rosie,72571
+Independence,Salado,72575
+Independence,Sulphur Rock,72579
+Izard,Calico Rock,72519
+Izard,Guion,72540
+Izard,Mount Pleasant,72561
+Izard,Oxford,72565
+Izard,Pineville,72566
+Jackson,Amagon,72005
+Jackson,Beedeville,72014
+Jackson,Campbell Station,72519
+Jackson,Diaz,72043
+Jackson,Grubbs,72431
+Jackson,Jacksonport,72075
+Jackson,Newport,72112
+Jackson,Swifton,72471
+Jackson,Tuckerman,72473
+Jackson,Tupelo,72169
+Jefferson,Altheimer,72004
+Jefferson,Humphrey,72073
+Jefferson,Pine Bluff,71601
+Jefferson,Pine Bluff,71602
+Jefferson,Pine Bluff,71603
+Jefferson,Pine Bluff,71611
+Jefferson,Redfield,72132
+Jefferson,Sherrill,72152
+Jefferson,Wabbaseka,72175
+Jefferson,White Hall,71602
+Johnson,Clarksville,72830
+Johnson,Coal Hill,72832
+Johnson,Hartman,72840
+Johnson,Knoxville,72845
+Johnson,Lamar,72846
+Lafayette,Bradley,71826
+Lafayette,Buckner,71827
+Lafayette,Lewisville,71845
+Lafayette,Stamps,71860
+Lawrence,Alicia,72410
+Lawrence,Black Rock,72415
+Lawrence,Hoxie,72433
+Lawrence,Imboden,72434
+Lawrence,Minturn,72445
+Lawrence,Portia,72457
+Lawrence,Powhatan,72458
+Lawrence,Ravenden,72459
+Lawrence,Ravenden Springs,72460
+Lawrence,Smithville,72466
+Lawrence,Strawberry,72469
+Lawrence,Walnut Ridge,72476
+Lee,Aubrey,72311
+Lee,Haynes,72341
+Lee,La Grange,72352
+Lee,Marianna,72360
+Lee,Moro,72368
+Lee,Rondo,72370
+Lincoln,Gould,71643
+Lincoln,Grady,71644
+Lincoln,Star City,71667
+Lincoln,Yorktown,71678
+Little River,Alleene,71820
+Little River,Ashdown,71822
+Little River,Foreman,71836
+Little River,Ogden,71853
+Little River,Wilton,71865
+Little River,Winthrop,71866
+Logan,Booneville,72927
+Logan,Magazine,72943
+Logan,Paris,72855
+Logan,Ratcliff,72951
+Logan,Scranton,72863
+Logan,Subiaco,72865
+Lonoke,Allport,72029
+Lonoke,Austin,72007
+Lonoke,Cabot,72023
+Lonoke,Carlisle,72024
+Lonoke,Coy,72037
+Lonoke,England,72046
+Lonoke,Humnoke,72072
+Lonoke,Keo,72083
+Lonoke,Lonoke,72086
+Lonoke,Pettus,72016
+Lonoke,Ward,72176
+Madison,Hindsville,72738
+Madison,Huntsville,72740
+Madison,Pettigrew,72752
+Madison,St. Paul,72760
+Marion,Bull Shoals,72619
+Marion,Everton,72633
+Marion,Flippin,72634
+Marion,Pyatt,72672
+Marion,Summit,72677
+Marion,Yellville,72687
+Miller,Fouke,71837
+Miller,Garland,71839
+Miller,Texarkana,71854
+Mississippi,Bassett,72313
+Mississippi,Birdsong,72350
+Mississippi,Blytheville,72315
+Mississippi,Blytheville,72316
+Mississippi,Burdette,72321
+Mississippi,Chickasawba,72329
+Mississippi,Dell,72426
+Mississippi,Etowah,72428
+Mississippi,Gosnell,72315
+Mississippi,Keiser,72351
+Mississippi,Leachville,72438
+Mississippi,Luxora,72358
+Mississippi,Manila,72442
+Mississippi,Marie,72444
+Mississippi,Osceola,72370
+Mississippi,Victoria,72358
+Mississippi,Wilson,72395
+Monroe,Brinkley,72021
+Monroe,Clarendon,72029
+Monroe,Holly Grove,72069
+Montgomery,Black Springs,71933
+Montgomery,Mount Ida,71957
+Montgomery,Norman,71960
+Montgomery,Oden,71961
+Nevada,Bluff City,71722
+Nevada,Bodcaw,71851
+Nevada,Cale,71828
+Nevada,Emmet,71835
+Nevada,Prescott,71857
+Newton,Deer,72628
+Newton,Jasper,72641
+Newton,Western Grove,72685
+Ouachita,Bearden,71720
+Ouachita,Chidester,71726
+Ouachita,East Camden,71701
+Ouachita,Louann,71751
+Ouachita,Smackover,71762
+Ouachita,Stephens,71764
+Perry,Adona,72001
+Perry,Bigelow,72016
+Perry,Casa,72025
+Perry,Houston,72070
+Perry,Perryville,72126
+Phillips,Elaine,72333
+Phillips,Helena-West Helena,72342
+Phillips,Marvell,72366
+Phillips,Turner,72383
+Pike,Antoine,71922
+Pike,Delight,71940
+Pike,Glenwood,71943
+Pike,Murfreesboro,71958
+Poinsett,Fisher,72429
+Poinsett,Harrisburg,72432
+Poinsett,Lepanto,72354
+Poinsett,Marked Tree,72365
+Poinsett,Trumann,72472
+Poinsett,Tyronza,72386
+Poinsett,Weiner,72479
+Polk,Cove,71937
+Polk,Grannis,71944
+Polk,Hatfield,71945
+Polk,Mena,71953
+Polk,Vandervoort,71972
+Polk,Wickes,71973
+Pope,Atkins,72823
+Pope,Dover,72837
+Pope,Hector,72843
+Pope,London,72847
+Pope,Pottsville,72858
+Pope,Russellville,72801
+Pope,Russellville,72802
+Prairie,Carlisle,72024
+Prairie,Des Arc,72040
+Prairie,DeValls Bluff,72041
+Prairie,Hazen,72064
+Prairie,Ulm,72170
+Pulaski,Alexander,72002
+Pulaski,Cammack Village,72207
+Pulaski,Jacksonville,72076
+Pulaski,Jacksonville,72078
+Pulaski,Little Rock,72201
+Pulaski,Little Rock,72202
+Pulaski,Little Rock,72203
+Pulaski,Little Rock,72204
+Pulaski,Little Rock,72205
+Pulaski,Little Rock,72206
+Pulaski,Little Rock,72207
+Pulaski,Little Rock,72209
+Pulaski,Little Rock,72210
+Pulaski,Little Rock,72211
+Pulaski,Little Rock,72212
+Pulaski,Little Rock,72223
+Pulaski,Maumelle,72113
+Pulaski,North Little Rock,72114
+Pulaski,North Little Rock,72115
+Pulaski,North Little Rock,72116
+Pulaski,North Little Rock,72117
+Pulaski,North Little Rock,72118
+Pulaski,Shannon Hills,72103
+Pulaski,Sherwood,72120
+Pulaski,Sweet Home,72164
+Pulaski,Wrightsville,72206
+Randolph,Biggers,72413
+Randolph,McDougal,72441
+Randolph,O'Kean,72449
+Randolph,Pocahontas,72455
+Randolph,Reyno,72462
+Randolph,Warm Springs,72478
+Saline,Alexander,72002
+Saline,Bauxite,72011
+Saline,Benton,72015
+Saline,Benton,72018
+Saline,Benton,72019
+Saline,Bryant,72022
+Saline,East End,72002
+Saline,Haskell,72015
+Saline,Lonsdale,72087
+Saline,Mabelvale,72103
+Saline,Paron,72122
+Saline,Salem,72576
+Saline,Shannon Hills,72103
+Saline,Traskwood,72167
+Scott,Boles,72926
+Scott,Mansfield,72944
+Scott,Parks,72950
+Scott,Waldron,72958
+Searcy,Gilbert,72636
+Searcy,Leslie,72645
+Searcy,Marshall,72650
+Searcy,St. Joe,72675
+Sebastian,Barling,72923
+Sebastian,Bonanza,72916
+Sebastian,Central City,72941
+Sebastian,Fort Smith,72901
+Sebastian,Fort Smith,72903
+Sebastian,Fort Smith,72904
+Sebastian,Fort Smith,72905
+Sebastian,Fort Smith,72906
+Sebastian,Fort Smith,72908
+Sebastian,Fort Smith,72913
+Sebastian,Fort Smith,72916
+Sebastian,Greenwood,72936
+Sebastian,Hackett,72937
+Sebastian,Hartford,72938
+Sebastian,Huntington,72940
+Sebastian,Lavaca,72941
+Sebastian,Mansfield,72944
+Sebastian,Midland,72945
+Sevier,Ben Lomond,71823
+Sevier,De Queen,71832
+Sevier,Gillham,71841
+Sevier,Horatio,71842
+Sevier,Lockesburg,71846
+Sharp,Ash Flat,72513
+Sharp,Cave City,72521
+Sharp,Cherokee Village,72525
+Sharp,Evening Shade,72532
+Sharp,Hardy,72542
+Sharp,Highland,72542
+Stone,Fifty-Six,72533
+Stone,Mountain View,72560
+Union,Calion,71724
+Union,El Dorado,71730
+Union,El Dorado,71731
+Union,Felsenthal,71762
+Union,Huttig,71747
+Union,Junction City,71749
+Union,Lawson,71750
+Union,Norphlet,71759
+Union,Smackover,71762
+Union,Strong,71765
+Van Buren,Botkinburg,72561
+Van Buren,Clinton,72031
+Van Buren,Damascus,72039
+Van Buren,Dennard,72629
+Van Buren,Fairfield Bay,72088
+Van Buren,Fox,72051
+Van Buren,Shirley,72153
+Washington,Elkins,72727
+Washington,Elm Springs,72728
+Washington,Farmington,72730
+Washington,Fayetteville,72701
+Washington,Fayetteville,72703
+Washington,Fayetteville,72704
+Washington,Goshen,72735
+Washington,Greenland,72737
+Washington,Johnson,72741
+Washington,Lincoln,72744
+Washington,Prairie Grove,72753
+Washington,Springdale,72762
+Washington,Springdale,72764
+Washington,Springdale,72765
+Washington,Tontitown,72770
+Washington,Winslow,72959
+White,Bald Knob,72010
+White,Beebe,72012
+White,Bradford,72020
+White,Griffithville,72060
+White,Higginson,72068
+White,Judsonia,72081
+White,Kensett,72082
+White,McRae,72102
+White,Pangburn,72121
+White,Rose Bud,72137
+White,Searcy,72143
+White,Searcy,72145
+White,West Point,72178
+Woodruff,Augusta,72006
+Woodruff,Cotton Plant,72036
+Woodruff,Hunter,72074
+Woodruff,McCrory,72101
+Woodruff,Patterson,72123
+Yell,Belleville,72824
+Yell,Dardanelle,72834
+Yell,Danville,72833
+Yell,Havana,72842
+Yell,Ola,72853
+Yell,Plainview,72857

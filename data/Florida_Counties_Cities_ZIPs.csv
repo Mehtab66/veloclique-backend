@@ -1,0 +1,881 @@
+County,City,ZIP
+Alachua,Alachua,32615
+Alachua,Gainesville,32601
+Alachua,Gainesville,32602
+Alachua,Gainesville,32603
+Alachua,Gainesville,32604
+Alachua,Gainesville,32605
+Alachua,Gainesville,32606
+Alachua,Gainesville,32607
+Alachua,Gainesville,32608
+Alachua,Gainesville,32609
+Alachua,Gainesville,32610
+Alachua,Gainesville,32611
+Alachua,Gainesville,32612
+Alachua,Gainesville,32614
+Alachua,Hawthorne,32640
+Alachua,High Springs,32643
+Alachua,Newberry,32669
+Alachua,Waldo,32694
+Baker,Macclenny,32063
+Bay,Callaway,32404
+Bay,Lynn Haven,32444
+Bay,Mexico Beach,32456
+Bay,Panama City,32401
+Bay,Panama City,32402
+Bay,Panama City,32403
+Bay,Panama City,32404
+Bay,Panama City,32405
+Bay,Panama City,32407
+Bay,Panama City,32408
+Bay,Panama City Beach,32407
+Bay,Panama City Beach,32408
+Bay,Panama City Beach,32413
+Bay,Parker,32404
+Bay,Springfield,32401
+Bradford,Brooker,32622
+Bradford,Hampton,32044
+Bradford,Lawtey,32058
+Bradford,Starke,32091
+Brevard,Cape Canaveral,32920
+Brevard,Cocoa,32922
+Brevard,Cocoa,32923
+Brevard,Cocoa,32926
+Brevard,Cocoa Beach,32931
+Brevard,Cocoa Beach,32932
+Brevard,Grant-Valkaria,32949
+Brevard,Indialantic,32903
+Brevard,Indian Harbour Beach,32937
+Brevard,Malabar,32950
+Brevard,Melbourne,32901
+Brevard,Melbourne,32904
+Brevard,Melbourne,32934
+Brevard,Melbourne,32935
+Brevard,Melbourne Beach,32951
+Brevard,Palm Bay,32905
+Brevard,Palm Bay,32907
+Brevard,Palm Bay,32908
+Brevard,Palm Bay,32909
+Brevard,Rockledge,32955
+Brevard,Satellite Beach,32937
+Brevard,Titusville,32780
+Brevard,Titusville,32796
+Brevard,West Melbourne,32904
+Broward,Coconut Creek,33063
+Broward,Coconut Creek,33066
+Broward,Cooper City,33024
+Broward,Cooper City,33026
+Broward,Coral Springs,33065
+Broward,Coral Springs,33071
+Broward,Coral Springs,33076
+Broward,Dania Beach,33004
+Broward,Davie,33314
+Broward,Davie,33317
+Broward,Davie,33324
+Broward,Davie,33325
+Broward,Davie,33328
+Broward,Davie,33330
+Broward,Deerfield Beach,33064
+Broward,Deerfield Beach,33441
+Broward,Fort Lauderdale,33301
+Broward,Fort Lauderdale,33304
+Broward,Fort Lauderdale,33305
+Broward,Fort Lauderdale,33306
+Broward,Fort Lauderdale,33308
+Broward,Fort Lauderdale,33309
+Broward,Fort Lauderdale,33311
+Broward,Fort Lauderdale,33312
+Broward,Fort Lauderdale,33315
+Broward,Fort Lauderdale,33316
+Broward,Fort Lauderdale,33334
+Broward,Hallandale Beach,33009
+Broward,Hillsboro Beach,33062
+Broward,Hollywood,33019
+Broward,Hollywood,33020
+Broward,Hollywood,33021
+Broward,Hollywood,33023
+Broward,Hollywood,33024
+Broward,Hollywood,33025
+Broward,Hollywood,33026
+Broward,Lauderdale Lakes,33309
+Broward,Lauderdale Lakes,33311
+Broward,Lauderdale-by-the-Sea,33308
+Broward,Lauderhill,33313
+Broward,Lauderhill,33319
+Broward,Lazy Lake,33305
+Broward,Lighthouse Point,33064
+Broward,Margate,33063
+Broward,Margate,33065
+Broward,Miramar,33023
+Broward,Miramar,33025
+Broward,Miramar,33027
+Broward,North Lauderdale,33068
+Broward,Oakland Park,33304
+Broward,Oakland Park,33309
+Broward,Oakland Park,33334
+Broward,Parkland,33067
+Broward,Pembroke Park,33009
+Broward,Pembroke Pines,33023
+Broward,Pembroke Pines,33024
+Broward,Pembroke Pines,33025
+Broward,Pembroke Pines,33026
+Broward,Pembroke Pines,33027
+Broward,Plantation,33311
+Broward,Plantation,33312
+Broward,Plantation,33313
+Broward,Plantation,33317
+Broward,Plantation,33322
+Broward,Plantation,33324
+Broward,Pompano Beach,33060
+Broward,Pompano Beach,33062
+Broward,Pompano Beach,33063
+Broward,Pompano Beach,33064
+Broward,Pompano Beach,33065
+Broward,Pompano Beach,33066
+Broward,Pompano Beach,33069
+Broward,Sea Ranch Lakes,33308
+Broward,Southwest Ranches,33330
+Broward,Sunrise,33313
+Broward,Sunrise,33322
+Broward,Sunrise,33323
+Broward,Sunrise,33325
+Broward,Sunrise,33326
+Broward,Tamarac,33319
+Broward,Tamarac,33321
+Broward,West Park,33023
+Broward,Weston,33326
+Broward,Weston,33327
+Broward,Weston,33331
+Broward,Wilton Manors,33305
+Calhoun,Altha,32421
+Calhoun,Blountstown,32424
+Charlotte,Punta Gorda,33950
+Charlotte,Punta Gorda,33955
+Citrus,Crystal River,34428
+Citrus,Inverness,34450
+Citrus,Inverness,34452
+Clay,Green Cove Springs,32043
+Clay,Keystone Heights,32656
+Clay,Orange Park,32065
+Clay,Orange Park,32073
+Clay,Penney Farms,32079
+Collier,Everglades City,34139
+Collier,Marco Island,34145
+Collier,Naples,34102
+Collier,Naples,34103
+Collier,Naples,34104
+Collier,Naples,34105
+Collier,Naples,34108
+Collier,Naples,34109
+Collier,Naples,34110
+Collier,Naples,34112
+Collier,Naples,34113
+Collier,Naples,34114
+Collier,Naples,34116
+Collier,Naples,34117
+Collier,Naples,34119
+Columbia,Fort White,32038
+Columbia,Lake City,32024
+Columbia,Lake City,32025
+Columbia,Lake City,32055
+DeSoto,Arcadia,34266
+Dixie,Cross City,32628
+Duval,Atlantic Beach,32233
+Duval,Baldwin,32234
+Duval,Jacksonville,32099
+Duval,Jacksonville,32202
+Duval,Jacksonville,32204
+Duval,Jacksonville,32205
+Duval,Jacksonville,32206
+Duval,Jacksonville,32207
+Duval,Jacksonville,32208
+Duval,Jacksonville,32209
+Duval,Jacksonville,32210
+Duval,Jacksonville,32211
+Duval,Jacksonville,32212
+Duval,Jacksonville,32214
+Duval,Jacksonville,32216
+Duval,Jacksonville,32217
+Duval,Jacksonville,32218
+Duval,Jacksonville,32219
+Duval,Jacksonville,32220
+Duval,Jacksonville,32221
+Duval,Jacksonville,32222
+Duval,Jacksonville,32223
+Duval,Jacksonville,32224
+Duval,Jacksonville,32225
+Duval,Jacksonville,32226
+Duval,Jacksonville,32227
+Duval,Jacksonville,32228
+Duval,Jacksonville,32229
+Duval,Jacksonville,32230
+Duval,Jacksonville,32231
+Duval,Jacksonville,32232
+Duval,Jacksonville,32233
+Duval,Jacksonville,32234
+Duval,Jacksonville,32235
+Duval,Jacksonville,32236
+Duval,Jacksonville,32238
+Duval,Jacksonville,32244
+Duval,Jacksonville,32246
+Duval,Jacksonville,32250
+Duval,Jacksonville,32254
+Duval,Jacksonville,32256
+Duval,Jacksonville,32257
+Duval,Jacksonville,32258
+Duval,Jacksonville Beach,32250
+Duval,Neptune Beach,32266
+Escambia,Century,32535
+Escambia,Pensacola,32501
+Escambia,Pensacola,32502
+Escambia,Pensacola,32503
+Escambia,Pensacola,32504
+Escambia,Pensacola,32505
+Escambia,Pensacola,32506
+Escambia,Pensacola,32507
+Escambia,Pensacola,32508
+Escambia,Pensacola,32514
+Escambia,Pensacola,32526
+Flagler,Bunnell,32110
+Flagler,Flagler Beach,32136
+Flagler,Palm Coast,32135
+Flagler,Palm Coast,32137
+Flagler,Palm Coast,32164
+Franklin,Apalachicola,32320
+Franklin,Carrabelle,32322
+Gadsden,Chattahoochee,32324
+Gadsden,Greensboro,32330
+Gadsden,Gretna,32332
+Gadsden,Havana,32333
+Gadsden,Midway,32343
+Gadsden,Quincy,32351
+Gadsden,Quincy,32352
+Gilchrist,Bell,32619
+Gilchrist,Fanning Springs,32693
+Gilchrist,Trenton,32693
+Glades,Moore Haven,33471
+Gulf,Port St. Joe,32456
+Gulf,Wewahitchka,32465
+Hamilton,Jasper,32052
+Hamilton,Jennings,32053
+Hamilton,White Springs,32096
+Hardee,Bowling Green,33834
+Hardee,Wauchula,33873
+Hardee,Zolfo Springs,33890
+Hendry,Clewiston,33440
+Hendry,LaBelle,33935
+Hernando,Brooksville,34601
+Hernando,Brooksville,34602
+Hernando,Brooksville,34604
+Hernando,Weeki Wachee,34607
+Highlands,Avon Park,33825
+Highlands,Lake Placid,33852
+Highlands,Sebring,33870
+Highlands,Sebring,33872
+Highlands,Sebring,33875
+Highlands,Sebring,33876
+Hillsborough,Plant City,33563
+Hillsborough,Plant City,33565
+Hillsborough,Plant City,33566
+Hillsborough,Tampa,33602
+Hillsborough,Tampa,33603
+Hillsborough,Tampa,33604
+Hillsborough,Tampa,33605
+Hillsborough,Tampa,33606
+Hillsborough,Tampa,33607
+Hillsborough,Tampa,33609
+Hillsborough,Tampa,33610
+Hillsborough,Tampa,33611
+Hillsborough,Tampa,33612
+Hillsborough,Tampa,33613
+Hillsborough,Tampa,33614
+Hillsborough,Tampa,33615
+Hillsborough,Tampa,33616
+Hillsborough,Tampa,33617
+Hillsborough,Tampa,33618
+Hillsborough,Tampa,33619
+Hillsborough,Tampa,33620
+Hillsborough,Tampa,33621
+Hillsborough,Tampa,33624
+Hillsborough,Tampa,33625
+Hillsborough,Tampa,33626
+Hillsborough,Tampa,33629
+Hillsborough,Tampa,33634
+Hillsborough,Tampa,33635
+Hillsborough,Tampa,33647
+Hillsborough,Temple Terrace,33617
+Holmes,Bonifay,32425
+Holmes,Esto,32425
+Holmes,Noma,32423
+Holmes,Ponce de Leon,32455
+Holmes,Westville,32464
+Indian River,Fellsmere,32948
+Indian River,Indian River Shores,32963
+Indian River,Orchid,32963
+Indian River,Sebastian,32958
+Indian River,Vero Beach,32960
+Indian River,Vero Beach,32961
+Indian River,Vero Beach,32962
+Indian River,Vero Beach,32963
+Indian River,Vero Beach,32966
+Indian River,Vero Beach,32967
+Jackson,Alford,32420
+Jackson,Bascom,32423
+Jackson,Campbellton,32426
+Jackson,Cottondale,32431
+Jackson,Graceville,32440
+Jackson,Grand Ridge,32442
+Jackson,Greenwood,32443
+Jackson,Jacob City,32438
+Jackson,Malone,32445
+Jackson,Marianna,32446
+Jackson,Marianna,32448
+Jackson,Sneads,32460
+Jefferson,Monticello,32344
+Jefferson,Monticello,32345
+Lafayette,Mayo,32066
+Lake,Astatula,34705
+Lake,Clermont,34711
+Lake,Clermont,34714
+Lake,Eustis,32726
+Lake,Fruitland Park,34731
+Lake,Groveland,34736
+Lake,Howey-in-the-Hills,34737
+Lake,Lady Lake,32159
+Lake,Leesburg,34748
+Lake,Leesburg,34749
+Lake,Mascotte,34753
+Lake,Minneola,34715
+Lake,Montverde,34756
+Lake,Mount Dora,32757
+Lake,Tavares,32778
+Lake,Umatilla,32784
+Lee,Bonita Springs,34134
+Lee,Bonita Springs,34135
+Lee,Cape Coral,33904
+Lee,Cape Coral,33909
+Lee,Cape Coral,33914
+Lee,Cape Coral,33990
+Lee,Cape Coral,33991
+Lee,Fort Myers,33901
+Lee,Fort Myers,33905
+Lee,Fort Myers,33907
+Lee,Fort Myers,33908
+Lee,Fort Myers,33912
+Lee,Fort Myers,33913
+Lee,Fort Myers,33916
+Lee,Fort Myers,33919
+Lee,Fort Myers Beach,33931
+Lee,Sanibel,33957
+Leon,Tallahassee,32301
+Leon,Tallahassee,32303
+Leon,Tallahassee,32304
+Leon,Tallahassee,32305
+Leon,Tallahassee,32308
+Leon,Tallahassee,32309
+Leon,Tallahassee,32310
+Leon,Tallahassee,32311
+Leon,Tallahassee,32312
+Levy,Bronson,32621
+Levy,Cedar Key,32625
+Levy,Chiefland,32626
+Levy,Inglis,34449
+Levy,Otter Creek,32683
+Levy,Williston,32696
+Levy,Yankeetown,34498
+Liberty,Bristol,32321
+Madison,Greenville,32331
+Madison,Lee,32059
+Madison,Madison,32340
+Madison,Pinetta,32350
+Manatee,Anna Maria,34216
+Manatee,Bradenton,34201
+Manatee,Bradenton,34203
+Manatee,Bradenton,34205
+Manatee,Bradenton,34207
+Manatee,Bradenton,34208
+Manatee,Bradenton,34209
+Manatee,Bradenton Beach,34217
+Manatee,Holmes Beach,34217
+Manatee,Longboat Key,34228
+Manatee,Palmetto,34221
+Marion,Belleview,34420
+Marion,Dunnellon,34430
+Marion,Dunnellon,34431
+Marion,Dunnellon,34432
+Marion,McIntosh,32664
+Marion,Ocala,34470
+Marion,Ocala,34471
+Marion,Ocala,34472
+Marion,Ocala,34473
+Marion,Ocala,34474
+Marion,Ocala,34475
+Marion,Ocala,34476
+Marion,Ocala,34479
+Marion,Ocala,34480
+Marion,Ocala,34481
+Marion,Ocala,34482
+Marion,Reddick,32686
+Martin,Jupiter Island,33455
+Martin,Ocean Breeze Park,34957
+Martin,Sewall's Point,34996
+Martin,Stuart,34994
+Martin,Stuart,34995
+Martin,Stuart,34996
+Martin,Stuart,34997
+Miami-Dade,Aventura,33180
+Miami-Dade,Bal Harbour,33154
+Miami-Dade,Bay Harbor Islands,33154
+Miami-Dade,Coral Gables,33114
+Miami-Dade,Coral Gables,33133
+Miami-Dade,Coral Gables,33134
+Miami-Dade,Coral Gables,33143
+Miami-Dade,Coral Gables,33146
+Miami-Dade,Cutler Bay,33157
+Miami-Dade,Cutler Bay,33189
+Miami-Dade,Doral,33122
+Miami-Dade,Doral,33126
+Miami-Dade,Doral,33166
+Miami-Dade,Doral,33172
+Miami-Dade,Doral,33178
+Miami-Dade,Florida City,33034
+Miami-Dade,Golden Beach,33160
+Miami-Dade,Hialeah,33010
+Miami-Dade,Hialeah,33012
+Miami-Dade,Hialeah,33013
+Miami-Dade,Hialeah,33014
+Miami-Dade,Hialeah,33015
+Miami-Dade,Hialeah,33016
+Miami-Dade,Hialeah,33018
+Miami-Dade,Hialeah Gardens,33016
+Miami-Dade,Homestead,33030
+Miami-Dade,Homestead,33031
+Miami-Dade,Homestead,33032
+Miami-Dade,Homestead,33033
+Miami-Dade,Homestead,33035
+Miami-Dade,Indian Creek,33154
+Miami-Dade,Key Biscayne,33149
+Miami-Dade,Medley,33166
+Miami-Dade,Miami,33101
+Miami-Dade,Miami,33109
+Miami-Dade,Miami,33125
+Miami-Dade,Miami,33126
+Miami-Dade,Miami,33127
+Miami-Dade,Miami,33128
+Miami-Dade,Miami,33129
+Miami-Dade,Miami,33130
+Miami-Dade,Miami,33131
+Miami-Dade,Miami,33132
+Miami-Dade,Miami,33133
+Miami-Dade,Miami,33134
+Miami-Dade,Miami,33135
+Miami-Dade,Miami,33136
+Miami-Dade,Miami,33137
+Miami-Dade,Miami,33138
+Miami-Dade,Miami,33142
+Miami-Dade,Miami,33144
+Miami-Dade,Miami,33145
+Miami-Dade,Miami,33146
+Miami-Dade,Miami,33147
+Miami-Dade,Miami,33150
+Miami-Dade,Miami,33155
+Miami-Dade,Miami,33156
+Miami-Dade,Miami,33157
+Miami-Dade,Miami,33158
+Miami-Dade,Miami,33161
+Miami-Dade,Miami,33165
+Miami-Dade,Miami,33166
+Miami-Dade,Miami,33167
+Miami-Dade,Miami,33168
+Miami-Dade,Miami,33169
+Miami-Dade,Miami,33170
+Miami-Dade,Miami,33172
+Miami-Dade,Miami,33173
+Miami-Dade,Miami,33174
+Miami-Dade,Miami,33175
+Miami-Dade,Miami,33176
+Miami-Dade,Miami,33177
+Miami-Dade,Miami,33178
+Miami-Dade,Miami,33179
+Miami-Dade,Miami,33180
+Miami-Dade,Miami,33181
+Miami-Dade,Miami,33182
+Miami-Dade,Miami,33183
+Miami-Dade,Miami,33184
+Miami-Dade,Miami,33185
+Miami-Dade,Miami,33186
+Miami-Dade,Miami,33187
+Miami-Dade,Miami,33189
+Miami-Dade,Miami,33190
+Miami-Dade,Miami Beach,33109
+Miami-Dade,Miami Beach,33139
+Miami-Dade,Miami Beach,33140
+Miami-Dade,Miami Beach,33141
+Miami-Dade,Miami Gardens,33055
+Miami-Dade,Miami Gardens,33056
+Miami-Dade,Miami Gardens,33169
+Miami-Dade,Miami Lakes,33014
+Miami-Dade,Miami Lakes,33015
+Miami-Dade,Miami Lakes,33016
+Miami-Dade,Miami Shores,33138
+Miami-Dade,Miami Shores,33150
+Miami-Dade,Miami Springs,33166
+Miami-Dade,North Bay Village,33141
+Miami-Dade,North Miami,33161
+Miami-Dade,North Miami,33162
+Miami-Dade,North Miami,33167
+Miami-Dade,North Miami,33168
+Miami-Dade,North Miami,33181
+Miami-Dade,North Miami Beach,33160
+Miami-Dade,North Miami Beach,33162
+Miami-Dade,North Miami Beach,33169
+Miami-Dade,Opa-locka,33054
+Miami-Dade,Palmetto Bay,33157
+Miami-Dade,Palmetto Bay,33158
+Miami-Dade,Pinecrest,33156
+Miami-Dade,South Miami,33143
+Miami-Dade,Sunny Isles Beach,33160
+Miami-Dade,Surfside,33154
+Miami-Dade,Sweetwater,33172
+Miami-Dade,Virginia Gardens,33166
+Miami-Dade,West Miami,33144
+Monroe,Islamorada,33036
+Monroe,Key Colony Beach,33051
+Monroe,Key West,33040
+Monroe,Key West,33041
+Monroe,Layton,33001
+Monroe,Marathon,33050
+Monroe,Marathon,33051
+Nassau,Callahan,32011
+Nassau,Fernandina Beach,32034
+Nassau,Fernandina Beach,32035
+Nassau,Hilliard,32046
+Okaloosa,Crestview,32536
+Okaloosa,Destin,32540
+Okaloosa,Destin,32541
+Okaloosa,Fort Walton Beach,32547
+Okaloosa,Fort Walton Beach,32548
+Okaloosa,Laurel Hill,32567
+Okaloosa,Mary Esther,32569
+Okaloosa,Niceville,32578
+Okaloosa,Shalimar,32579
+Okaloosa,Valparaiso,32580
+Okeechobee,Okeechobee,34972
+Okeechobee,Okeechobee,34973
+Okeechobee,Okeechobee,34974
+Orange,Apopka,32703
+Orange,Apopka,32712
+Orange,Bay Lake,32836
+Orange,Belle Isle,32809
+Orange,Eatonville,32751
+Orange,Edgewood,32809
+Orange,Maitland,32751
+Orange,Ocoee,34761
+Orange,Orlando,32801
+Orange,Orlando,32803
+Orange,Orlando,32804
+Orange,Orlando,32805
+Orange,Orlando,32806
+Orange,Orlando,32807
+Orange,Orlando,32808
+Orange,Orlando,32809
+Orange,Orlando,32810
+Orange,Orlando,32811
+Orange,Orlando,32812
+Orange,Orlando,32814
+Orange,Orlando,32817
+Orange,Orlando,32818
+Orange,Orlando,32819
+Orange,Orlando,32821
+Orange,Orlando,32822
+Orange,Orlando,32824
+Orange,Orlando,32825
+Orange,Orlando,32826
+Orange,Orlando,32827
+Orange,Orlando,32828
+Orange,Orlando,32829
+Orange,Orlando,32831
+Orange,Orlando,32832
+Orange,Orlando,32833
+Orange,Orlando,32835
+Orange,Orlando,32836
+Orange,Orlando,32837
+Orange,Orlando,32839
+Orange,Windermere,34786
+Orange,Winter Garden,34777
+Orange,Winter Park,32789
+Orange,Winter Park,32792
+Osceola,Kissimmee,34741
+Osceola,Kissimmee,34743
+Osceola,Kissimmee,34744
+Osceola,Kissimmee,34745
+Osceola,Kissimmee,34746
+Osceola,St. Cloud,34769
+Osceola,St. Cloud,34771
+Osceola,St. Cloud,34772
+Palm Beach,Atlantis,33462
+Palm Beach,Belle Glade,33430
+Palm Beach,Boca Raton,33431
+Palm Beach,Boca Raton,33432
+Palm Beach,Boca Raton,33433
+Palm Beach,Boca Raton,33434
+Palm Beach,Boca Raton,33486
+Palm Beach,Boca Raton,33487
+Palm Beach,Boca Raton,33496
+Palm Beach,Boynton Beach,33424
+Palm Beach,Boynton Beach,33425
+Palm Beach,Boynton Beach,33426
+Palm Beach,Boynton Beach,33435
+Palm Beach,Briny Breezes,33435
+Palm Beach,Cloud Lake,33406
+Palm Beach,Delray Beach,33444
+Palm Beach,Delray Beach,33445
+Palm Beach,Delray Beach,33446
+Palm Beach,Delray Beach,33483
+Palm Beach,Glen Ridge,33406
+Palm Beach,Golf,33436
+Palm Beach,Greenacres,33413
+Palm Beach,Greenacres,33463
+Palm Beach,Gulf Stream,33483
+Palm Beach,Haverhill,33415
+Palm Beach,Highland Beach,33487
+Palm Beach,Hypoluxo,33462
+Palm Beach,Juno Beach,33408
+Palm Beach,Jupiter,33458
+Palm Beach,Jupiter,33477
+Palm Beach,Jupiter Inlet Colony,33469
+Palm Beach,Lake Clarke Shores,33406
+Palm Beach,Lake Park,33403
+Palm Beach,Lake Worth,33460
+Palm Beach,Lake Worth Beach,33460
+Palm Beach,Lake Worth Beach,33461
+Palm Beach,Lake Worth Beach,33462
+Palm Beach,Lantana,33462
+Palm Beach,Manalapan,33462
+Palm Beach,Mangonia Park,33407
+Palm Beach,North Palm Beach,33408
+Palm Beach,Ocean Ridge,33435
+Palm Beach,Pahokee,33476
+Palm Beach,Palm Beach,33480
+Palm Beach,Palm Beach Gardens,33410
+Palm Beach,Palm Beach Gardens,33418
+Palm Beach,Palm Beach Shores,33404
+Palm Beach,Palm Springs,33406
+Palm Beach,Rivera Beach,33404
+Palm Beach,Riviera Beach,33404
+Palm Beach,Royal Palm Beach,33411
+Palm Beach,South Bay,33493
+Palm Beach,South Palm Beach,33480
+Palm Beach,Tequesta,33469
+Palm Beach,Wellington,33414
+Palm Beach,West Palm Beach,33401
+Palm Beach,West Palm Beach,33403
+Palm Beach,West Palm Beach,33404
+Palm Beach,West Palm Beach,33405
+Palm Beach,West Palm Beach,33406
+Palm Beach,West Palm Beach,33407
+Palm Beach,West Palm Beach,33409
+Palm Beach,West Palm Beach,33411
+Palm Beach,West Palm Beach,33412
+Palm Beach,West Palm Beach,33413
+Palm Beach,West Palm Beach,33415
+Palm Beach,West Palm Beach,33417
+Pasco,Dade City,33523
+Pasco,Dade City,33525
+Pasco,New Port Richey,34652
+Pasco,New Port Richey,34653
+Pasco,New Port Richey,34654
+Pasco,New Port Richey,34655
+Pasco,New Port Richey,34656
+Pasco,Port Richey,34668
+Pasco,San Antonio,33576
+Pasco,St. Leo,33574
+Pasco,Zephyrhills,33539
+Pasco,Zephyrhills,33540
+Pasco,Zephyrhills,33541
+Pinellas,Belleair,33756
+Pinellas,Belleair Beach,33786
+Pinellas,Belleair Bluffs,33770
+Pinellas,Clearwater,33755
+Pinellas,Clearwater,33756
+Pinellas,Clearwater,33759
+Pinellas,Clearwater,33760
+Pinellas,Clearwater,33761
+Pinellas,Clearwater,33763
+Pinellas,Clearwater,33764
+Pinellas,Clearwater,33765
+Pinellas,Clearwater,33767
+Pinellas,Dunedin,34698
+Pinellas,Gulfport,33707
+Pinellas,Indian Rocks Beach,33785
+Pinellas,Indian Shores,33785
+Pinellas,Kenneth City,33709
+Pinellas,Largo,33770
+Pinellas,Largo,33771
+Pinellas,Largo,33773
+Pinellas,Largo,33774
+Pinellas,Largo,33777
+Pinellas,Largo,33778
+Pinellas,Madeira Beach,33708
+Pinellas,North Redington Beach,33708
+Pinellas,Oldsmar,34677
+Pinellas,Pinellas Park,33781
+Pinellas,Pinellas Park,33782
+Pinellas,Redington Beach,33708
+Pinellas,Redington Shores,33708
+Pinellas,Safety Harbor,34695
+Pinellas,St. Pete Beach,33706
+Pinellas,St. Petersburg,33701
+Pinellas,St. Petersburg,33702
+Pinellas,St. Petersburg,33703
+Pinellas,St. Petersburg,33704
+Pinellas,St. Petersburg,33705
+Pinellas,St. Petersburg,33706
+Pinellas,St. Petersburg,33707
+Pinellas,St. Petersburg,33708
+Pinellas,St. Petersburg,33709
+Pinellas,St. Petersburg,33710
+Pinellas,St. Petersburg,33711
+Pinellas,St. Petersburg,33712
+Pinellas,St. Petersburg,33713
+Pinellas,St. Petersburg,33714
+Pinellas,St. Petersburg,33715
+Pinellas,St. Petersburg,33716
+Pinellas,Seminole,33772
+Pinellas,Seminole,33776
+Pinellas,South Pasadena,33707
+Pinellas,Tarpon Springs,34688
+Pinellas,Tarpon Springs,34689
+Pinellas,Treasure Island,33706
+Polk,Auburndale,33823
+Polk,Bartow,33830
+Polk,Davenport,33836
+Polk,Davenport,33837
+Polk,Dundee,33838
+Polk,Eagle Lake,33839
+Polk,Fort Meade,33841
+Polk,Frostproof,33843
+Polk,Haines City,33844
+Polk,Highland Park,33853
+Polk,Lake Alfred,33850
+Polk,Lake Hamilton,33851
+Polk,Lake Wales,33853
+Polk,Lake Wales,33859
+Polk,Lakeland,33801
+Polk,Lakeland,33803
+Polk,Lakeland,33805
+Polk,Lakeland,33809
+Polk,Lakeland,33810
+Polk,Lakeland,33811
+Polk,Lakeland,33813
+Polk,Mulberry,33860
+Polk,Polk City,33868
+Polk,Winter Haven,33880
+Polk,Winter Haven,33881
+Polk,Winter Haven,33884
+Putnam,Crescent City,32112
+Putnam,Interlachen,32148
+Putnam,Palatka,32177
+Putnam,Palatka,32178
+Putnam,Pomona Park,32181
+Putnam,Welaka,32193
+St. Johns,St. Augustine,32080
+St. Johns,St. Augustine,32084
+St. Johns,St. Augustine,32086
+St. Johns,St. Augustine Beach,32080
+St. Lucie,Fort Pierce,34945
+St. Lucie,Fort Pierce,34946
+St. Lucie,Fort Pierce,34947
+St. Lucie,Fort Pierce,34949
+St. Lucie,Fort Pierce,34950
+St. Lucie,Fort Pierce,34951
+St. Lucie,Port St. Lucie,34952
+St. Lucie,Port St. Lucie,34953
+St. Lucie,Port St. Lucie,34983
+St. Lucie,Port St. Lucie,34984
+St. Lucie,Port St. Lucie,34986
+St. Lucie,Port St. Lucie,34987
+St. Lucie,Port St. Lucie,34988
+Santa Rosa,Gulf Breeze,32561
+Santa Rosa,Gulf Breeze,32563
+Santa Rosa,Jay,32565
+Santa Rosa,Milton,32570
+Santa Rosa,Milton,32571
+Santa Rosa,Milton,32572
+Sarasota,Longboat Key,34228
+Sarasota,North Port,34286
+Sarasota,North Port,34287
+Sarasota,North Port,34288
+Sarasota,Sarasota,34230
+Sarasota,Sarasota,34231
+Sarasota,Sarasota,34232
+Sarasota,Sarasota,34233
+Sarasota,Sarasota,34234
+Sarasota,Sarasota,34235
+Sarasota,Sarasota,34236
+Sarasota,Sarasota,34237
+Sarasota,Sarasota,34238
+Sarasota,Sarasota,34239
+Sarasota,Sarasota,34240
+Sarasota,Sarasota,34241
+Sarasota,Venice,34285
+Sarasota,Venice,34292
+Sarasota,Venice,34293
+Seminole,Altamonte Springs,32701
+Seminole,Altamonte Springs,32714
+Seminole,Casselberry,32707
+Seminole,Lake Mary,32746
+Seminole,Longwood,32750
+Seminole,Longwood,32752
+Seminole,Oviedo,32765
+Seminole,Sanford,32771
+Seminole,Sanford,32773
+Seminole,Winter Springs,32708
+Sumter,Bushnell,33513
+Sumter,Center Hill,33514
+Sumter,Coleman,33521
+Sumter,Webster,33597
+Sumter,Wildwood,34785
+Suwannee,Branford,32008
+Suwannee,Live Oak,32060
+Suwannee,Live Oak,32064
+Taylor,Perry,32347
+Taylor,Perry,32348
+Union,Lake Butler,32054
+Union,Raiford,32083
+Union,Worthington Springs,32697
+Volusia,Daytona Beach,32114
+Volusia,Daytona Beach,32117
+Volusia,Daytona Beach,32118
+Volusia,Daytona Beach,32119
+Volusia,Daytona Beach Shores,32118
+Volusia,DeBary,32713
+Volusia,DeLand,32720
+Volusia,DeLand,32724
+Volusia,Deltona,32725
+Volusia,Deltona,32738
+Volusia,Edgewater,32132
+Volusia,Holly Hill,32117
+Volusia,Lake Helen,32744
+Volusia,New Smyrna Beach,32168
+Volusia,New Smyrna Beach,32169
+Volusia,Oak Hill,32759
+Volusia,Orange City,32763
+Volusia,Ormond Beach,32174
+Volusia,Ormond Beach,32176
+Volusia,Pierson,32180
+Volusia,Ponce Inlet,32127
+Volusia,Port Orange,32127
+Volusia,Port Orange,32129
+Volusia,South Daytona,32119
+Wakulla,Sopchoppy,32358
+Wakulla,St. Marks,32355
+Walton,DeFuniak Springs,32433
+Walton,DeFuniak Springs,32435
+Walton,Freeport,32439
+Walton,Paxton,32538
+Washington,Caryville,32427
+Washington,Chipley,32428
+Washington,Ebro,32437
+Washington,Vernon,32462
+Washington,Wausau,32463

@@ -1,0 +1,499 @@
+County,City,ZIP Code
+Adams,Hatton,99344
+Adams,Lind,99341
+Adams,Othello,99344
+Adams,Ritzville,99169
+Adams,Washtucna,99371
+Asotin,Asotin,99402
+Asotin,Clarkston,99403
+Benton,Benton City,99320
+Benton,Kennewick,99336
+Benton,Kennewick,99337
+Benton,Prosser,99350
+Benton,Richland,99352
+Benton,Richland,99354
+Benton,West Richland,99353
+Chelan,Cashmere,98815
+Chelan,Chelan,98816
+Chelan,Entiat,98822
+Chelan,Leavenworth,98826
+Chelan,Wenatchee,98801
+Chelan,Wenatchee,98807
+Clallam,Forks,98331
+Clallam,Port Angeles,98362
+Clallam,Port Angeles,98363
+Clallam,Sequim,98382
+Clark,Battle Ground,98604
+Clark,Camas,98607
+Clark,La Center,98629
+Clark,Ridgefield,98642
+Clark,Vancouver,98660
+Clark,Vancouver,98661
+Clark,Vancouver,98662
+Clark,Vancouver,98663
+Clark,Vancouver,98664
+Clark,Vancouver,98665
+Clark,Vancouver,98666
+Clark,Vancouver,98668
+Clark,Vancouver,98682
+Clark,Vancouver,98683
+Clark,Vancouver,98684
+Clark,Vancouver,98685
+Clark,Vancouver,98686
+Clark,Washougal,98671
+Clark,Yacolt,98675
+Columbia,Dayton,99328
+Columbia,Starbuck,99359
+Cowlitz,Castle Rock,98611
+Cowlitz,Kalama,98625
+Cowlitz,Kelso,98626
+Cowlitz,Longview,98632
+Cowlitz,Woodland,98674
+Douglas,Bridgeport,98813
+Douglas,East Wenatchee,98802
+Douglas,Mansfield,98830
+Douglas,Rock Island,98850
+Douglas,Waterville,98858
+Ferry,Republic,99166
+Franklin,Connell,99326
+Franklin,Kahlotus,99335
+Franklin,Mesa,99343
+Franklin,Pasco,99301
+Franklin,Pasco,99302
+Garfield,Pomeroy,99347
+Grant,Coulee City,99115
+Grant,Coulee Dam,99116
+Grant,Electric City,99123
+Grant,Ephrata,98823
+Grant,George,98824
+Grant,Grand Coulee,99133
+Grant,Hartline,99135
+Grant,Krupp,98832
+Grant,Mattawa,99349
+Grant,Moses Lake,98837
+Grant,Quincy,98848
+Grant,Royal City,99357
+Grant,Soap Lake,98851
+Grant,Warden,98857
+Grant,Wilson Creek,98860
+Grays Harbor,Aberdeen,98520
+Grays Harbor,Cosmopolis,98537
+Grays Harbor,Elma,98541
+Grays Harbor,Hoquiam,98550
+Grays Harbor,McCleary,98557
+Grays Harbor,Montesano,98563
+Grays Harbor,Oakville,98568
+Grays Harbor,Ocean Shores,98569
+Grays Harbor,Westport,98595
+Island,Coupeville,98239
+Island,Langley,98260
+Island,Oak Harbor,98277
+Island,Oak Harbor,98278
+Jefferson,Port Townsend,98368
+King,Algona,98001
+King,Auburn,98001
+King,Auburn,98002
+King,Auburn,98092
+King,Beaux Arts Village,98004
+King,Bellevue,98004
+King,Bellevue,98005
+King,Bellevue,98006
+King,Bellevue,98007
+King,Bellevue,98008
+King,Bellevue,98009
+King,Black Diamond,98010
+King,Bothell,98011
+King,Bothell,98021
+King,Burien,98146
+King,Burien,98166
+King,Carnation,98014
+King,Clyde Hill,98004
+King,Covington,98042
+King,Des Moines,98198
+King,Duvall,98019
+King,Enumclaw,98022
+King,Federal Way,98003
+King,Federal Way,98023
+King,Federal Way,98063
+King,Hunts Point,98004
+King,Issaquah,98027
+King,Issaquah,98029
+King,Kenmore,98028
+King,Kent,98030
+King,Kent,98031
+King,Kent,98032
+King,Kent,98035
+King,Kent,98042
+King,Kirkland,98033
+King,Kirkland,98034
+King,Lake Forest Park,98155
+King,Maple Valley,98038
+King,Medina,98039
+King,Mercer Island,98040
+King,Milton,98354
+King,Newcastle,98056
+King,Normandy Park,98166
+King,North Bend,98045
+King,Pacific,98047
+King,Redmond,98052
+King,Redmond,98053
+King,Redmond,98073
+King,Renton,98055
+King,Renton,98056
+King,Renton,98057
+King,Renton,98058
+King,Sammamish,98029
+King,Sammamish,98074
+King,SeaTac,98148
+King,SeaTac,98188
+King,Seattle,98101
+King,Seattle,98102
+King,Seattle,98103
+King,Seattle,98104
+King,Seattle,98105
+King,Seattle,98106
+King,Seattle,98107
+King,Seattle,98108
+King,Seattle,98109
+King,Seattle,98111
+King,Seattle,98112
+King,Seattle,98113
+King,Seattle,98114
+King,Seattle,98115
+King,Seattle,98116
+King,Seattle,98117
+King,Seattle,98118
+King,Seattle,98119
+King,Seattle,98121
+King,Seattle,98122
+King,Seattle,98124
+King,Seattle,98125
+King,Seattle,98126
+King,Seattle,98127
+King,Seattle,98129
+King,Seattle,98131
+King,Seattle,98133
+King,Seattle,98134
+King,Seattle,98136
+King,Seattle,98138
+King,Seattle,98139
+King,Seattle,98141
+King,Seattle,98144
+King,Seattle,98145
+King,Seattle,98146
+King,Seattle,98148
+King,Seattle,98154
+King,Seattle,98155
+King,Seattle,98158
+King,Seattle,98160
+King,Seattle,98161
+King,Seattle,98164
+King,Seattle,98165
+King,Seattle,98166
+King,Seattle,98168
+King,Seattle,98170
+King,Seattle,98174
+King,Seattle,98175
+King,Seattle,98177
+King,Seattle,98178
+King,Seattle,98181
+King,Seattle,98184
+King,Seattle,98185
+King,Seattle,98188
+King,Seattle,98190
+King,Seattle,98191
+King,Seattle,98194
+King,Seattle,98195
+King,Seattle,98198
+King,Seattle,98199
+King,Shoreline,98133
+King,Shoreline,98155
+King,Shoreline,98177
+King,Skykomish,98288
+King,Snoqualmie,98065
+King,Tukwila,98168
+King,Tukwila,98188
+King,Woodinville,98072
+King,Yarrow Point,98004
+Kitsap,Bainbridge Island,98110
+Kitsap,Bremerton,98310
+Kitsap,Bremerton,98311
+Kitsap,Bremerton,98312
+Kitsap,Port Orchard,98366
+Kitsap,Port Orchard,98367
+Kitsap,Poulsbo,98370
+Kittitas,Cle Elum,98922
+Kittitas,Ellensburg,98926
+Kittitas,Kittitas,98934
+Kittitas,Roslyn,98941
+Kittitas,South Cle Elum,98943
+Klickitat,Bingen,98605
+Klickitat,Goldendale,98620
+Klickitat,White Salmon,98672
+Lewis,Centralia,98531
+Lewis,Chehalis,98532
+Lewis,Morton,98356
+Lewis,Mossyrock,98564
+Lewis,Napavine,98565
+Lewis,Pe Ell,98572
+Lewis,Toledo,98591
+Lewis,Vader,98593
+Lewis,Winlock,98596
+Lincoln,Almira,99103
+Lincoln,Creston,99117
+Lincoln,Davenport,99122
+Lincoln,Harrington,99134
+Lincoln,Odessa,99159
+Lincoln,Reardan,99029
+Lincoln,Sprague,99032
+Lincoln,Wilbur,99185
+Mason,Shelton,98584
+Okanogan,Brewster,98812
+Okanogan,Conconully,98819
+Okanogan,Coulee Dam,99116
+Okanogan,Elmer City,99124
+Okanogan,Nespelem,99155
+Okanogan,Okanogan,98840
+Okanogan,Omak,98841
+Okanogan,Oroville,98844
+Okanogan,Pateros,98846
+Okanogan,Riverside,98849
+Okanogan,Tonasket,98855
+Okanogan,Twisp,98856
+Okanogan,Winthrop,98862
+Pacific,Ilwaco,98624
+Pacific,Long Beach,98631
+Pacific,Raymond,98577
+Pacific,South Bend,98586
+Pend Oreille,Cusick,99119
+Pend Oreille,Ione,99139
+Pend Oreille,Metaline,99152
+Pend Oreille,Metaline Falls,99153
+Pend Oreille,Newport,99156
+Pierce,Bonney Lake,98391
+Pierce,Buckley,98321
+Pierce,Carbonado,98323
+Pierce,DuPont,98327
+Pierce,Eatonville,98328
+Pierce,Edgewood,98372
+Pierce,Fife,98424
+Pierce,Fircrest,98466
+Pierce,Gig Harbor,98329
+Pierce,Gig Harbor,98332
+Pierce,Lakewood,98439
+Pierce,Lakewood,98496
+Pierce,Lakewood,98498
+Pierce,Lakewood,98499
+Pierce,Milton,98354
+Pierce,Orting,98360
+Pierce,Pacific,98047
+Pierce,Puyallup,98371
+Pierce,Puyallup,98372
+Pierce,Puyallup,98373
+Pierce,Puyallup,98374
+Pierce,Roy,98580
+Pierce,Ruston,98407
+Pierce,South Prairie,98385
+Pierce,Steilacoom,98388
+Pierce,Sumner,98352
+Pierce,Sumner,98390
+Pierce,Tacoma,98401
+Pierce,Tacoma,98402
+Pierce,Tacoma,98403
+Pierce,Tacoma,98404
+Pierce,Tacoma,98405
+Pierce,Tacoma,98406
+Pierce,Tacoma,98407
+Pierce,Tacoma,98408
+Pierce,Tacoma,98409
+Pierce,Tacoma,98411
+Pierce,Tacoma,98412
+Pierce,Tacoma,98413
+Pierce,Tacoma,98415
+Pierce,Tacoma,98416
+Pierce,Tacoma,98417
+Pierce,Tacoma,98418
+Pierce,Tacoma,98421
+Pierce,Tacoma,98422
+Pierce,Tacoma,98424
+Pierce,Tacoma,98430
+Pierce,Tacoma,98431
+Pierce,Tacoma,98433
+Pierce,Tacoma,98438
+Pierce,Tacoma,98439
+Pierce,Tacoma,98443
+Pierce,Tacoma,98444
+Pierce,Tacoma,98445
+Pierce,Tacoma,98446
+Pierce,Tacoma,98447
+Pierce,Tacoma,98448
+Pierce,Tacoma,98464
+Pierce,Tacoma,98465
+Pierce,Tacoma,98466
+Pierce,Tacoma,98467
+Pierce,Tacoma,98471
+Pierce,Tacoma,98481
+Pierce,Tacoma,98490
+Pierce,Tacoma,98493
+Pierce,University Place,98466
+Pierce,Wilkeson,98396
+San Juan,Friday Harbor,98250
+Skagit,Anacortes,98221
+Skagit,Burlington,98233
+Skagit,Concrete,98237
+Skagit,Hamilton,98255
+Skagit,La Conner,98257
+Skagit,Lyman,98263
+Skagit,Mount Vernon,98273
+Skagit,Mount Vernon,98274
+Skagit,Sedro-Woolley,98284
+Skamania,North Bonneville,98639
+Skamania,Stevenson,98648
+Snohomish,Arlington,98223
+Snohomish,Brier,98036
+Snohomish,Darrington,98241
+Snohomish,Edmonds,98020
+Snohomish,Edmonds,98026
+Snohomish,Everett,98201
+Snohomish,Everett,98203
+Snohomish,Everett,98204
+Snohomish,Everett,98206
+Snohomish,Everett,98207
+Snohomish,Everett,98208
+Snohomish,Everett,98213
+Snohomish,Gold Bar,98251
+Snohomish,Granite Falls,98252
+Snohomish,Index,98256
+Snohomish,Lake Stevens,98258
+Snohomish,Lynnwood,98036
+Snohomish,Lynnwood,98037
+Snohomish,Lynnwood,98046
+Snohomish,Marysville,98270
+Snohomish,Marysville,98271
+Snohomish,Mill Creek,98012
+Snohomish,Monroe,98272
+Snohomish,Mountlake Terrace,98043
+Snohomish,Mukilteo,98275
+Snohomish,Snohomish,98290
+Snohomish,Snohomish,98291
+Snohomish,Stanwood,98292
+Snohomish,Sultan,98294
+Snohomish,Woodway,98020
+Spokane,Airway Heights,99001
+Spokane,Cheney,99004
+Spokane,Deer Park,99006
+Spokane,Fairfield,99012
+Spokane,Latah,99018
+Spokane,Liberty Lake,99019
+Spokane,Medical Lake,99022
+Spokane,Millwood,99212
+Spokane,Rockford,99030
+Spokane,Spangle,99031
+Spokane,Spokane,99201
+Spokane,Spokane,99202
+Spokane,Spokane,99203
+Spokane,Spokane,99204
+Spokane,Spokane,99205
+Spokane,Spokane,99206
+Spokane,Spokane,99207
+Spokane,Spokane,99208
+Spokane,Spokane,99209
+Spokane,Spokane,99210
+Spokane,Spokane,99211
+Spokane,Spokane,99212
+Spokane,Spokane,99213
+Spokane,Spokane,99214
+Spokane,Spokane,99215
+Spokane,Spokane,99216
+Spokane,Spokane,99217
+Spokane,Spokane,99218
+Spokane,Spokane,99219
+Spokane,Spokane,99220
+Spokane,Spokane,99223
+Spokane,Spokane,99224
+Spokane,Spokane,99228
+Spokane,Spokane,99251
+Spokane,Spokane,99252
+Spokane,Spokane,99256
+Spokane,Spokane Valley,99016
+Spokane,Spokane Valley,99206
+Spokane,Spokane Valley,99212
+Spokane,Spokane Valley,99216
+Spokane,Spokane Valley,99223
+Spokane,Waverly,99039
+Stevens,Chewelah,99109
+Stevens,Colville,99114
+Stevens,Kettle Falls,99141
+Stevens,Marcus,99151
+Stevens,Northport,99157
+Stevens,Springdale,99173
+Thurston,Bucoda,98530
+Thurston,Lacey,98503
+Thurston,Lacey,98509
+Thurston,Olympia,98501
+Thurston,Olympia,98502
+Thurston,Olympia,98503
+Thurston,Olympia,98504
+Thurston,Olympia,98505
+Thurston,Olympia,98506
+Thurston,Olympia,98507
+Thurston,Olympia,98508
+Thurston,Olympia,98512
+Thurston,Olympia,98513
+Thurston,Rainier,98576
+Thurston,Tenino,98589
+Thurston,Tumwater,98501
+Thurston,Tumwater,98502
+Thurston,Tumwater,98512
+Thurston,Yelm,98597
+Wahkiakum,Cathlamet,98612
+Walla Walla,College Place,99324
+Walla Walla,Prescott,99348
+Walla Walla,Waitsburg,99361
+Walla Walla,Walla Walla,99362
+Whatcom,Bellingham,98225
+Whatcom,Bellingham,98226
+Whatcom,Bellingham,98227
+Whatcom,Bellingham,98228
+Whatcom,Bellingham,98229
+Whatcom,Blaine,98230
+Whatcom,Everson,98247
+Whatcom,Ferndale,98248
+Whatcom,Lynden,98264
+Whatcom,Nooksack,98276
+Whatcom,Sumas,98295
+Whitman,Albion,99102
+Whitman,Colfax,99111
+Whitman,Colton,99113
+Whitman,Endicott,99125
+Whitman,Farmington,99128
+Whitman,Garfield,99130
+Whitman,Lamont,99017
+Whitman,Malden,99149
+Whitman,Oakesdale,99158
+Whitman,Palouse,99161
+Whitman,Pullman,99163
+Whitman,Pullman,99164
+Whitman,Rosalia,99170
+Whitman,St. John,99171
+Whitman,Tekoa,99033
+Whitman,Uniontown,99179
+Yakima,Grandview,98930
+Yakima,Granger,98932
+Yakima,Harrah,98933
+Yakima,Mabton,98935
+Yakima,Moxee,98936
+Yakima,Naches,98937
+Yakima,Selah,98942
+Yakima,Sunnyside,98944
+Yakima,Tieton,98947
+Yakima,Toppenish,98948
+Yakima,Union Gap,98903
+Yakima,Wapato,98951
+Yakima,Yakima,98901
+Yakima,Yakima,98902
+Yakima,Yakima,98903
+Yakima,Yakima,98904
+Yakima,Yakima,98907
+Yakima,Yakima,98908
+Yakima,Zillah,98953
