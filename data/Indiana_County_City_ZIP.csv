@@ -1,0 +1,987 @@
+County,City,ZIP_Code
+Madison,Alexandria,46001
+Madison,Anderson,46011
+Madison,Anderson,46012
+Madison,Anderson,46013
+Madison,Anderson,46014
+Madison,Anderson,46015
+Madison,Anderson,46016
+Madison,Anderson,46017
+Madison,Anderson,46018
+Hamilton,Arcadia,46030
+Hamilton,Atlanta,46031
+Hamilton,Carmel,46032
+Hamilton,Carmel,46033
+Hamilton,Cicero,46034
+Clinton,Colfax,46035
+Madison,Elwood,46036
+Hamilton,Fishers,46037
+Hamilton,Fishers,46038
+Clinton,Forest,46039
+Hancock,Fortville,46040
+Clinton,Frankfort,46041
+Madison,Frankton,46044
+Tipton,Goldsmith,46045
+Tipton,Hobbs,46047
+Madison,Ingalls,46048
+Tipton,Kempton,46049
+Clinton,Kirklin,46050
+Madison,Lapel,46051
+Boone,Lebanon,46052
+Hancock,Mc Cordsville,46055
+Madison,Markleville,46056
+Clinton,Michigantown,46057
+Clinton,Mulberry,46058
+Hamilton,Noblesville,46060
+Hamilton,Noblesville,46061
+Hamilton,Noblesville,46062
+Madison,Orestes,46063
+Madison,Pendleton,46064
+Clinton,Rossville,46065
+Clinton,Sedalia,46067
+Tipton,Sharpsville,46068
+Hamilton,Sheridan,46069
+Madison,Summitville,46070
+Boone,Thorntown,46071
+Tipton,Tipton,46072
+Hamilton,Westfield,46074
+Boone,Whitestown,46075
+Tipton,Windfall,46076
+Boone,Zionsville,46077
+Hamilton,Carmel,46082
+Hamilton,Fishers,46085
+Boone,Advance,46102
+Hendricks,Amo,46103
+Rush,Arlington,46104
+Putnam,Bainbridge,46105
+Johnson,Bargersville,46106
+Marion,Beech Grove,46107
+Shelby,Boggstown,46110
+Morgan,Brooklyn,46111
+Hendricks,Brownsburg,46112
+Marion,Camby,46113
+Rush,Carthage,46115
+Hancock,Charlottesville,46117
+Hendricks,Clayton,46118
+Putnam,Cloverdale,46120
+Hendricks,Coatesville,46121
+Hendricks,Danville,46122
+Hendricks,Avon,46123
+Johnson,Edinburgh,46124
+Morgan,Eminence,46125
+Shelby,Fairland,46126
+Rush,Falmouth,46127
+Putnam,Fillmore,46128
+Hancock,Finly,46129
+Shelby,Fountaintown,46130
+Johnson,Franklin,46131
+Fayette,Glenwood,46133
+Putnam,Greencastle,46135
+Hancock,Greenfield,46140
+Johnson,Greenwood,46142
+Johnson,Greenwood,46143
+Shelby,Gwynneville,46144
+Rush,Homer,46146
+Boone,Jamestown,46147
+Henry,Knightstown,46148
+Hendricks,Lizton,46149
+Rush,Manilla,46150
+Morgan,Martinsville,46151
+Hancock,Maxwell,46154
+Rush,Mays,46155
+Rush,Milroy,46156
+Morgan,Monrovia,46157
+Morgan,Mooresville,46158
+Morgan,Morgantown,46160
+Shelby,Morristown,46161
+Johnson,Needham,46162
+Hancock,New Palestine,46163
+Johnson,Nineveh,46164
+Hendricks,North Salem,46165
+Morgan,Paragon,46166
+Hendricks,Pittsboro,46167
+Hendricks,Plainfield,46168
+Putnam,Putnamville,46170
+Putnam,Reelsville,46171
+Putnam,Roachdale,46172
+Rush,Rushville,46173
+Putnam,Russellville,46175
+Shelby,Shelbyville,46176
+Hendricks,Stilesville,46180
+Johnson,Trafalgar,46181
+Shelby,Waldron,46182
+Marion,West Newton,46183
+Johnson,Whiteland,46184
+Hancock,Wilkinson,46186
+Marion,Indianapolis,46201
+Marion,Indianapolis,46202
+Marion,Indianapolis,46203
+Marion,Indianapolis,46204
+Marion,Indianapolis,46205
+Marion,Indianapolis,46206
+Marion,Indianapolis,46207
+Marion,Indianapolis,46208
+Marion,Indianapolis,46209
+Marion,Indianapolis,46211
+Marion,Indianapolis,46214
+Marion,Indianapolis,46216
+Marion,Indianapolis,46217
+Marion,Indianapolis,46218
+Marion,Indianapolis,46219
+Marion,Indianapolis,46220
+Marion,Indianapolis,46221
+Marion,Indianapolis,46222
+Marion,Indianapolis,46223
+Marion,Indianapolis,46224
+Marion,Indianapolis,46225
+Marion,Indianapolis,46226
+Marion,Indianapolis,46227
+Marion,Indianapolis,46228
+Marion,Indianapolis,46229
+Marion,Indianapolis,46230
+Marion,Indianapolis,46231
+Marion,Indianapolis,46234
+Marion,Indianapolis,46235
+Marion,Indianapolis,46236
+Marion,Indianapolis,46237
+Marion,Indianapolis,46239
+Marion,Indianapolis,46240
+Marion,Indianapolis,46241
+Marion,Indianapolis,46242
+Marion,Indianapolis,46244
+Marion,Indianapolis,46247
+Marion,Indianapolis,46249
+Marion,Indianapolis,46250
+Marion,Indianapolis,46251
+Marion,Indianapolis,46253
+Marion,Indianapolis,46254
+Marion,Indianapolis,46255
+Marion,Indianapolis,46256
+Marion,Indianapolis,46259
+Marion,Indianapolis,46260
+Marion,Indianapolis,46262
+Marion,Indianapolis,46266
+Marion,Indianapolis,46268
+Marion,Indianapolis,46274
+Marion,Indianapolis,46275
+Marion,Indianapolis,46277
+Marion,Indianapolis,46278
+Hamilton,Indianapolis,46280
+Marion,Indianapolis,46282
+Marion,Indianapolis,46283
+Marion,Indianapolis,46285
+Hamilton,Indianapolis,46290
+Marion,Indianapolis,46291
+Marion,Indianapolis,46295
+Marion,Indianapolis,46296
+Marion,Indianapolis,46298
+Porter,Beverly Shores,46301
+Porter,Boone Grove,46302
+Lake,Cedar Lake,46303
+Porter,Chesterton,46304
+Lake,Crown Point,46307
+Lake,Crown Point,46308
+Jasper,Demotte,46310
+Lake,Dyer,46311
+Lake,East Chicago,46312
+Lake,Griffith,46319
+Lake,Hammond,46320
+Lake,Munster,46321
+Lake,Highland,46322
+Lake,Hammond,46323
+Lake,Hammond,46324
+Lake,Hammond,46325
+Lake,Hammond,46327
+La Porte,Hanna,46340
+Porter,Hebron,46341
+Lake,Hobart,46342
+La Porte,Kingsbury,46345
+La Porte,Kingsford Heights,46346
+Porter,Kouts,46347
+La Porte,La Crosse,46348
+Newton,Lake Village,46349
+La Porte,La Porte,46350
+La Porte,La Porte,46352
+Lake,Leroy,46355
+Lake,Lowell,46356
+La Porte,Michigan City,46360
+La Porte,Michigan City,46361
+La Porte,Mill Creek,46365
+Starke,North Judson,46366
+Porter,Portage,46368
+La Porte,Rolling Prairie,46371
+Newton,Roselawn,46372
+Lake,Saint John,46373
+Starke,San Pierre,46374
+Lake,Schererville,46375
+Lake,Schneider,46376
+Lake,Shelby,46377
+Newton,Sumava Resorts,46379
+Jasper,Tefft,46380
+Newton,Thayer,46381
+La Porte,Union Mills,46382
+Porter,Valparaiso,46383
+Porter,Valparaiso,46384
+Porter,Valparaiso,46385
+La Porte,Wanatah,46390
+La Porte,Westville,46391
+Jasper,Wheatfield,46392
+Porter,Wheeler,46393
+Lake,Whiting,46394
+Lake,Gary,46401
+Lake,Gary,46402
+Lake,Gary,46403
+Lake,Gary,46404
+Lake,Lake Station,46405
+Lake,Gary,46406
+Lake,Gary,46407
+Lake,Gary,46408
+Lake,Gary,46409
+Lake,Merrillville,46410
+Lake,Merrillville,46411
+Marshall,Argos,46501
+Kosciusko,Atwood,46502
+Marshall,Bourbon,46504
+Marshall,Bremen,46506
+Elkhart,Bristol,46507
+Kosciusko,Burket,46508
+Kosciusko,Claypool,46510
+Marshall,Culver,46511
+Starke,Donaldson,46513
+Elkhart,Elkhart,46514
+Elkhart,Elkhart,46515
+Elkhart,Elkhart,46516
+Elkhart,Elkhart,46517
+Kosciusko,Etna Green,46524
+Elkhart,Goshen,46526
+Elkhart,Goshen,46527
+Elkhart,Goshen,46528
+St Joseph,Granger,46530
+Starke,Grovertown,46531
+Starke,Hamlet,46532
+Starke,Knox,46534
+St Joseph,Lakeville,46536
+Marshall,Lapaz,46537
+Kosciusko,Leesburg,46538
+Kosciusko,Mentone,46539
+Elkhart,Middlebury,46540
+Kosciusko,Milford,46542
+Elkhart,Millersburg,46543
+St Joseph,Mishawaka,46544
+St Joseph,Mishawaka,46545
+St. Joseph,Mishawaka,46546
+Elkhart,Nappanee,46550
+St Joseph,New Carlisle,46552
+Elkhart,New Paris,46553
+St Joseph,North Liberty,46554
+Kosciusko,North Webster,46555
+St. Joseph,Notre Dame,46556
+St Joseph,Osceola,46561
+Kosciusko,Pierceton,46562
+Marshall,Plymouth,46563
+Lagrange,Shipshewana,46565
+Kosciusko,Syracuse,46567
+Marshall,Tippecanoe,46570
+Lagrange,Topeka,46571
+Marshall,Tyner,46572
+Elkhart,Wakarusa,46573
+St Joseph,Walkerton,46574
+Kosciusko,Warsaw,46580
+Kosciusko,Warsaw,46581
+Kosciusko,Warsaw,46582
+Kosciusko,Winona Lake,46590
+St. Joseph,Wyatt,46595
+St Joseph,South Bend,46601
+St. Joseph,South Bend,46604
+St Joseph,South Bend,46613
+St Joseph,South Bend,46614
+St Joseph,South Bend,46615
+St Joseph,South Bend,46616
+St Joseph,South Bend,46617
+St Joseph,South Bend,46619
+St. Joseph,South Bend,46620
+St. Joseph,South Bend,46624
+St. Joseph,South Bend,46626
+St Joseph,South Bend,46628
+St. Joseph,South Bend,46634
+St Joseph,South Bend,46635
+St Joseph,South Bend,46637
+St. Joseph,South Bend,46660
+St. Joseph,South Bend,46680
+St. Joseph,South Bend,46699
+Noble,Albion,46701
+Huntington,Andrews,46702
+Steuben,Angola,46703
+Allen,Arcola,46704
+De Kalb,Ashley,46705
+De Kalb,Auburn,46706
+Noble,Avilla,46710
+Adams,Berne,46711
+Huntington,Bippus,46713
+Wells,Bluffton,46714
+De Kalb,Butler,46721
+Whitley,Churubusco,46723
+Whitley,Columbia City,46725
+De Kalb,Corunna,46730
+Wells,Craigville,46731
+Noble,Cromwell,46732
+Adams,Decatur,46733
+Steuben,Fremont,46737
+De Kalb,Garrett,46738
+Adams,Geneva,46740
+Allen,Grabill,46741
+Steuben,Hamilton,46742
+Allen,Harlan,46743
+Allen,Hoagland,46745
+Lagrange,Howe,46746
+Steuben,Hudson,46747
+Allen,Huntertown,46748
+Huntington,Huntington,46750
+Noble,Kendallville,46755
+Wells,Keystone,46759
+Noble,Kimmell,46760
+Lagrange,Lagrange,46761
+Noble,Laotto,46763
+Whitley,Larwill,46764
+Allen,Leo,46765
+Wells,Liberty Center,46766
+Noble,Ligonier,46767
+Adams,Linn Grove,46769
+Wells,Markle,46770
+Lagrange,Mongo,46771
+Adams,Monroe,46772
+Allen,Monroeville,46773
+Allen,New Haven,46774
+Steuben,Orland,46776
+Wells,Ossian,46777
+Wells,Petroleum,46778
+Steuben,Pleasant Lake,46779
+Adams,Pleasant Mills,46780
+Wells,Poneto,46781
+Adams,Preble,46782
+Huntington,Roanoke,46783
+Noble,Rome City,46784
+De Kalb,Saint Joe,46785
+Lagrange,South Milford,46786
+Whitley,South Whitley,46787
+De Kalb,Spencerville,46788
+Lagrange,Stroh,46789
+Wells,Uniondale,46791
+Huntington,Warren,46792
+De Kalb,Waterloo,46793
+Noble,Wawaka,46794
+Lagrange,Wolcottville,46795
+Noble,Wolflake,46796
+Allen,Woodburn,46797
+Allen,Yoder,46798
+Wells,Zanesville,46799
+Allen,Fort Wayne,46801
+Allen,Fort Wayne,46802
+Allen,Fort Wayne,46803
+Allen,Fort Wayne,46804
+Allen,Fort Wayne,46805
+Allen,Fort Wayne,46806
+Allen,Fort Wayne,46807
+Allen,Fort Wayne,46808
+Allen,Fort Wayne,46809
+Allen,Fort Wayne,46814
+Allen,Fort Wayne,46815
+Allen,Fort Wayne,46816
+Allen,Fort Wayne,46818
+Allen,Fort Wayne,46819
+Allen,Fort Wayne,46825
+Allen,Fort Wayne,46835
+Allen,Fort Wayne,46845
+Allen,Fort Wayne,46850
+Allen,Fort Wayne,46851
+Allen,Fort Wayne,46852
+Allen,Fort Wayne,46853
+Allen,Fort Wayne,46854
+Allen,Fort Wayne,46855
+Allen,Fort Wayne,46856
+Allen,Fort Wayne,46857
+Allen,Fort Wayne,46858
+Allen,Fort Wayne,46859
+Allen,Fort Wayne,46860
+Allen,Fort Wayne,46861
+Allen,Fort Wayne,46862
+Allen,Fort Wayne,46863
+Allen,Fort Wayne,46864
+Allen,Fort Wayne,46865
+Allen,Fort Wayne,46866
+Allen,Fort Wayne,46867
+Allen,Fort Wayne,46868
+Allen,Fort Wayne,46869
+Allen,Fort Wayne,46885
+Allen,Fort Wayne,46895
+Allen,Fort Wayne,46896
+Allen,Fort Wayne,46897
+Allen,Fort Wayne,46898
+Allen,Fort Wayne,46899
+Howard,Kokomo,46901
+Howard,Kokomo,46902
+Howard,Kokomo,46903
+Howard,Kokomo,46904
+Fulton,Akron,46910
+Miami,Amboy,46911
+Fulton,Athens,46912
+Carroll,Bringhurst,46913
+Miami,Bunker Hill,46914
+Carroll,Burlington,46915
+Carroll,Burrows,46916
+Carroll,Camden,46917
+Grant,Converse,46919
+Carroll,Cutler,46920
+Miami,Deedsville,46921
+Fulton,Delong,46922
+Carroll,Delphi,46923
+Miami,Denver,46926
+Grant,Fairmount,46928
+Carroll,Flora,46929
+Grant,Fowlerton,46930
+Fulton,Fulton,46931
+Cass,Galveston,46932
+Grant,Gas City,46933
+Fulton,Grass Creek,46935
+Howard,Greentown,46936
+Howard,Hemlock,46937
+Grant,Jonesboro,46938
+Fulton,Kewanna,46939
+Wabash,La Fontaine,46940
+Wabash,Lagro,46941
+Cass,Lake Cicott,46942
+Wabash,Laketon,46943
+Fulton,Leiters Ford,46945
+Wabash,Liberty Mills,46946
+Cass,Logansport,46947
+Cass,Lucerne,46950
+Miami,Macy,46951
+Grant,Marion,46952
+Grant,Marion,46953
+Grant,Matthews,46957
+Miami,Mexico,46958
+Miami,Miami,46959
+Pulaski,Monterey,46960
+Cass,New Waverly,46961
+Wabash,North Manchester,46962
+Howard,Oakford,46965
+Cass,Onward,46967
+Starke,Ora,46968
+Miami,Peru,46970
+Miami,Grissom Arb,46971
+Wabash,Roann,46974
+Fulton,Rochester,46975
+Carroll,Rockfield,46977
+Cass,Royal Center,46978
+Howard,Russiaville,46979
+Wabash,Servia,46980
+Kosciusko,Silver Lake,46982
+Wabash,Somerset,46984
+Pulaski,Star City,46985
+Grant,Swayzee,46986
+Grant,Sweetser,46987
+Cass,Twelve Mile,46988
+Grant,Upland,46989
+Wabash,Urbana,46990
+Grant,Van Buren,46991
+Wabash,Wabash,46992
+Cass,Walton,46994
+Howard,West Middleton,46995
+Pulaski,Winamac,46996
+Cass,Young America,46998
+Dearborn,Aurora,47001
+Union,West College Corner,47003
+Ripley,Batesville,47006
+Franklin,Bath,47010
+Switzerland,Bennington,47011
+Franklin,Brookville,47012
+Franklin,Cedar Grove,47016
+Ripley,Cross Plains,47017
+Dearborn,Dillsboro,47018
+Switzerland,East Enterprise,47019
+Switzerland,Florence,47020
+Ripley,Friendship,47021
+Dearborn,Guilford,47022
+Ripley,Holton,47023
+Franklin,Laurel,47024
+Dearborn,Lawrenceburg,47025
+Franklin,Metamora,47030
+Ripley,Milan,47031
+Dearborn,Moores Hill,47032
+Ripley,Morris,47033
+Ripley,Napoleon,47034
+Franklin,New Trenton,47035
+Franklin,Oldenburg,47036
+Ripley,Osgood,47037
+Switzerland,Patriot,47038
+Ripley,Pierceville,47039
+Ohio,Rising Sun,47040
+Ripley,Sunman,47041
+Ripley,Versailles,47042
+Switzerland,Vevay,47043
+Dearborn,West Harrison,47060
+Scott,Austin,47102
+Clark,Bethlehem,47104
+Clark,Borden,47106
+Harrison,Bradford,47107
+Washington,Campbellsburg,47108
+Harrison,Central,47110
+Clark,Charlestown,47111
+Harrison,Corydon,47112
+Harrison,Crandall,47114
+Harrison,Depauw,47115
+Crawford,Eckerty,47116
+Harrison,Elizabeth,47117
+Crawford,English,47118
+Floyd,Floyds Knobs,47119
+Washington,Fredericksburg,47120
+Floyd,Georgetown,47122
+Crawford,Grantsburg,47123
+Floyd,Greenville,47124
+Orange,Hardinsburg,47125
+Clark,Henryville,47126
+Clark,Clarksville,47129
+Clark,Jeffersonville,47130
+Clark,Jeffersonville,47131
+Clark,Jeffersonville,47132
+Clark,Jeffersonville,47133
+Clark,Jeffersonville,47134
+Harrison,Laconia,47135
+Harrison,Lanesville,47136
+Crawford,Leavenworth,47137
+Scott,Lexington,47138
+Washington,Little York,47139
+Crawford,Marengo,47140
+Clark,Marysville,47141
+Harrison,Mauckport,47142
+Clark,Memphis,47143
+Clark,Jeffersonville,47144
+Crawford,Milltown,47145
+Floyd,Mount Saint Francis,47146
+Clark,Nabb,47147
+Floyd,New Albany,47150
+Floyd,New Albany,47151
+Harrison,New Middletown,47160
+Harrison,New Salisbury,47161
+Clark,New Washington,47162
+Clark,Otisco,47163
+Harrison,Palmyra,47164
+Washington,Pekin,47165
+Harrison,Ramsey,47166
+Washington,Salem,47167
+Scott,Scottsburg,47170
+Clark,Sellersburg,47172
+Crawford,Sulphur,47174
+Crawford,Taswell,47175
+Clark,Underwood,47177
+Clark,Jeffersonville,47190
+Clark,Jeffersonville,47199
+Bartholomew,Columbus,47201
+Bartholomew,Columbus,47202
+Bartholomew,Columbus,47203
+Jackson,Brownstown,47220
+Jennings,Butlerville,47223
+Jefferson,Canaan,47224
+Decatur,Clarksburg,47225
+Bartholomew,Clifford,47226
+Jennings,Commiskey,47227
+Jackson,Cortland,47228
+Jackson,Crothersville,47229
+Jefferson,Deputy,47230
+Jefferson,Dupont,47231
+Bartholomew,Elizabethtown,47232
+Shelby,Flat Rock,47234
+Jackson,Freetown,47235
+Bartholomew,Grammer,47236
+Decatur,Greensburg,47240
+Jefferson,Hanover,47243
+Bartholomew,Hartsville,47244
+Jennings,Hayden,47245
+Bartholomew,Hope,47246
+Bartholomew,Jonesville,47247
+Jackson,Kurtz,47249
+Jefferson,Madison,47250
+Jackson,Medora,47260
+Ripley,Millhousen,47261
+Decatur,New Point,47263
+Jackson,Norman,47264
+Jennings,North Vernon,47265
+Jennings,Paris Crossing,47270
+Decatur,Saint Paul,47272
+Jennings,Scipio,47273
+Jackson,Seymour,47274
+Bartholomew,Taylorsville,47280
+Jackson,Vallonia,47281
+Jennings,Vernon,47282
+Decatur,Westport,47283
+Delaware,Muncie,47302
+Delaware,Muncie,47303
+Delaware,Muncie,47304
+Delaware,Muncie,47305
+Delaware,Muncie,47306
+Delaware,Muncie,47307
+Delaware,Muncie,47308
+Delaware,Albany,47320
+Fayette,Bentonville,47322
+Wayne,Boston,47324
+Union,Brownsville,47325
+Jay,Bryant,47326
+Wayne,Cambridge City,47327
+Wayne,Centerville,47330
+Fayette,Connersville,47331
+Delaware,Daleville,47334
+Wayne,Dublin,47335
+Blackford,Dunkirk,47336
+Henry,Dunreith,47337
+Delaware,Eaton,47338
+Wayne,Economy,47339
+Randolph,Farmland,47340
+Wayne,Fountain City,47341
+Delaware,Gaston,47342
+Henry,Greensboro,47344
+Wayne,Greens Fork,47345
+Wayne,Hagerstown,47346
+Blackford,Hartford City,47348
+Henry,Kennard,47351
+Henry,Lewisville,47352
+Union,Liberty,47353
+Randolph,Losantville,47354
+Randolph,Lynn,47355
+Henry,Middletown,47356
+Wayne,Milton,47357
+Randolph,Modoc,47358
+Blackford,Montpelier,47359
+Henry,Mooreland,47360
+Henry,Mount Summit,47361
+Henry,New Castle,47362
+Henry,New Lisbon,47366
+Delaware,Oakville,47367
+Randolph,Parker City,47368
+Jay,Pennville,47369
+Wayne,Pershing,47370
+Jay,Portland,47371
+Jay,Redkey,47373
+Wayne,Richmond,47374
+Wayne,Richmond,47375
+Randolph,Ridgeville,47380
+Jay,Salamonia,47381
+Randolph,Saratoga,47382
+Delaware,Selma,47383
+Henry,Shirley,47384
+Henry,Spiceland,47385
+Henry,Springport,47386
+Henry,Straughn,47387
+Henry,Sulphur Springs,47388
+Randolph,Union City,47390
+Wayne,Webster,47392
+Wayne,Williamsburg,47393
+Randolph,Winchester,47394
+Delaware,Yorktown,47396
+Monroe,Bloomington,47401
+Monroe,Bloomington,47402
+Monroe,Bloomington,47403
+Monroe,Bloomington,47404
+Monroe,Bloomington,47405
+Monroe,Bloomington,47406
+Monroe,Bloomington,47407
+Monroe,Bloomington,47408
+Lawrence,Avoca,47420
+Lawrence,Bedford,47421
+Greene,Bloomfield,47424
+Monroe,Clear Creek,47426
+Owen,Coal City,47427
+Monroe,Ellettsville,47429
+Lawrence,Fort Ritner,47430
+Owen,Freedom,47431
+Orange,French Lick,47432
+Owen,Gosport,47433
+Monroe,Harrodsburg,47434
+Brown,Helmsburg,47435
+Lawrence,Heltonville,47436
+Lawrence,Huron,47437
+Greene,Jasonville,47438
+Greene,Koleen,47439
+Greene,Linton,47441
+Greene,Lyons,47443
+Greene,Midland,47445
+Lawrence,Mitchell,47446
+Brown,Nashville,47448
+Greene,Newberry,47449
+Lawrence,Oolitic,47451
+Orange,Orleans,47452
+Greene,Owensburg,47453
+Orange,Paoli,47454
+Owen,Patricksburg,47455
+Owen,Quincy,47456
+Martin,Scotland,47457
+Monroe,Smithville,47458
+Greene,Solsberry,47459
+Owen,Spencer,47460
+Lawrence,Springville,47462
+Monroe,Stanford,47463
+Monroe,Stinesville,47464
+Greene,Switz City,47465
+Lawrence,Tunnelton,47467
+Monroe,Unionville,47468
+Orange,West Baden Springs,47469
+Lawrence,Williams,47470
+Greene,Worthington,47471
+Monroe,Bloomington,47490
+Daviess,Washington,47501
+Knox,Bicknell,47512
+Dubois,Birdseye,47513
+Perry,Branchville,47514
+Perry,Bristow,47515
+Knox,Bruceville,47516
+Daviess,Cannelburg,47519
+Perry,Cannelton,47520
+Dubois,Celestine,47521
+Martin,Crane,47522
+Spencer,Dale,47523
+Knox,Decker,47524
+Perry,Derby,47525
+Dubois,Dubois,47527
+Knox,Edwardsport,47528
+Daviess,Elnora,47529
+Spencer,Evanston,47531
+Dubois,Ferdinand,47532
+Knox,Freelandville,47535
+Spencer,Fulda,47536
+Spencer,Gentryville,47537
+Dubois,Holland,47541
+Dubois,Huntingburg,47542
+Dubois,Ireland,47545
+Dubois,Jasper,47546
+Dubois,Jasper,47547
+Dubois,Jasper,47549
+Spencer,Lamar,47550
+Perry,Leopold,47551
+Spencer,Lincoln City,47552
+Martin,Loogootee,47553
+Spencer,Mariah Hill,47556
+Knox,Monroe City,47557
+Daviess,Montgomery,47558
+Knox,Oaktown,47561
+Daviess,Odon,47562
+Pike,Otwell,47564
+Pike,Petersburg,47567
+Daviess,Plainville,47568
+Knox,Ragsdale,47573
+Perry,Rome,47574
+Dubois,Saint Anthony,47575
+Perry,Saint Croix,47576
+Spencer,Saint Meinrad,47577
+Knox,Sandborn,47578
+Spencer,Santa Claus,47579
+Dubois,Schnellville,47580
+Martin,Shoals,47581
+Pike,Spurgeon,47584
+Pike,Stendal,47585
+Perry,Tell City,47586
+Perry,Troy,47588
+Pike,Velpen,47590
+Knox,Vincennes,47591
+Knox,Westphalia,47596
+Knox,Wheatland,47597
+Pike,Winslow,47598
+Warrick,Boonville,47601
+Warrick,Chandler,47610
+Spencer,Chrisney,47611
+Posey,Cynthiana,47612
+Warrick,Elberfeld,47613
+Warrick,Folsomville,47614
+Spencer,Grandview,47615
+Posey,Griffin,47616
+Spencer,Hatfield,47617
+Vanderburgh,Inglefield,47618
+Warrick,Lynnville,47619
+Posey,Mount Vernon,47620
+Warrick,Newburgh,47629
+Warrick,Newburgh,47630
+Posey,New Harmony,47631
+Posey,Poseyville,47633
+Spencer,Richland,47634
+Spencer,Rockport,47635
+Warrick,Tennyson,47637
+Posey,Wadesville,47638
+Gibson,Haubstadt,47639
+Gibson,Hazleton,47640
+Gibson,Buckskin,47647
+Gibson,Fort Branch,47648
+Gibson,Francisco,47649
+Gibson,Mackey,47654
+Gibson,Oakland City,47660
+Gibson,Owensville,47665
+Gibson,Patoka,47666
+Gibson,Princeton,47670
+Gibson,Somerville,47683
+Vanderburgh,Evansville,47701
+Vanderburgh,Evansville,47702
+Vanderburgh,Evansville,47703
+Vanderburgh,Evansville,47704
+Vanderburgh,Evansville,47705
+Vanderburgh,Evansville,47706
+Vanderburgh,Evansville,47708
+Vanderburgh,Evansville,47710
+Vanderburgh,Evansville,47711
+Vanderburgh,Evansville,47712
+Vanderburgh,Evansville,47713
+Vanderburgh,Evansville,47714
+Vanderburgh,Evansville,47715
+Vanderburgh,Evansville,47716
+Vanderburgh,Evansville,47719
+Vanderburgh,Evansville,47720
+Vanderburgh,Evansville,47721
+Vanderburgh,Evansville,47722
+Vanderburgh,Evansville,47724
+Vanderburgh,Evansville,47725
+Vanderburgh,Evansville,47727
+Vanderburgh,Evansville,47728
+Vanderburgh,Evansville,47730
+Vanderburgh,Evansville,47731
+Vanderburgh,Evansville,47732
+Vanderburgh,Evansville,47733
+Vanderburgh,Evansville,47734
+Vanderburgh,Evansville,47735
+Vanderburgh,Evansville,47736
+Vanderburgh,Evansville,47737
+Vanderburgh,Evansville,47739
+Vanderburgh,Evansville,47740
+Vanderburgh,Evansville,47741
+Vanderburgh,Evansville,47744
+Vanderburgh,Evansville,47747
+Vanderburgh,Evansville,47750
+Vigo,Terre Haute,47801
+Vigo,Terre Haute,47802
+Vigo,Terre Haute,47803
+Vigo,Terre Haute,47804
+Vigo,Terre Haute,47805
+Vigo,Terre Haute,47807
+Vigo,Terre Haute,47808
+Vigo,Terre Haute,47809
+Vigo,Terre Haute,47811
+Vigo,Terre Haute,47812
+Parke,Bellmore,47830
+Vermillion,Blanford,47831
+Parke,Bloomingdale,47832
+Clay,Bowling Green,47833
+Clay,Brazil,47834
+Parke,Bridgeton,47836
+Clay,Carbon,47837
+Sullivan,Carlisle,47838
+Clay,Centerpoint,47840
+Clay,Clay City,47841
+Vermillion,Clinton,47842
+Clay,Coalmont,47845
+Clay,Cory,47846
+Vermillion,Dana,47847
+Sullivan,Dugger,47848
+Sullivan,Fairbanks,47849
+Sullivan,Farmersburg,47850
+Vigo,Fontanet,47851
+Sullivan,Graysville,47852
+Clay,Harmony,47853
+Vermillion,Hillsdale,47854
+Sullivan,Hymera,47855
+Parke,Judson,47856
+Clay,Knightsville,47857
+Clay,Lewis,47858
+Parke,Marshall,47859
+Parke,Mecca,47860
+Sullivan,Merom,47861
+Parke,Montezuma,47862
+Vigo,New Goshen,47863
+Sullivan,Sullivan,47864
+Sullivan,Paxton,47865
+Vigo,Pimento,47866
+Owen,Poland,47868
+Vigo,Prairie Creek,47869
+Vigo,Prairieton,47870
+Vigo,Riley,47871
+Parke,Rockville,47872
+Parke,Rosedale,47874
+Vermillion,Saint Bernice,47875
+Vigo,Saint Mary Of The Woods,47876
+Vigo,Seelyville,47878
+Sullivan,Shelburn,47879
+Vigo,Shepardsville,47880
+Clay,Staunton,47881
+Sullivan,Sullivan,47882
+Vermillion,Universal,47884
+Vigo,West Terre Haute,47885
+Tippecanoe,Lafayette,47901
+Tippecanoe,Lafayette,47902
+Tippecanoe,Lafayette,47903
+Tippecanoe,Lafayette,47904
+Tippecanoe,Lafayette,47905
+Tippecanoe,West Lafayette,47906
+Tippecanoe,West Lafayette,47907
+Tippecanoe,Lafayette,47909
+Montgomery,Alamo,47916
+Warren,Ambia,47917
+Fountain,Attica,47918
+Tippecanoe,Battle Ground,47920
+Benton,Boswell,47921
+Newton,Brook,47922
+White,Brookston,47923
+Tippecanoe,Buck Creek,47924
+White,Buffalo,47925
+White,Burnettsville,47926
+Vermillion,Cayuga,47928
+White,Chalmers,47929
+Tippecanoe,Clarks Hill,47930
+Fountain,Covington,47932
+Montgomery,Crawfordsville,47933
+Montgomery,Crawfordsville,47934
+Montgomery,Crawfordsville,47935
+Montgomery,Crawfordsville,47936
+Montgomery,Crawfordsville,47937
+Montgomery,Crawfordsville,47938
+Montgomery,Crawfordsville,47939
+Montgomery,Darlington,47940
+Tippecanoe,Dayton,47941
+Benton,Earl Park,47942
+Jasper,Fair Oaks,47943
+Benton,Fowler,47944
+Pulaski,Francesville,47946
+Newton,Goodland,47948
+Fountain,Hillsboro,47949
+White,Idaville,47950
+Newton,Kentland,47951
+Fountain,Kingman,47952
+Montgomery,Ladoga,47954
+Montgomery,Linden,47955
+Pulaski,Medaryville,47957
+Fountain,Mellott,47958
+White,Monon,47959
+White,Monticello,47960
+Tippecanoe,Montmorenci,47962
+Newton,Morocco,47963
+Newton,Mount Ayr,47964
+Montgomery,New Market,47965
+Vermillion,Newport,47966
+Montgomery,New Richmond,47967
+Montgomery,New Ross,47968
+Fountain,Newtown,47969
+Benton,Otterbein,47970
+Benton,Oxford,47971
+Vermillion,Perrysville,47974
+Warren,Pine Village,47975
+Jasper,Remington,47977
+Jasper,Rensselaer,47978
+White,Reynolds,47980
+Tippecanoe,Romney,47981
+Warren,State Line,47982
+Tippecanoe,Stockwell,47983
+Benton,Talbot,47984
+Benton,Templeton,47986
+Fountain,Veedersburg,47987
+Fountain,Wallace,47988
+Montgomery,Waveland,47989
+Montgomery,Waynetown,47990
+Warren,West Lebanon,47991
+Tippecanoe,Westpoint,47992
+Warren,Williamsport,47993
+Montgomery,Wingate,47994
+White,Wolcott,47995
+Tippecanoe,West Lafayette,47996

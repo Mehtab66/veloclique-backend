@@ -1,0 +1,439 @@
+County,City,ZIP
+Adair,Columbia,42728
+Allen,Scottsville,42164
+Anderson,Lawrenceburg,40342
+Ballard,Barlow,42024
+Ballard,LaCenter,42056
+Ballard,Wickliffe,42087
+Barren,Cave City,42127
+Barren,Glasgow,42141
+Barren,Park City,42160
+Bath,Owingsville,40360
+Bath,Salt Lick,40371
+Bath,Sharpsburg,40374
+Bell,Middlesboro,40965
+Bell,Pineville,40977
+Boone,Florence,41042
+Boone,Union,41091
+Boone,Walton,41094
+Bourbon,Millersburg,40348
+Bourbon,North Middletown,40357
+Bourbon,Paris,40361
+Boyd,Ashland,41101
+Boyd,Ashland,41102
+Boyd,Catlettsburg,41129
+Boyle,Danville,40422
+Boyle,Junction City,40440
+Boyle,Perryville,40468
+Bracken,Augusta,41002
+Bracken,Brooksville,41004
+Breathitt,Jackson,41339
+Breckinridge,Cloverport,40111
+Breckinridge,Hardinsburg,40143
+Breckinridge,Irvington,40146
+Bullitt,Hillview,40129
+Bullitt,Lebanon Junction,40150
+Bullitt,Mount Washington,40047
+Bullitt,Shepherdsville,40165
+Butler,Morgantown,42261
+Butler,Rochester,42273
+Caldwell,Princeton,42445
+Calloway,Hazel,42049
+Calloway,Murray,42071
+Campbell,Alexandria,41001
+Campbell,Bellevue,41073
+Campbell,California,41007
+Campbell,Dayton,41074
+Campbell,Fort Thomas,41075
+Campbell,Highland Heights,41076
+Campbell,Melbourne,41059
+Campbell,Newport,41071
+Campbell,Newport,41072
+Campbell,Southgate,41071
+Campbell,Wilder,41071
+Campbell,Woodlawn,41071
+Carlisle,Arlington,42021
+Carlisle,Bardwell,42023
+Carlisle,Milburn,42064
+Carroll,Carrollton,41008
+Carroll,Ghent,41045
+Carroll,Sanders,41083
+Carroll,Worthville,41098
+Carter,Grayson,41143
+Carter,Olive Hill,41164
+Casey,Liberty,42539
+Christian,Crofton,42217
+Christian,Hopkinsville,42240
+Christian,Hopkinsville,42241
+Christian,Pembroke,42266
+Clark,Winchester,40391
+Clark,Winchester,40392
+Clay,Manchester,40962
+Clinton,Albany,42602
+Crittenden,Marion,42064
+Cumberland,Burkesville,42717
+Daviess,Owensboro,42301
+Daviess,Owensboro,42303
+Daviess,Owensboro,42304
+Daviess,Whitesville,42378
+Edmonson,Brownsville,42210
+Elliott,Sandy Hook,41171
+Estill,Irvine,40336
+Estill,Ravenna,40472
+Fayette,Lexington,40502
+Fayette,Lexington,40503
+Fayette,Lexington,40504
+Fayette,Lexington,40505
+Fayette,Lexington,40506
+Fayette,Lexington,40507
+Fayette,Lexington,40508
+Fayette,Lexington,40509
+Fayette,Lexington,40510
+Fayette,Lexington,40511
+Fayette,Lexington,40513
+Fayette,Lexington,40514
+Fayette,Lexington,40515
+Fayette,Lexington,40516
+Fayette,Lexington,40517
+Fleming,Flemingsburg,41041
+Floyd,Martin,41649
+Floyd,Prestonsburg,41653
+Franklin,Frankfort,40601
+Franklin,Frankfort,40602
+Fulton,Fulton,42041
+Fulton,Hickman,42050
+Gallatin,Warsaw,41095
+Garrard,Lancaster,40444
+Grant,Corinth,41010
+Grant,Crittenden,41030
+Grant,Dry Ridge,41035
+Grant,Williamstown,41097
+Graves,Cuba,42031
+Graves,Fancy Farm,42039
+Graves,Mayfield,42066
+Graves,Wingo,42088
+Grayson,Caneyville,42721
+Grayson,Clarkson,42726
+Grayson,Leitchfield,42754
+Grayson,Millwood,42762
+Green,Greensburg,42743
+Greenup,Flatwoods,41139
+Greenup,Greenup,41144
+Greenup,Russell,41169
+Greenup,Wurtland,41144
+Hancock,Hawesville,42348
+Hancock,Lewisport,42351
+Hardin,Cecilia,42724
+Hardin,Elizabethtown,42701
+Hardin,Elizabethtown,42702
+Hardin,Radcliff,40160
+Hardin,Radcliff,40161
+Hardin,Sonora,42776
+Hardin,Upton,42784
+Hardin,Vine Grove,40175
+Hardin,West Point,40177
+Harlan,Cumberland,40823
+Harlan,Evarts,40828
+Harlan,Harlan,40831
+Harlan,Lynch,40855
+Harrison,Cynthiana,41031
+Hart,Horse Cave,42749
+Hart,Munfordville,42765
+Henderson,Henderson,42420
+Henderson,Robards,42452
+Henry,Campbellsburg,40011
+Henry,Eminence,40019
+Henry,New Castle,40050
+Henry,Pleasureville,40057
+Henry,Port Royal,40058
+Henry,Smithfield,40068
+Henry,Sulphur,40070
+Hickman,Clinton,42031
+Hickman,Columbus,42032
+Hopkins,Dawson Springs,42408
+Hopkins,Earlington,42410
+Hopkins,Madisonville,42431
+Hopkins,Mortons Gap,42440
+Hopkins,Nortonville,42442
+Hopkins,Nebo,42441
+Jackson,McKee,40447
+Jefferson,Anchorage,40223
+Jefferson,Audubon Park,40213
+Jefferson,Bancroft,40222
+Jefferson,Barbourmeade,40241
+Jefferson,Beechwood Village,40207
+Jefferson,Bellemeade,40222
+Jefferson,Bellewood,40222
+Jefferson,Blue Ridge Manor,40299
+Jefferson,Broeck Pointe,40222
+Jefferson,Brownsboro Farm,40223
+Jefferson,Brownsboro Village,40241
+Jefferson,Cambridge,40229
+Jefferson,Coldstream,40241
+Jefferson,Creekside,40243
+Jefferson,Crossgate,40223
+Jefferson,Douglass Hills,40243
+Jefferson,Druid Hills,40207
+Jefferson,Evergreen,40229
+Jefferson,Fern Creek,40291
+Jefferson,Fincastle,40213
+Jefferson,Forest Hills,40245
+Jefferson,Glenview,40025
+Jefferson,Glenview Hills,40229
+Jefferson,Glenview Manor,40229
+Jefferson,Goose Creek,40222
+Jefferson,Graymoor-Devondale,40222
+Jefferson,Green Spring,40241
+Jefferson,Hickory Hill,40299
+Jefferson,Hills and Dales,40206
+Jefferson,Hollyvilla,40272
+Jefferson,Houston Acres,40220
+Jefferson,Hunters Hollow,40243
+Jefferson,Hurstbourne,40222
+Jefferson,Hurstbourne Acres,40222
+Jefferson,Indian Hills,40207
+Jefferson,Jeffersontown,40299
+Jefferson,Kingsley,40067
+Jefferson,Langdon Place,40222
+Jefferson,Lincolnshire,40222
+Jefferson,Louisville,40202
+Jefferson,Louisville,40203
+Jefferson,Louisville,40204
+Jefferson,Louisville,40205
+Jefferson,Louisville,40206
+Jefferson,Louisville,40207
+Jefferson,Louisville,40208
+Jefferson,Louisville,40209
+Jefferson,Louisville,40210
+Jefferson,Louisville,40211
+Jefferson,Louisville,40212
+Jefferson,Louisville,40213
+Jefferson,Louisville,40214
+Jefferson,Louisville,40215
+Jefferson,Louisville,40216
+Jefferson,Louisville,40217
+Jefferson,Louisville,40218
+Jefferson,Louisville,40219
+Jefferson,Louisville,40220
+Jefferson,Louisville,40222
+Jefferson,Louisville,40223
+Jefferson,Louisville,40228
+Jefferson,Louisville,40229
+Jefferson,Louisville,40241
+Jefferson,Louisville,40242
+Jefferson,Louisville,40243
+Jefferson,Louisville,40245
+Jefferson,Louisville,40258
+Jefferson,Louisville,40272
+Jefferson,Louisville,40291
+Jefferson,Lyndon,40222
+Jefferson,Lynnview,40213
+Jefferson,Manor Creek,40223
+Jefferson,Meadow Vale,40229
+Jefferson,Meadowbrook Farm,40223
+Jefferson,Meadowview Estates,40229
+Jefferson,Middletown,40243
+Jefferson,Maryhill Estates,40229
+Jefferson,Minor Lane Heights,40219
+Jefferson,Mockingbird Valley,40207
+Jefferson,Moorland,40222
+Jefferson,Murray Hill,40206
+Jefferson,Norbourne Estates,40207
+Jefferson,Northfield,40222
+Jefferson,Norwood,40222
+Jefferson,Oakwood,40229
+Jefferson,Old Brownsboro Place,40241
+Jefferson,Orchard Grass Hills,40223
+Jefferson,Parkway Village,40272
+Jefferson,Plantation,40299
+Jefferson,Poplar Hills,40213
+Jefferson,Prospect,40059
+Jefferson,Richlawn,40205
+Jefferson,Riverwood,40272
+Jefferson,Rolling Fields,40207
+Jefferson,Rolling Hills,40207
+Jefferson,St. Matthews,40207
+Jefferson,St. Regis Park,40220
+Jefferson,Seneca Gardens,40207
+Jefferson,Shively,40216
+Jefferson,South Park View,40229
+Jefferson,Spring Mill,40241
+Jefferson,Spring Valley,40241
+Jefferson,Strathmoor Manor,40205
+Jefferson,Strathmoor Village,40205
+Jefferson,Ten Broeck,40241
+Jefferson,Thornhill,40222
+Jefferson,Watterson Park,40299
+Jefferson,Wellington,40229
+Jefferson,West Buechel,40218
+Jefferson,Westwood,40222
+Jefferson,Wildwood,40222
+Jefferson,Windy Hills,40207
+Jefferson,Woodland Hills,40243
+Jefferson,Woodlawn Park,40207
+Jefferson,Worthington Hills,40299
+Jessamine,Nicholasville,40356
+Jessamine,Wilmore,40390
+Johnson,Paintsville,41240
+Kenton,Covington,41011
+Kenton,Covington,41014
+Kenton,Covington,41015
+Kenton,Covington,41016
+Kenton,Covington,41017
+Kenton,Covington,41018
+Kenton,Covington,41019
+Kenton,Crescent Springs,41017
+Kenton,Crestview Hills,41017
+Kenton,Edgewood,41017
+Kenton,Elsmere,41018
+Kenton,Erlanger,41018
+Kenton,Fort Mitchell,41017
+Kenton,Fort Wright,41011
+Kenton,Independence,41051
+Kenton,Kenton Vale,41015
+Kenton,Lakeside Park,41017
+Kenton,Ludlow,41016
+Kenton,Park Hills,41011
+Kenton,Ryland Heights,41015
+Kenton,Taylor Mill,41015
+Kenton,Villa Hills,41017
+Kenton,Visalia,41041
+Knott,Hindman,41822
+Knox,Barbourville,40906
+Knox,Corbin,40701
+LaRue,Hodgenville,42748
+Laurel,Corbin,40701
+Laurel,London,40741
+Laurel,London,40742
+Laurel,London,40743
+Lawrence,Louisa,41230
+Lee,Beattyville,41311
+Leslie,Hyden,41749
+Letcher,Jenkins,41537
+Letcher,Neon,41840
+Letcher,Whitesburg,41858
+Lewis,Vanceburg,41179
+Lincoln,Crab Orchard,40419
+Lincoln,Hustonville,40437
+Lincoln,Stanford,40484
+Livingston,Smithland,42081
+Logan,Adairville,42202
+Logan,Auburn,42206
+Logan,Lewisburg,42256
+Logan,Russellville,42276
+Lyon,Eddyville,42038
+Lyon,Kuttawa,42055
+Madison,Berea,40403
+Madison,Richmond,40475
+Magoffin,Salyersville,41465
+Marion,Bradfordsville,40009
+Marion,Lebanon,40033
+Marion,Loretto,40037
+Marion,Raywick,40060
+Marshall,Benton,42025
+Marshall,Calvert City,42029
+Marshall,Hardin,42048
+Martin,Inez,41224
+Mason,Maysville,41056
+McCracken,Paducah,42001
+McCracken,Paducah,42003
+McCreary,Stearns,42647
+McCreary,Whitley City,42653
+McLean,Calhoun,42327
+McLean,Island,42350
+McLean,Livermore,42352
+Meade,Brandenburg,40108
+Meade,Muldraugh,40155
+Menifee,Frenchburg,40322
+Mercer,Burgin,40310
+Mercer,Harrodsburg,40330
+Metcalfe,Edmonton,42129
+Monroe,Fountain Run,42133
+Monroe,Gamaliel,42140
+Monroe,Tompkinsville,42167
+Montgomery,Mount Sterling,40353
+Morgan,West Liberty,41472
+Muhlenberg,Bremen,42325
+Muhlenberg,Central City,42330
+Muhlenberg,Drakesboro,42337
+Muhlenberg,Dunmor,42339
+Muhlenberg,Greenville,42345
+Muhlenberg,Powderly,42367
+Nelson,Bardstown,40004
+Nelson,Bloomfield,40008
+Nelson,Boston,40107
+Nelson,Fairfield,40020
+Nelson,New Haven,40051
+Nicholas,Carlisle,40311
+Ohio,Beaver Dam,42320
+Ohio,Fordsville,42343
+Ohio,Hartford,42347
+Ohio,Rockport,42369
+Oldham,Crestwood,40014
+Oldham,Goshen,40026
+Oldham,LaGrange,40031
+Oldham,Orchard Grass Hills,40223
+Oldham,Pewee Valley,40056
+Oldham,Prospect,40059
+Owen,Owenton,40359
+Owsley,Booneville,41314
+Pendleton,Butler,41006
+Pendleton,Falmouth,41040
+Perry,Hazard,41701
+Pike,Coal Run Village,41527
+Pike,Elkhorn City,41522
+Pike,Pikeville,41501
+Pike,Pikeville,41502
+Powell,Clay City,40312
+Powell,Stanton,40380
+Pulaski,Burnside,42519
+Pulaski,Eubank,42567
+Pulaski,Science Hill,42553
+Pulaski,Somerset,42501
+Pulaski,Somerset,42503
+Robertson,Mount Olivet,41064
+Rockcastle,Brodhead,40409
+Rockcastle,Livingston,40445
+Rockcastle,Mount Vernon,40456
+Rowan,Morehead,40351
+Russell,Jamestown,42629
+Russell,Russell Springs,42642
+Scott,Georgetown,40324
+Scott,Sadieville,40370
+Scott,Stamping Ground,40379
+Shelby,Shelbyville,40065
+Shelby,Simpsonville,40067
+Simpson,Franklin,42134
+Spencer,Taylorsville,40071
+Taylor,Campbellsville,42718
+Todd,Elkton,42220
+Todd,Guthrie,42234
+Todd,Trenton,42286
+Trigg,Cadiz,42211
+Trimble,Bedford,40006
+Trimble,Milton,40045
+Union,Morganfield,42437
+Union,Sturgis,42459
+Union,Uniontown,42461
+Union,Waverly,42462
+Warren,Bowling Green,42101
+Warren,Bowling Green,42102
+Warren,Bowling Green,42103
+Warren,Bowling Green,42104
+Warren,Oakland,42159
+Warren,Plum Springs,42157
+Warren,Smiths Grove,42171
+Warren,Woodburn,42170
+Washington,Mackville,40040
+Washington,Springfield,40069
+Wayne,Monticello,42633
+Webster,Clay,42404
+Webster,Dixon,42409
+Webster,Providence,42450
+Webster,Sebree,42455
+Webster,Slaughters,42456
+Whitley,Corbin,40701
+Whitley,Williamsburg,40769
+Wolfe,Campton,41301
+Woodford,Midway,40347
+Woodford,Versailles,40383
