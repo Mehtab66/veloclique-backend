@@ -26,7 +26,11 @@ connectDB();
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN?.split(",") || ["http://localhost:5173"],
+    origin: process.env.CLIENT_ORIGIN?.split(",") || [
+      "http://localhost:5173",
+      "https://www.veloclique.com",
+      "https://veloclique.com",
+    ],
     credentials: true,
   })
 );
