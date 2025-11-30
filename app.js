@@ -15,7 +15,7 @@ import connectDB from "./config/db.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
-
+import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
 const app = express();
 
@@ -58,7 +58,7 @@ app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
 app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
-
+app.use("/subscriptions", subscription);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
