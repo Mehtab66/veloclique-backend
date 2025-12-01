@@ -1,5 +1,5 @@
-#!/usr/bin/env node
-
+dotenv.config(); 
+import dotenv from "dotenv";
 import app from "../app.js";
 import debugLib from "debug";
 import http from "http";

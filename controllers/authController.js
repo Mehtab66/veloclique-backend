@@ -1,5 +1,34 @@
 import passport from "passport";
-import { registerUser } from "../services/authService.js";
+import { registerUser, sendSignupOTP, verifySignupOTP } from "../services/authService.js";
+
+// Send OTP for signup
+export const sendOTP = async (req, res) => {
+  const { email, password, name } = req.body;
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+    const result = await sendSignupOTP(email, password, name);
+    res.json(result);
+  } catch (err) {
+    const errorMessage = err.message || "Failed to send OTP";
+    res.status(400).json({ error: errorMessage });
+  }
+};
+
+// Verify OTP and create account
+export const verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+  try {
+    if (!email || !otp) {
+      return res.status(400).json({ error: "Email and OTP are required" });
+    }
+    const user = await verifySignupOTP(email, otp);
+    res.json({ message: "Account created successfully", user });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -47,3 +76,4 @@ export const logout = (req, res) => {
     res.json({ message: "Logged out" });
   });
 };
+
