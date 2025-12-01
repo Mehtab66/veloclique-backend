@@ -92,4 +92,9 @@
 //   done(null, user);
 // });
 
-// export default passport;
+import passport from "passport";
+
+// Passport configuration is currently disabled
+// Uncomment the strategies above when needed
+
+export default passport;
