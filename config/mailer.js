@@ -1,36 +1,59 @@
 import nodemailer from "nodemailer";
 
+let transporter = null;
+
 /**
- * Configure a reusable Nodemailer transporter.
- * Values default to sensible development-friendly presets but should be
- * overridden via environment variables in production.
+ * Get or create the nodemailer transporter
+ * Creates transporter lazily to ensure env vars are loaded
  */
-const mailUser = process.env.SMTP_USER 
-const mailPass = process.env.SMTP_PASS
+const getTransporter = () => {
+  if (transporter) {
+    return transporter;
+  }
 
-const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST || process.env.SMTP_HOST || "smtp.gmail.com",
-  port: Number(process.env.MAIL_PORT || process.env.SMTP_PORT || 587),
-  secure: process.env.MAIL_SECURE === "true" || Number(process.env.MAIL_PORT || process.env.SMTP_PORT) === 465,
-  auth:
-    mailUser && mailPass
-      ? {
-          user: mailUser,
-          pass: mailPass,
-        }
-      : undefined,
-});
+  // Validate required environment variables
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
 
-// Log connection issues early to aid debugging.
-if (process.env.NODE_ENV !== "test") {
-  transporter
-    .verify()
-    .then(() => {
-      console.log("📧 Mailer ready");
-    })
-    .catch((err) => {
-      console.error("❌ Mailer configuration error:", err.message);
-    });
-}
+  if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
+    throw new Error(
+      "SMTP configuration missing. Please set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS in .env file"
+    );
+  }
 
-export default transporter;
+  const port = Number(smtpPort);
+  if (isNaN(port)) {
+    throw new Error(`Invalid SMTP_PORT: ${smtpPort}. Must be a number.`);
+  }
+
+  // Create transporter with proper configuration
+  transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: port,
+    secure: port === 465, // true for 465, false for other ports
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+    tls: {
+      rejectUnauthorized: false, // Allow self-signed certificates
+    },
+  });
+
+  console.log(`📧 SMTP configured: ${smtpHost}:${port}`);
+  
+  // Verify connection (async, don't block)
+  transporter.verify((err) => {
+    if (err) {
+      console.error("❌ SMTP Connection Error:", err.message);
+    } else {
+      console.log("✅ SMTP Ready - Connection verified");
+    }
+  });
+
+  return transporter;
+};
+
+export default getTransporter;

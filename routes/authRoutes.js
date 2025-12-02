@@ -13,7 +13,12 @@ import {
   success,
   failure,
   logout,
+  getMe,
+  sendForgotPasswordOTP,
+  verifyForgotPasswordOTP,
+  resetPasswordController,
 } from "../controllers/authController.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -23,7 +28,7 @@ router.post("/verify-otp", verifyOTP);
 router.post("/register", register);
 router.post("/login", login);
 
-// Google
+// Google OAuth
 router.get("/google", googleAuth);
 router.get("/google/callback", googleCallback, success);
 
@@ -35,9 +40,15 @@ router.get("/facebook/callback", facebookCallback, success);
 router.get("/apple", appleAuth);
 router.post("/apple/callback", appleCallback, success);
 
+// Password Reset
+router.post("/forgot-password", sendForgotPasswordOTP);
+router.post("/verify-forgot-password-otp", verifyForgotPasswordOTP);
+router.post("/reset-password", resetPasswordController);
+
 // Common
 router.get("/failure", failure);
 router.get("/logout", logout);
+router.get("/me", authenticate, getMe);
 
 export default router;
 
