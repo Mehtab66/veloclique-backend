@@ -1,5 +1,9 @@
-const express = require("express");
+import express from "express";
+import * as subscriptionController from "../controllers/subscriptionController.js";
+import * as webhookController from "../controllers/webhookController.js";
+
 const router = express.Router();
+
 const {
   createSubscription,
   getSubscription,
@@ -9,9 +13,9 @@ const {
   getPaymentMethods,
   createSetupIntent,
   getProducts,
-} = require("../controllers/subscriptionController");
+} = subscriptionController;
 
-const { handleWebhook } = require("../controllers/webhookController");
+const { handleWebhook } = webhookController;
 
 // Webhook route (must be before body-parser middleware)
 router.post(
@@ -32,4 +36,4 @@ router.post("/subscriptions/user/:userId/setup-intent", createSetupIntent);
 // Product routes
 router.get("/products", getProducts);
 
-module.exports = router;
+export default router;

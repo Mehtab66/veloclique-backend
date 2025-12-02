@@ -1,6 +1,5 @@
-dotenv.config();
 import dotenv from "dotenv";
-
+dotenv.config();
 
 
 import express from "express";
@@ -17,7 +16,7 @@ import connectDB from "./config/db.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
-import subscription from "./routes/subscriptions.js";
+// import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
 const app = express();
 
@@ -50,9 +49,10 @@ app.use(
   })
 );
 
+
 // --- Initialize Passport ---
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // --- Routes ---
 app.use("/", indexRouter);
@@ -60,7 +60,7 @@ app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
 app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
-app.use("/subscriptions", subscription);
+// app.use("/subscriptions", subscription);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });

@@ -1,0 +1,663 @@
+{
+	"info": {
+		"_postman_id": "veloclique-backend-collection",
+		"name": "Veloclique Backend API",
+		"description": "Complete API collection for Veloclique Backend - All Controllers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth Controller",
+			"item": [
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John Doe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/send-otp",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "send-otp"]
+						}
+					}
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/verify-otp",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "verify-otp"]
+						}
+					}
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Google Auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/google",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "google"]
+						}
+					}
+				},
+				{
+					"name": "Google Callback",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/google/callback",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "google", "callback"]
+						}
+					}
+				},
+				{
+					"name": "Facebook Auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/facebook",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "facebook"]
+						}
+					}
+				},
+				{
+					"name": "Facebook Callback",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/facebook/callback",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "facebook", "callback"]
+						}
+					}
+				},
+				{
+					"name": "Apple Auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/apple",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "apple"]
+						}
+					}
+				},
+				{
+					"name": "Apple Callback",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/apple/callback",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "apple", "callback"]
+						}
+					}
+				},
+				{
+					"name": "Auth Failure",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/failure",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "failure"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Location Controller",
+			"item": [
+				{
+					"name": "Get States",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/locations/states",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "states"]
+						}
+					}
+				},
+				{
+					"name": "Get Counties by State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/locations/states/:state/counties",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "states", ":state", "counties"],
+							"variable": [
+								{
+									"key": "state",
+									"value": "California",
+									"description": "State name"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Cities by State and County",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/locations/states/:state/counties/:county/cities",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "states", ":state", "counties", ":county", "cities"],
+							"variable": [
+								{
+									"key": "state",
+									"value": "California",
+									"description": "State name"
+								},
+								{
+									"key": "county",
+									"value": "Los Angeles",
+									"description": "County name"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Shop Controller",
+			"item": [
+				{
+					"name": "Get Shop States",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/shops/states?category=",
+							"host": ["{{base_url}}"],
+							"path": ["shops", "states"],
+							"query": [
+								{
+									"key": "category",
+									"value": "",
+									"description": "Optional: Filter by category",
+									"disabled": true
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Cities by State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/shops/states/:state/cities?category=",
+							"host": ["{{base_url}}"],
+							"path": ["shops", "states", ":state", "cities"],
+							"query": [
+								{
+									"key": "category",
+									"value": "",
+									"description": "Optional: Filter by category",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "state",
+									"value": "California",
+									"description": "State name"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "List Shops",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/shops?state=&city=&status=&category=&search=&minRating=&page=1&limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["shops"],
+							"query": [
+								{
+									"key": "state",
+									"value": "",
+									"description": "Filter by state",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "",
+									"description": "Filter by city",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by business status",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "",
+									"description": "Filter by category",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search by shop name",
+									"disabled": true
+								},
+								{
+									"key": "minRating",
+									"value": "",
+									"description": "Minimum rating",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Items per page (max 100)"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Shop by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/shops/:id",
+							"host": ["{{base_url}}"],
+							"path": ["shops", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "Shop MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Subscription Controller",
+			"item": [
+				{
+					"name": "Create Subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "idempotency-key",
+								"value": "{{$guid}}",
+								"description": "Required: Unique idempotency key"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"priceId\": \"price_1234567890\",\n  \"email\": \"user@example.com\",\n  \"payment_method\": \"pm_1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions"]
+						}
+					}
+				},
+				{
+					"name": "Get Subscription",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancel Subscription",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "idempotency-key",
+								"value": "{{$guid}}",
+								"description": "Required: Unique idempotency key"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cancelAtPeriodEnd\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId/cancel",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId", "cancel"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Resume Subscription",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "idempotency-key",
+								"value": "{{$guid}}",
+								"description": "Required: Unique idempotency key"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId/resume",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId", "resume"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Subscription",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "idempotency-key",
+								"value": "{{$guid}}",
+								"description": "Required: Unique idempotency key"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPriceId\": \"price_0987654321\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId/update",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId", "update"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Payment Methods",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId/payment-methods",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId", "payment-methods"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Setup Intent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/subscriptions/user/:userId/setup-intent",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "subscriptions", "user", ":userId", "setup-intent"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "507f1f77bcf86cd799439011",
+									"description": "User MongoDB ObjectId"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/subscriptions/products",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "products"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Webhook Controller",
+			"item": [
+				{
+					"name": "Stripe Webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "stripe-signature",
+								"value": "{{stripe_signature}}",
+								"description": "Stripe webhook signature"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"evt_1234567890\",\n  \"object\": \"event\",\n  \"type\": \"customer.subscription.updated\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"sub_1234567890\",\n      \"customer\": \"cus_1234567890\",\n      \"status\": \"active\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/webhook",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", "webhook"]
+						},
+						"description": "Handles Stripe webhook events. Note: This endpoint expects raw body (application/json) and requires stripe-signature header."
+					}
+				}
+			]
+		},
+		{
+			"name": "General",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					}
+				},
+				{
+					"name": "Root",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						}
+					}
+				},
+				{
+					"name": "Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": ["{{base_url}}"],
+							"path": ["users"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "stripe_signature",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
+

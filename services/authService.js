@@ -2,8 +2,9 @@ import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import OTP from "../models/otp.model.js";
 import { sendOTPEmail } from "./emailService.js";
+import { generateToken } from "../middleware/authMiddleware.js";
 
-// Generate 6-digit OTP
+// Generate 6-digit OTP (reused for password reset)
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -72,7 +73,14 @@ export const verifySignupOTP = async (email, otp) => {
   // Delete OTP record after successful registration
   await OTP.deleteOne({ _id: otpRecord._id });
 
-  return user;
+  // Generate token for new user
+  const token = generateToken(user);
+  
+  // Return user without password
+  const userObj = user.toObject();
+  delete userObj.password;
+
+  return { user: userObj, token };
 };
 
 export const registerUser = async (name, email, password) => {
@@ -88,10 +96,31 @@ export const validateUser = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found");
 
+  if (!user.password) {
+    throw new Error("Please use social login or reset your password");
+  }
+
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw new Error("Invalid password");
 
   return user;
+};
+
+/**
+ * Login user and generate JWT token
+ * @param {string} email - User email
+ * @param {string} password - User password
+ * @returns {Object} User object and JWT token
+ */
+export const loginUser = async (email, password) => {
+  const user = await validateUser(email, password);
+  const token = generateToken(user);
+  
+  // Return user without password
+  const userObj = user.toObject();
+  delete userObj.password;
+  
+  return { user: userObj, token };
 };
 
 export const findOrCreateOAuthUser = async (provider, profile) => {
@@ -107,4 +136,123 @@ export const findOrCreateOAuthUser = async (provider, profile) => {
     });
   }
   return user;
+};
+
+/**
+ * Send password reset OTP
+ * @param {string} email - User email
+ * @returns {Object} Success message and email
+ */
+export const sendPasswordResetOTP = async (email) => {
+  // Check if user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    // Don't reveal if user exists for security
+    throw new Error("If an account exists with this email, a reset code will be sent");
+  }
+
+  // Generate OTP
+  const otp = generateOTP();
+
+  // Delete any existing OTP for this email
+  await OTP.deleteMany({ email });
+
+  // Create new OTP record (no password stored for reset)
+  const otpRecord = await OTP.create({
+    email,
+    otp,
+    // password not needed for password reset
+    name: null,
+    expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+  });
+
+  // Send OTP email
+  try {
+    const { sendPasswordResetOTPEmail } = await import("./emailService.js");
+    await sendPasswordResetOTPEmail(email, otp);
+  } catch (error) {
+    // If email sending fails, delete the OTP record
+    await OTP.deleteOne({ _id: otpRecord._id });
+    throw error;
+  }
+
+  return { message: "Password reset code sent successfully", email };
+};
+
+/**
+ * Verify password reset OTP
+ * @param {string} email - User email
+ * @param {string} otp - OTP code
+ * @returns {Object} Success message
+ */
+export const verifyPasswordResetOTP = async (email, otp) => {
+  // Find OTP record
+  const otpRecord = await OTP.findOne({ email, otp });
+  if (!otpRecord) throw new Error("Invalid or expired code");
+
+  // Check if OTP is expired
+  if (new Date() > otpRecord.expiresAt) {
+    await OTP.deleteOne({ _id: otpRecord._id });
+    throw new Error("Code has expired");
+  }
+
+  // Verify user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    await OTP.deleteOne({ _id: otpRecord._id });
+    throw new Error("User not found");
+  }
+
+  // Don't delete OTP yet - keep it for password reset step
+  return { message: "Code verified successfully", email };
+};
+
+/**
+ * Reset password with new password
+ * @param {string} email - User email
+ * @param {string} otp - OTP code (for verification)
+ * @param {string} newPassword - New password
+ * @returns {Object} User object and JWT token
+ */
+export const resetPassword = async (email, otp, newPassword) => {
+  // Find OTP record
+  const otpRecord = await OTP.findOne({ email, otp });
+  if (!otpRecord) throw new Error("Invalid or expired code");
+
+  // Check if OTP is expired
+  if (new Date() > otpRecord.expiresAt) {
+    await OTP.deleteOne({ _id: otpRecord._id });
+    throw new Error("Code has expired");
+  }
+
+  // Find user
+  const user = await User.findOne({ email });
+  if (!user) {
+    await OTP.deleteOne({ _id: otpRecord._id });
+    throw new Error("User not found");
+  }
+
+  // Validate new password
+  if (!newPassword || newPassword.length < 6) {
+    throw new Error("Password must be at least 6 characters");
+  }
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update user password
+  user.password = hashedPassword;
+  await user.save();
+
+  // Delete OTP record
+  await OTP.deleteOne({ _id: otpRecord._id });
+
+  // Generate token for user
+  const token = generateToken(user);
+
+  // Return user without password
+  const userObj = user.toObject();
+  delete userObj.password;
+
+  return { user: userObj, token, message: "Password reset successfully" };
 };

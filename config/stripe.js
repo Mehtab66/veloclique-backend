@@ -1,4 +1,14 @@
-const Stripe = require("stripe");
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+import dotenv from "dotenv";
+import Stripe from "stripe";
 
-module.exports = stripe;
+dotenv.config();
+
+const secretKey = process.env.STRIPE_SECRET_KEY;
+
+if (!secretKey) {
+  throw new Error("STRIPE_SECRET_KEY is not set in environment variables");
+}
+
+const stripe = new Stripe(secretKey);
+
+export default stripe;

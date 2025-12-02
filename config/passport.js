@@ -1,48 +1,70 @@
-// import passport from "passport";
-// import { Strategy as LocalStrategy } from "passport-local";
-// import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-// import { Strategy as FacebookStrategy } from "passport-facebook";
-// import AppleStrategy from "passport-apple";
-// import {
-//   registerUser,
-//   validateUser,
-//   findOrCreateOAuthUser,
-// } from "../services/authService.js";
-// import User from "../models/user.model.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-// // Local (Email & Password)
-// passport.use(
-//   new LocalStrategy(
-//     { usernameField: "email" },
-//     async (email, password, done) => {
-//       try {
-//         const user = await validateUser(email, password);
-//         return done(null, user);
-//       } catch (err) {
-//         return done(null, false, { message: err.message });
-//       }
-//     }
-//   )
-// );
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { findOrCreateOAuthUser } from "../services/authService.js";
 
-// // Google
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: process.env.GOOGLE_CALLBACK_URL,
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         const user = await findOrCreateOAuthUser("google", profile);
-//         done(null, user);
-//       } catch (err) {
-//         done(err);
-//       }
-//     }
-//   )
-// );
+// Function to initialize Google OAuth strategy
+const initializeGoogleStrategy = () => {
+  // Check if already registered
+  if (passport._strategies && passport._strategies.google) {
+    return true;
+  }
+
+  // Check if credentials are provided
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    try {
+      passport.use(
+        "google",
+        new GoogleStrategy(
+          {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:4000/auth/google/callback",
+          },
+          async (accessToken, refreshToken, profile, done) => {
+            try {
+              const user = await findOrCreateOAuthUser("google", profile);
+              done(null, user);
+            } catch (err) {
+              done(err, null);
+            }
+          }
+        )
+      );
+      console.log("✅ Google OAuth strategy initialized");
+      return true;
+    } catch (error) {
+      console.error("❌ Failed to initialize Google OAuth strategy:", error.message);
+      return false;
+    }
+  } else {
+    console.warn("⚠️  Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required");
+    return false;
+  }
+};
+
+// Initialize Google strategy on module load
+initializeGoogleStrategy();
+
+// Export function to re-initialize if needed
+export { initializeGoogleStrategy };
+
+// Serialize user for session (minimal - we use JWT)
+passport.serializeUser((user, done) => {
+  done(null, user._id || user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const User = (await import("../models/user.model.js")).default;
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 // // Facebook
 // passport.use(
@@ -84,17 +106,5 @@
 //     }
 //   )
 // );
-
-// // Serialize user
-// passport.serializeUser((user, done) => done(null, user.id));
-// passport.deserializeUser(async (id, done) => {
-//   const user = await User.findById(id);
-//   done(null, user);
-// });
-
-import passport from "passport";
-
-// Passport configuration is currently disabled
-// Uncomment the strategies above when needed
 
 export default passport;

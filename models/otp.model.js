@@ -14,7 +14,7 @@ const otpSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true, // Store hashed password temporarily
+      required: false, // Optional - not needed for password reset
     },
     name: {
       type: String,
