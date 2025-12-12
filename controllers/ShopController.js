@@ -171,6 +171,58 @@ export const listShops = async (req, res) => {
   }
 };
 
+export const getNearbyShops = async (req, res) => {
+  try {
+    const { lat, lng, radiusMiles = 25, limit = 12 } = req.query;
+
+    const latitude = Number(lat);
+    const longitude = Number(lng);
+    const maxResults = Math.min(Math.max(Number(limit) || 12, 1), 50);
+    const radiusInMeters = Math.max(Number(radiusMiles) || 25, 1) * 1609.34;
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return res.status(400).json({ message: "lat and lng are required numbers" });
+    }
+
+    const shops = await Shop.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
+          $maxDistance: radiusInMeters,
+        },
+      },
+    })
+      .limit(maxResults)
+      .select([
+        "name",
+        "fullAddress",
+        "streetAddress",
+        "city",
+        "state",
+        "zip",
+        "phone",
+        "website",
+        "firstCategory",
+        "secondCategory",
+        "reviewsCount",
+        "averageRating",
+        "businessStatus",
+        "imageUrl",
+        "location",
+      ]);
+
+    res.json({
+      total: shops.length,
+      shops,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch nearby shops", error: error.message });
+  }
+};
+
 export const getShopById = async (req, res) => {
   try {
     const { id } = req.params;
