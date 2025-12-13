@@ -1,9 +1,9 @@
-const GearPick = require("../models/GearPick");
+import GearPick from "../models/gearpick.model.js";
 
 // @desc    Submit a new gear pick
 // @route   POST /api/gear-picks
 // @access  Private
-exports.submitGearPick = async (req, res) => {
+export const submitGearPick = async (req, res) => {
   try {
     const { gearName, category, productLink, recommendation } = req.body;
 
@@ -43,7 +43,7 @@ exports.submitGearPick = async (req, res) => {
 // @desc    Get all gear picks with filtering and sorting
 // @route   GET /api/gear-picks
 // @access  Public
-exports.getGearPicks = async (req, res) => {
+export const getGearPicks = async (req, res) => {
   try {
     const {
       category = "All",
@@ -125,7 +125,7 @@ exports.getGearPicks = async (req, res) => {
 // @desc    Get gear picks for admin (all statuses)
 // @route   GET /api/gear-picks/admin/all
 // @access  Admin
-exports.getGearPicksForAdmin = async (req, res) => {
+export const getGearPicksForAdmin = async (req, res) => {
   try {
     const { status, category = "All", page = 1, limit = 20 } = req.query;
 
@@ -176,7 +176,7 @@ exports.getGearPicksForAdmin = async (req, res) => {
 // @desc    Approve or reject gear pick
 // @route   PUT /api/gear-picks/:id/status
 // @access  Admin
-exports.updateGearPickStatus = async (req, res) => {
+export const updateGearPickStatus = async (req, res) => {
   try {
     const { status } = req.body;
 
@@ -218,7 +218,7 @@ exports.updateGearPickStatus = async (req, res) => {
 // @desc    Vote on a gear pick
 // @route   POST /api/gear-picks/:id/vote
 // @access  Private
-exports.voteOnGearPick = async (req, res) => {
+export const voteOnGearPick = async (req, res) => {
   try {
     const { vote } = req.body;
 
