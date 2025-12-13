@@ -16,7 +16,7 @@ import connectDB from "./config/db.js";
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
-import routeRoutes from "./routes/route.routes.js";
+import routeRoutes from "./routes/route.js";
 
 // import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
