@@ -16,6 +16,8 @@ import connectDB from "./config/db.js";
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
+import routeRoutes from "./routes/route.routes.js";
+
 // import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
 const app = express();
@@ -60,6 +62,8 @@ app.use("/auth", authRoutes);
 app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
+app.use("/routes", routeRoutes);
+
 // app.use("/subscriptions", subscription);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
