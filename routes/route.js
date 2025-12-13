@@ -3,7 +3,7 @@ import {
   createRoute,
   getRoutes,
   updateRouteStatus,
-} from "../controllers/route.controller.js";
+} from "../controllers/routeController.js";
 import { upload } from "../middlewares/upload.js";
 
 const router = express.Router();
