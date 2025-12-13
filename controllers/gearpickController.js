@@ -1,4 +1,5 @@
 import GearPick from "../models/gearpick.model.js";
+import cloudinary from "../config/cloudinary.js";
 
 // @desc    Submit a new gear pick
 // @route   POST /api/gear-picks
@@ -280,6 +281,56 @@ export const voteOnGearPick = async (req, res) => {
     });
   } catch (error) {
     console.error("Vote error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+export const uploadGearPickImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload an image",
+      });
+    }
+
+    const gearPick = await GearPick.findById(req.params.id);
+
+    if (!gearPick) {
+      return res.status(404).json({
+        success: false,
+        message: "Gear pick not found",
+      });
+    }
+
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+      {
+        folder: "veloclique/gearpicks",
+        resource_type: "image",
+      }
+    );
+
+    // Save image data
+    gearPick.image = {
+      publicId: result.public_id,
+      url: result.secure_url,
+    };
+
+    await gearPick.save();
+
+    res.json({
+      success: true,
+      message: "Image uploaded successfully",
+      data: gearPick.image,
+    });
+  } catch (error) {
+    console.error("Upload gear pick image error:", error);
     res.status(500).json({
       success: false,
       message: "Server error",

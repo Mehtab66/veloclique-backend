@@ -47,6 +47,15 @@ const GearPickSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    image: {
+      publicId: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
+    },
+
     voteHistory: [
       {
         userId: {
