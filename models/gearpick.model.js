@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const GearPickSchema = new mongoose.Schema(
   {
@@ -73,4 +73,4 @@ const GearPickSchema = new mongoose.Schema(
 GearPickSchema.index({ category: 1, status: 1, votes: -1 });
 GearPickSchema.index({ status: 1, createdAt: -1 });
 
-module.exports = mongoose.model("GearPick", GearPickSchema);
+export default mongoose.model("Gearpick", GearPickSchema);

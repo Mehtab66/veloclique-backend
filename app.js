@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -16,6 +15,7 @@ import connectDB from "./config/db.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
+import gearpicks from "./routes/gearpick.js";
 // import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
 const app = express();
@@ -49,7 +49,6 @@ app.use(
   })
 );
 
-
 // --- Initialize Passport ---
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,6 +59,7 @@ app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
 app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
+app.use("/gearpicks", gearpicks);
 // app.use("/subscriptions", subscription);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
