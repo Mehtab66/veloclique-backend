@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import OTP from "../models/otp.model.js";
 import { sendOTPEmail } from "./emailService.js";
 import { generateToken } from "../middleware/authMiddleware.js";
+import { addUserSession } from "./userService.js";
 
 // Generate 6-digit OTP (reused for password reset)
 const generateOTP = () => {
@@ -63,11 +64,20 @@ export const verifySignupOTP = async (email, otp) => {
     throw new Error("User already exists");
   }
 
-  // Create user account
+  // Create user account with default preferences
   const user = await User.create({
     email: otpRecord.email,
     password: otpRecord.password,
     name: otpRecord.name || null,
+    displayName: otpRecord.name || null,
+    emailPreferences: {
+      newShops: true,
+      routeHighlights: true,
+      monthlyUpdates: true,
+      specialOffers: false,
+    },
+    isProfilePrivate: true,
+    twoFactorEnabled: false,
   });
 
   // Delete OTP record after successful registration
@@ -75,7 +85,7 @@ export const verifySignupOTP = async (email, otp) => {
 
   // Generate token for new user
   const token = generateToken(user);
-  
+
   // Return user without password
   const userObj = user.toObject();
   delete userObj.password;
@@ -115,11 +125,11 @@ export const validateUser = async (email, password) => {
 export const loginUser = async (email, password) => {
   const user = await validateUser(email, password);
   const token = generateToken(user);
-  
+
   // Return user without password
   const userObj = user.toObject();
   delete userObj.password;
-  
+
   return { user: userObj, token };
 };
 
@@ -148,7 +158,9 @@ export const sendPasswordResetOTP = async (email) => {
   const user = await User.findOne({ email });
   if (!user) {
     // Don't reveal if user exists for security
-    throw new Error("If an account exists with this email, a reset code will be sent");
+    throw new Error(
+      "If an account exists with this email, a reset code will be sent"
+    );
   }
 
   // Generate OTP

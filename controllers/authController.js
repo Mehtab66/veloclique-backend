@@ -1,14 +1,15 @@
 import passport from "passport";
-import { 
-  registerUser, 
-  sendSignupOTP, 
-  verifySignupOTP, 
+import {
+  registerUser,
+  sendSignupOTP,
+  verifySignupOTP,
   loginUser,
   sendPasswordResetOTP,
   verifyPasswordResetOTP,
-  resetPassword
+  resetPassword,
 } from "../services/authService.js";
 import { authenticate, generateToken } from "../middleware/authMiddleware.js";
+import { addUserSession } from "../services/userService.js";
 
 // Send OTP for signup
 export const sendOTP = async (req, res) => {
@@ -26,16 +27,46 @@ export const sendOTP = async (req, res) => {
 };
 
 // Verify OTP and create account
+// export const verifyOTP = async (req, res) => {
+//   const { email, otp } = req.body;
+//   try {
+//     if (!email || !otp) {
+//       return res.status(400).json({ error: "Email and OTP are required" });
+//     }
+//     const { user, token } = await verifySignupOTP(email, otp);
+//     res.json({ message: "Account created successfully", user, token });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
 export const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
   try {
     if (!email || !otp) {
-      return res.status(400).json({ error: "Email and OTP are required" });
+      return res.status(400).json({
+        success: false,
+        error: "Email and OTP are required",
+      });
     }
     const { user, token } = await verifySignupOTP(email, otp);
-    res.json({ message: "Account created successfully", user, token });
+
+    // Add session for new user
+    const deviceInfo = req.headers["user-agent"] || "Unknown Device";
+    const ipAddress =
+      req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    await addUserSession(user._id, token, deviceInfo, ipAddress);
+
+    res.json({
+      success: true,
+      message: "Account created successfully",
+      user,
+      token,
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
   }
 };
 
@@ -50,68 +81,104 @@ export const register = async (req, res) => {
 };
 
 // Login with email and password - returns JWT token
+// export const login = async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     if (!email || !password) {
+//       return res.status(400).json({ error: "Email and password are required" });
+//     }
+//     const { user, token } = await loginUser(email, password);
+//     res.json({ message: "Login successful", user, token });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message || "Login failed" });
+//   }
+// };
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
+      return res.status(400).json({
+        success: false,
+        error: "Email and password are required",
+      });
     }
     const { user, token } = await loginUser(email, password);
-    res.json({ message: "Login successful", user, token });
+
+    // Add session for logged in user
+    const deviceInfo = req.headers["user-agent"] || "Unknown Device";
+    const ipAddress =
+      req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    await addUserSession(user._id, token, deviceInfo, ipAddress);
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user,
+      token,
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message || "Login failed" });
+    res.status(400).json({
+      success: false,
+      error: err.message || "Login failed",
+    });
   }
 };
 
 export const googleAuth = async (req, res, next) => {
   // Check if Google OAuth is configured
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    return res.status(503).json({ 
-      error: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables." 
+    return res.status(503).json({
+      error:
+        "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
     });
   }
-  
+
   // Try to initialize strategy if not already registered
   const { initializeGoogleStrategy } = await import("../config/passport.js");
   const isInitialized = initializeGoogleStrategy();
-  
+
   if (!isInitialized) {
-    return res.status(503).json({ 
-      error: "Google OAuth strategy failed to initialize. Please check your environment variables and restart the server." 
+    return res.status(503).json({
+      error:
+        "Google OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
     });
   }
-  
-  passport.authenticate("google", { 
+
+  passport.authenticate("google", {
     scope: ["profile", "email"],
-    session: false // We use JWT, not sessions
+    session: false, // We use JWT, not sessions
   })(req, res, next);
 };
 
 export const googleCallback = async (req, res, next) => {
   // Check if Google OAuth is configured
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    return res.status(503).json({ 
-      error: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables." 
+    return res.status(503).json({
+      error:
+        "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
     });
   }
-  
+
   // Try to initialize strategy if not already registered
   const { initializeGoogleStrategy } = await import("../config/passport.js");
   const isInitialized = initializeGoogleStrategy();
-  
+
   if (!isInitialized) {
-    return res.status(503).json({ 
-      error: "Google OAuth strategy failed to initialize. Please check your environment variables and restart the server." 
+    return res.status(503).json({
+      error:
+        "Google OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
     });
   }
-  
+
   passport.authenticate("google", {
     failureRedirect: "/auth/failure",
     session: false, // We use JWT, not sessions
   })(req, res, next);
 };
 
-export const facebookAuth = passport.authenticate("facebook", { scope: ["email"] });
+export const facebookAuth = passport.authenticate("facebook", {
+  scope: ["email"],
+});
 export const facebookCallback = passport.authenticate("facebook", {
   failureRedirect: "/auth/failure",
   session: true,
@@ -123,26 +190,77 @@ export const appleCallback = passport.authenticate("apple", {
   session: true,
 });
 
-export const failure = (req, res) => res.status(401).json({ message: "Authentication failed" });
+export const failure = (req, res) =>
+  res.status(401).json({ message: "Authentication failed" });
 
 // OAuth success handler - generates JWT token for OAuth users and redirects to frontend
+// export const success = async (req, res) => {
+//   try {
+//     if (!req.user) {
+//       return res.redirect(
+//         `${
+//           process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173"
+//         }/login?error=authentication_failed`
+//       );
+//     }
+
+//     const token = generateToken(req.user);
+
+//     // Redirect to frontend with token
+//     const clientOrigin =
+//       process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
+//     res.redirect(
+//       `${clientOrigin}/auth/callback?token=${token}&provider=google`
+//     );
+//   } catch (error) {
+//     const clientOrigin =
+//       process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
+//     res.redirect(
+//       `${clientOrigin}/login?error=${encodeURIComponent(error.message)}`
+//     );
+//   }
+// };
 export const success = async (req, res) => {
   try {
     if (!req.user) {
-      return res.redirect(`${process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173"}/login?error=authentication_failed`);
+      return res.redirect(
+        `${
+          process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173"
+        }/login?error=authentication_failed`
+      );
     }
-    
+
     const token = generateToken(req.user);
-    
+
+    // Add session for OAuth users
+    const deviceInfo = req.headers["user-agent"] || "Unknown Device";
+    const ipAddress =
+      req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    await addUserSession(req.user._id, token, deviceInfo, ipAddress);
+
+    // Determine provider
+    let provider = "google";
+    if (req.user.googleId) provider = "google";
+    if (req.user.facebookId) provider = "facebook";
+    if (req.user.appleId) provider = "apple";
+
     // Redirect to frontend with token
-    const clientOrigin = process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
-    res.redirect(`${clientOrigin}/auth/callback?token=${token}&provider=google`);
+    const clientOrigin =
+      process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
+    res.redirect(
+      `${clientOrigin}/auth/callback?token=${token}&provider=${provider}`
+    );
   } catch (error) {
-    const clientOrigin = process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
-    res.redirect(`${clientOrigin}/login?error=${encodeURIComponent(error.message)}`);
+    console.error("OAuth success error:", error);
+    const clientOrigin =
+      process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
+    res.redirect(
+      `${clientOrigin}/login?error=${encodeURIComponent(
+        error.message || "Authentication failed"
+      )}`
+    );
   }
 };
-
 // Get current user from token
 export const getMe = async (req, res) => {
   try {
@@ -166,7 +284,11 @@ export const sendForgotPasswordOTP = async (req, res) => {
     res.json(result);
   } catch (err) {
     // Always return success message for security (don't reveal if user exists)
-    res.json({ message: "If an account exists with this email, a reset code will be sent", email });
+    res.json({
+      message:
+        "If an account exists with this email, a reset code will be sent",
+      email,
+    });
   }
 };
 
@@ -189,7 +311,9 @@ export const resetPasswordController = async (req, res) => {
   const { email, otp, newPassword } = req.body;
   try {
     if (!email || !otp || !newPassword) {
-      return res.status(400).json({ error: "Email, OTP, and new password are required" });
+      return res
+        .status(400)
+        .json({ error: "Email, OTP, and new password are required" });
     }
     const result = await resetPassword(email, otp, newPassword);
     res.json(result);
@@ -202,4 +326,3 @@ export const resetPasswordController = async (req, res) => {
 export const logout = (req, res) => {
   res.json({ message: "Logged out successfully" });
 };
-
