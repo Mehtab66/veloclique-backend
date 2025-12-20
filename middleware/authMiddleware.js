@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_SECRET =
+  process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"; // Default 7 days
 
 /**
@@ -55,20 +56,82 @@ export const authenticate = async (req, res, next) => {
     const token = extractToken(req);
 
     if (!token) {
-      return res.status(401).json({ error: "No token provided" });
+      return res.status(401).json({
+        success: false,
+        error: "No token provided. Please log in.",
+      });
     }
 
     const decoded = verifyToken(token);
-    const user = await User.findById(decoded.id).select("-password");
+    const user = await User.findById(decoded.id);
 
     if (!user) {
-      return res.status(401).json({ error: "User not found" });
+      return res.status(401).json({
+        success: false,
+        error: "User not found. Please log in again.",
+      });
     }
 
-    req.user = user;
+    // Check if account is marked for deletion
+    if (user.markedForDeletion) {
+      return res.status(401).json({
+        success: false,
+        error: "Account is scheduled for deletion. Please contact support.",
+      });
+    }
+
+    // Verify token is in active sessions (if sessions are enabled)
+    if (user.sessions && user.sessions.length > 0) {
+      const sessionExists = user.sessions.some(
+        (session) => session.token === token
+      );
+      if (!sessionExists) {
+        return res.status(401).json({
+          success: false,
+          error: "Session expired. Please log in again.",
+        });
+      }
+
+      // Update session last active time
+      const session = user.sessions.find((s) => s.token === token);
+      if (session) {
+        session.lastActive = new Date();
+        await user.save();
+      }
+    }
+
+    // Remove sensitive data from user object
+    const userObj = user.toObject();
+    delete userObj.password;
+    delete userObj.twoFactorSecret;
+    delete userObj.emailChangeOTP;
+    delete userObj.emailChangeOTPExpires;
+    delete userObj.sessions;
+    delete userObj.dataExport;
+
+    req.user = userObj;
+    req.token = token; // Attach token for session management
     next();
   } catch (error) {
-    return res.status(401).json({ error: error.message || "Invalid token" });
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        error: "Invalid token. Please log in again.",
+      });
+    }
+
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        error: "Token expired. Please log in again.",
+      });
+    }
+
+    console.error("Auth middleware error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Authentication failed. Please try again.",
+    });
   }
 };
 
@@ -81,9 +144,19 @@ export const optionalAuth = async (req, res, next) => {
     const token = extractToken(req);
     if (token) {
       const decoded = verifyToken(token);
-      const user = await User.findById(decoded.id).select("-password");
-      if (user) {
-        req.user = user;
+      const user = await User.findById(decoded.id);
+      if (user && !user.markedForDeletion) {
+        // Remove sensitive data
+        const userObj = user.toObject();
+        delete userObj.password;
+        delete userObj.twoFactorSecret;
+        delete userObj.emailChangeOTP;
+        delete userObj.emailChangeOTPExpires;
+        delete userObj.sessions;
+        delete userObj.dataExport;
+
+        req.user = userObj;
+        req.token = token;
       }
     }
     next();
@@ -92,4 +165,3 @@ export const optionalAuth = async (req, res, next) => {
     next();
   }
 };
-
