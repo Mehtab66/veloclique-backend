@@ -21,6 +21,18 @@ const routeSchema = new mongoose.Schema(
       publicId: String,
       url: String,
     },
+    distance: {
+      type: String,
+      trim: true,
+    },
+    difficulty: {
+      type: String,
+      trim: true,
+    },
+    highlights: {
+      type: String,
+      trim: true,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

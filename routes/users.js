@@ -1,7 +1,9 @@
 import express from "express";
 import { authenticate } from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/upload.js";
 import {
   updateProfile,
+  uploadProfilePicture,
   changeEmailRequest,
   verifyEmailChange,
   changePassword,
@@ -9,7 +11,8 @@ import {
   updateEmailPreferences,
   updatePrivacySettings,
   requestDataExport,
-  deleteAccount,
+  requestDeleteAccount,
+  verifyDeleteAccount,
   getActiveSessions,
   endAllSessions,
   getProfile,
@@ -25,6 +28,13 @@ router.get("/profile", getProfile);
 
 // Update profile
 router.put("/profile", updateProfile);
+
+// Upload profile picture
+router.put(
+  "/profile-picture",
+  upload.single("profilePicture"),
+  uploadProfilePicture
+);
 
 // Email change flow
 router.post("/email/change-request", changeEmailRequest);
@@ -45,8 +55,9 @@ router.put("/privacy", updatePrivacySettings);
 // Data export
 router.post("/data/export", requestDataExport);
 
-// Account deletion
-router.delete("/account", deleteAccount);
+// Account deletion (OTP flow)
+router.post("/account/delete-request", requestDeleteAccount);
+router.post("/account/delete-verify", verifyDeleteAccount);
 
 // Session management
 router.get("/sessions", getActiveSessions);
