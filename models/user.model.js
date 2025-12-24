@@ -4,6 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     name: String,
     displayName: String,
+    profilePicture: {
+      type: String, // Cloudinary URL
+      default: "https://via.placeholder.com/150",
+    },
     email: {
       type: String,
       unique: true,
@@ -18,6 +22,8 @@ const userSchema = new mongoose.Schema(
     },
     emailChangeOTP: String,
     emailChangeOTPExpires: Date,
+    accountDeleteOTP: String,
+    accountDeleteOTPExpires: Date,
     password: {
       type: String,
       validate: {
@@ -27,6 +33,7 @@ const userSchema = new mongoose.Schema(
         message: "Password must be at least 6 characters",
       },
     },
+    passwordChangedAt: Date,
     googleId: { type: String, sparse: true },
     facebookId: { type: String, sparse: true },
     appleId: { type: String, sparse: true },
@@ -80,6 +87,8 @@ userSchema.methods.toJSON = function () {
   delete user.twoFactorSecret;
   delete user.emailChangeOTP;
   delete user.emailChangeOTPExpires;
+  delete user.accountDeleteOTP;
+  delete user.accountDeleteOTPExpires;
   delete user.sessions;
   delete user.dataExport;
   return user;

@@ -14,7 +14,7 @@ export const sendOTPEmail = async (email, otp) => {
 
   // Get FROM address dynamically (in case env vars load later)
   const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-  
+
   if (!fromAddress) {
     throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
   }
@@ -66,7 +66,7 @@ export const sendPasswordResetOTPEmail = async (email, otp) => {
   }
 
   const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-  
+
   if (!fromAddress) {
     throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
   }
@@ -237,10 +237,10 @@ export const sendDataExportEmail = async (email, downloadLink, expiresAt) => {
   }
 };
 
-// Account deletion confirmation
-export const sendAccountDeletionEmail = async (email) => {
-  if (!email) {
-    throw new Error("Email is required");
+// Account deletion OTP verification
+export const sendAccountDeletionEmail = async (email, otp) => {
+  if (!email || !otp) {
+    throw new Error("Email and OTP are required");
   }
 
   const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
@@ -252,47 +252,27 @@ export const sendAccountDeletionEmail = async (email) => {
     );
   }
 
-  const deletionDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-  const formattedDate = deletionDate.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   const mailOptions = {
     to: email,
     from: fromAddress,
-    subject: `${ORG_NAME} Account Deletion Confirmation`,
-    text: `Your ${ORG_NAME} account deletion has been scheduled and will be permanently deleted on ${formattedDate}. If you didn't request this, please contact support immediately.`,
+    subject: `${ORG_NAME} Account Deletion Verification`,
+    text: `Your ${ORG_NAME} account deletion verification code is ${otp}. This code will expire in 10 minutes. If you didn't request this, please secure your account immediately.`,
     html: `
       <div style="font-family: Arial, sans-serif; color: #111;">
         <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
         <p style="font-size: 16px; margin-bottom: 16px;">
-          We've received your request to delete your ${ORG_NAME} account.
+          You've requested to delete your ${ORG_NAME} account. Use the following verification code to confirm this action:
         </p>
-        <div style="background-color: #fff3f3; border: 1px solid #ffcdd2; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0 0 12px 0; font-size: 18px; color: #d32f2f; font-weight: bold;">
-            ⚠️ Account Deletion Scheduled
-          </p>
-          <p style="margin: 0; font-size: 16px;">
-            Your account has been scheduled for permanent deletion on:<br/>
-            <strong style="font-size: 18px;">${formattedDate}</strong>
+        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center; color: #d32f2f;">
+          ${otp}
+        </p>
+        <div style="background-color: #fff3f3; border: 1px solid #ffcdd2; padding: 16px; margin: 20px 0; border-radius: 8px;">
+          <p style="margin: 0; font-size: 14px; color: #d32f2f;">
+            <strong>⚠️ Warning:</strong> This action will permanently delete your account and all associated data after 7 days.
           </p>
         </div>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          During this 30-day period, your account will be in a deactivated state. If you change your mind, you can:
-        </p>
-        <ul style="font-size: 16px; color: #555; margin-bottom: 20px;">
-          <li>Contact our support team to cancel the deletion</li>
-          <li>Log in to your account (you'll have access until the deletion date)</li>
-        </ul>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #555; padding: 16px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px; color: #555;">
-            <strong>Important:</strong> After ${formattedDate}, all your data will be permanently removed and cannot be recovered.
-          </p>
-        </div>
-        <p style="font-size: 14px; color: #777; margin-top: 24px;">
-          If you did not request this account deletion, please contact our support team immediately to secure your account.
+        <p style="font-size: 14px; color: #555;">
+          This code expires in 10 minutes. If you didn't request this account deletion, please secure your account immediately.
         </p>
         <p style="font-size: 16px; margin-top: 24px;">
           Ride on,<br/>
@@ -306,12 +286,12 @@ export const sendAccountDeletionEmail = async (email) => {
     const transporter = getTransporter();
     const info = await transporter.sendMail(mailOptions);
     console.log(
-      `✅ Account deletion email sent to ${email}. Message ID: ${info.messageId}`
+      `✅ Account deletion OTP sent to ${email}. Message ID: ${info.messageId}`
     );
     return info;
   } catch (error) {
-    console.error("❌ Failed to send account deletion email:", error.message);
-    throw new Error(`Unable to send account deletion email: ${error.message}`);
+    console.error("❌ Failed to send account deletion OTP:", error.message);
+    throw new Error(`Unable to send account deletion verification: ${error.message}`);
   }
 };
 

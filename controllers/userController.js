@@ -1,5 +1,6 @@
 import {
   updateUserProfile,
+  uploadUserProfilePicture,
   requestEmailChange,
   verifyAndUpdateEmail,
   updateUserPassword,
@@ -7,7 +8,8 @@ import {
   updateUserEmailPreferences,
   updateUserPrivacySettings,
   generateDataExport,
-  deleteUserAccount,
+  requestAccountDeletion,
+  verifyAccountDeletion,
   getUserSessions,
   endAllUserSessions,
   getUserProfile,
@@ -25,12 +27,14 @@ export const getProfile = async (req, res) => {
         _id: user._id,
         name: user.name,
         displayName: user.displayName,
+        profilePicture: user.profilePicture,
         email: user.email,
         city: user.city,
         state: user.state,
         twoFactorEnabled: user.twoFactorEnabled,
         emailPreferences: user.emailPreferences,
         isProfilePrivate: user.isProfilePrivate,
+        passwordChangedAt: user.passwordChangedAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -46,6 +50,17 @@ export const getProfile = async (req, res) => {
 // Update profile (display name, city, state)
 export const updateProfile = async (req, res) => {
   try {
+    console.log('updateProfile called');
+    console.log('req.user:', req.user);
+    console.log('req.body:', req.body);
+
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        error: "User not authenticated",
+      });
+    }
+
     const userId = req.user._id;
     const { displayName, city, state } = req.body;
 
@@ -64,12 +79,50 @@ export const updateProfile = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('updateProfile error:', error);
     res.status(400).json({
       success: false,
       error: error.message,
     });
   }
 };
+
+// Upload profile picture
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No file uploaded",
+      });
+    }
+
+    const user = await uploadUserProfilePicture(userId, req.file.buffer);
+
+    res.json({
+      success: true,
+      message: "Profile picture uploaded successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        displayName: user.displayName,
+        profilePicture: user.profilePicture,
+        email: user.email,
+        city: user.city,
+        state: user.state,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Request email change (send OTP to new email)
 
 // Request email change (send OTP to new email)
 export const changeEmailRequest = async (req, res) => {
@@ -184,9 +237,8 @@ export const toggleTwoFactor = async (req, res) => {
     const user = await toggleTwoFactorAuth(userId, enable);
     res.json({
       success: true,
-      message: `Two-factor authentication ${
-        enable ? "enabled" : "disabled"
-      } successfully`,
+      message: `Two-factor authentication ${enable ? "enabled" : "disabled"
+        } successfully`,
       user: {
         _id: user._id,
         name: user.name,
@@ -276,20 +328,39 @@ export const requestDataExport = async (req, res) => {
   }
 };
 
-// Delete account
-export const deleteAccount = async (req, res) => {
+// Request account deletion - sends OTP to email
+export const requestDeleteAccount = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { password } = req.body;
 
-    if (!password) {
+    const result = await requestAccountDeletion(userId);
+    res.json({
+      success: true,
+      message: result.message,
+      email: result.email,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Verify OTP and delete account
+export const verifyDeleteAccount = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
       return res.status(400).json({
         success: false,
-        error: "Password is required for account deletion",
+        error: "Verification code is required",
       });
     }
 
-    await deleteUserAccount(userId, password);
+    await verifyAccountDeletion(userId, otp);
     res.json({
       success: true,
       message: "Account deleted successfully",
