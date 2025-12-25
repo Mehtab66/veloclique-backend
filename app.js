@@ -17,7 +17,7 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
-
+import donaionRoutes from "./routes/donationRoutes.js";
 // import subscription from "./routes/subscriptions.js";
 // --- Initialize Express app FIRST ---
 const app = express();
@@ -63,6 +63,7 @@ app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
+app.use("/donation", donaionRoutes);
 
 // app.use("/subscriptions", subscription);
 app.get("/health", (req, res) => {

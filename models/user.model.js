@@ -74,6 +74,28 @@ const userSchema = new mongoose.Schema(
       expiresAt: Date,
       requestedAt: Date,
     },
+    stripeCustomerId: { type: String, sparse: true },
+    donations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Donation" }],
+    badges: [
+      {
+        tier: {
+          type: String,
+          enum: ["Peloton", "Breakaway", "Yellow Jersey"],
+        },
+        grantedAt: { type: Date, default: Date.now },
+        expiresAt: { type: Date, default: null }, // null = permanent badge
+        isActive: { type: Boolean, default: true },
+        sourceDonation: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Donation",
+        },
+      },
+    ],
+    nameWallPreferences: {
+      displayName: { type: String, default: "" },
+      isVisible: { type: Boolean, default: true },
+      tierToShow: { type: String, default: "highest" }, // 'highest' or 'current'
+    },
   },
   {
     timestamps: true,
