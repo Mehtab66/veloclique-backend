@@ -38,10 +38,10 @@ app.use(
   })
 );
 
-// ⚠️ Stripe webhook must be BEFORE json body parsing
+// ⚠️ Stripe webhook must be registered BEFORE json body parsing
 app.use("/donation", donationRoutes);
 
-// --- Now safe to use body parsers ---
+// --- Now safe to use body parsers for other routes ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

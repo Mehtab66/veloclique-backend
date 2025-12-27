@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser"; // Use body-parser for Stripe webhook
 import {
   createCheckoutSession,
   handleWebhook,
@@ -17,10 +18,10 @@ const router = express.Router();
 // Public routes
 router.post("/create-checkout", createCheckoutSession);
 
-// ⚠️ Stripe Webhook (raw body required)
+// Stripe Webhook (raw body required)
 router.post(
   "/webhook",
-  express.raw({ type: "application/json" }),
+  bodyParser.raw({ type: "application/json" }),
   handleWebhook
 );
 
