@@ -14,11 +14,25 @@ export const createCheckoutSession = async (req, res) => {
       anonymousInfo,
     } = req.body;
 
-    const userId = req.user?._id;
-    const user = userId ? await User.findById(userId) : null;
+    // Check if user is authenticated via token
+    let userId = null;
+    let user = null;
+
+    // If there's an Authorization header, try to get the user
+    if (req.headers.authorization) {
+      try {
+        const token = req.headers.authorization.replace("Bearer ", "");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        userId = decoded.userId;
+        user = await User.findById(userId);
+      } catch (error) {
+        console.log("Invalid or expired token, proceeding as anonymous");
+        // Don't throw error, just proceed as anonymous
+      }
+    }
 
     // Get Stripe price ID
-    const priceId = STRIPE_PRICES[frequency][tier][`$${amount}`];
+    const priceId = STRIPE_PRICES[frequency]?.[tier]?.[`$${amount}`];
     if (!priceId) {
       return res.status(400).json({
         success: false,
@@ -26,17 +40,24 @@ export const createCheckoutSession = async (req, res) => {
       });
     }
 
+    // Determine if donation should be anonymous
+    // If user is not logged in OR explicitly chooses anonymous, mark as anonymous
+    const finalIsAnonymous = !user || isAnonymous === true;
+
     // Create or get Stripe customer
     let customerId;
+    let isAnonymousDonation = false;
+
     if (user?.stripeCustomerId) {
       customerId = user.stripeCustomerId;
-    } else if (user && !user.stripeCustomerId) {
+    } else if (user) {
       // Create new Stripe customer for logged-in user
       const customer = await stripe.customers.create({
         email: user.email,
         name: user.name,
         metadata: {
           userId: user._id.toString(),
+          userType: "registered",
         },
       });
       customerId = customer.id;
@@ -46,13 +67,24 @@ export const createCheckoutSession = async (req, res) => {
       await user.save();
     } else {
       // Anonymous donor - create customer with minimal info
-      const customer = await stripe.customers.create({
-        email: anonymousInfo?.email || undefined,
-        name: anonymousInfo?.name || undefined,
+      isAnonymousDonation = true;
+      const customerData = {
         metadata: {
           isAnonymous: "true",
+          donationTier: tier,
+          donationFrequency: frequency,
         },
-      });
+      };
+
+      // Only add email/name if provided
+      if (anonymousInfo?.email) {
+        customerData.email = anonymousInfo.email;
+      }
+      if (anonymousInfo?.name) {
+        customerData.name = anonymousInfo.name;
+      }
+
+      const customer = await stripe.customers.create(customerData);
       customerId = customer.id;
     }
 
@@ -66,24 +98,35 @@ export const createCheckoutSession = async (req, res) => {
         },
       ],
       mode: frequency === "monthly" ? "subscription" : "payment",
-      success_url: `${process.env.FRONTEND_URL}/donation-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/donation-canceled`,
+      success_url: `${
+        process.env.FRONTEND_URL || "https://veloclique.com"
+      }/donation-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${
+        process.env.FRONTEND_URL || "https://veloclique.com"
+      }/donation-canceled`,
       allow_promotion_codes: true,
       metadata: {
         tier,
         frequency,
-        isAnonymous: isAnonymous.toString(),
-        showOnNameWall: showOnNameWall.toString(),
+        isAnonymous: finalIsAnonymous.toString(),
+        showOnNameWall: finalIsAnonymous ? "false" : showOnNameWall.toString(), // Anonymous donations don't show on name wall
         userId: user?._id?.toString() || "anonymous",
         anonymousName: anonymousInfo?.name || "",
         anonymousEmail: anonymousInfo?.email || "",
+        amount: amount.toString(),
       },
+      // Allow customer to update their info
+      customer_update: {
+        address: "auto",
+        name: "auto",
+      },
+      billing_address_collection: "auto",
     });
 
     // Create donation record in database (pending status)
     const donation = new Donation({
       donorId: userId || null,
-      anonymousDonor: isAnonymous
+      anonymousDonor: finalIsAnonymous
         ? {
             name: anonymousInfo?.name || null,
             email: anonymousInfo?.email || null,
@@ -93,8 +136,8 @@ export const createCheckoutSession = async (req, res) => {
       currency: "USD",
       tier,
       frequency,
-      isAnonymous,
-      showOnNameWall,
+      isAnonymous: finalIsAnonymous,
+      showOnNameWall: finalIsAnonymous ? false : showOnNameWall, // Anonymous donations don't show on name wall
       stripe: {
         customerId,
         checkoutSessionId: session.id,
@@ -103,6 +146,8 @@ export const createCheckoutSession = async (req, res) => {
       metadata: {
         successUrl: session.success_url,
         cancelUrl: session.cancel_url,
+        ipAddress: req.ip,
+        userAgent: req.headers["user-agent"],
       },
     });
 
@@ -114,21 +159,31 @@ export const createCheckoutSession = async (req, res) => {
       await user.save();
     }
 
+    console.log(
+      `Checkout session created for ${tier} $${amount} - ${
+        finalIsAnonymous ? "Anonymous" : "User: " + userId
+      }`
+    );
+
     res.json({
       success: true,
       sessionId: session.id,
       url: session.url,
+      donationId: donation._id,
+      isAnonymous: finalIsAnonymous,
     });
   } catch (error) {
     console.error("Error creating checkout session:", error);
     res.status(500).json({
       success: false,
       message: "Failed to create checkout session",
-      error: error.message,
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
     });
   }
 };
-
 // Handle Stripe Webhook
 export const handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
@@ -660,6 +715,49 @@ export const cancelSubscription = async (req, res) => {
       success: false,
       message: "Failed to cancel subscription",
       error: error.message,
+    });
+  }
+};
+// Get name wall entries
+export const getNameWallEntries = async (req, res) => {
+  try {
+    // Find all completed donations that should be shown on name wall
+    const donations = await Donation.find({
+      status: "completed",
+      showOnNameWall: true,
+    })
+      .populate("donorId", "name displayName")
+      .sort({
+        // Sort by tier priority, then amount, then date
+        tier: 1,
+        amount: -1,
+        createdAt: -1,
+      })
+      .limit(1000); // Limit to prevent overwhelming response
+
+    // Filter out donations where donor doesn't want to be shown
+    const filteredDonations = donations.filter((donation) => {
+      // If donation is anonymous but has no name, skip it
+      if (
+        donation.isAnonymous &&
+        (!donation.anonymousDonor || !donation.anonymousDonor.name)
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    res.json({
+      success: true,
+      count: filteredDonations.length,
+      data: filteredDonations,
+    });
+  } catch (error) {
+    console.error("Error fetching name wall entries:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch name wall entries",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };

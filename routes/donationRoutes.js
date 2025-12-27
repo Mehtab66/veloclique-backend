@@ -8,6 +8,7 @@ import {
   verifyDonationSuccess,
   getDonationStats,
   cancelSubscription,
+  getNameWallEntries,
 } from "../controllers/donationController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 import bodyParser from "body-parser";
@@ -15,7 +16,7 @@ import bodyParser from "body-parser";
 const router = express.Router();
 
 // Public routes
-router.post("/create-checkout",   authenticate, createCheckoutSession);
+router.post("/create-checkout", createCheckoutSession);
 router.post(
   "/webhook",
   bodyParser.raw({ type: "application/json" }),
@@ -33,7 +34,7 @@ router.patch(
 );
 
 // Admin routes
-router.get("/all", authenticate , getAllDonations);
+router.get("/all", authenticate, getAllDonations);
 router.get("/stats", authenticate, getDonationStats);
-
+router.get("/namewall-entries", getNameWallEntries);
 export default router;
