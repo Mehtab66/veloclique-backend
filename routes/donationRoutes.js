@@ -1,7 +1,7 @@
 import express from "express";
 import {
   createCheckoutSession,
-  handleWebhook,
+  // handleWebhook removed - now handled in app.js
   getUserDonations,
   getAllDonations,
   updateNameWallPreference,
@@ -14,32 +14,19 @@ import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// IMPORTANT: Add JSON parsing middleware for ALL routes EXCEPT webhook
-const jsonParser = express.json();
+// REMOVED: No need for jsonParser since app.js applies it globally
+// REMOVED: No webhook route here - it's in app.js
 
-// Public routes - these need JSON parsing
-router.post("/create-checkout", jsonParser, createCheckoutSession);
+// Public routes
+router.post("/create-checkout", createCheckoutSession);
 router.get("/verify-success", verifyDonationSuccess);
 router.get("/namewall-entries", getNameWallEntries);
 
-// Stripe Webhook - RAW body parsing (NO jsonParser here!)
-router.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  handleWebhook
-);
-
 // Protected routes
 router.get("/my-donations", authenticate, getUserDonations);
-router.patch(
-  "/:donationId/namewall",
-  jsonParser,
-  authenticate,
-  updateNameWallPreference
-);
+router.patch("/:donationId/namewall", authenticate, updateNameWallPreference);
 router.patch(
   "/:donationId/cancel-subscription",
-  jsonParser,
   authenticate,
   cancelSubscription
 );

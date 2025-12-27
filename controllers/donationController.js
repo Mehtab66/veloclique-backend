@@ -189,35 +189,39 @@ export const handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // IMPORTANT: Check for both rawBody (from our middleware) and req.body (as fallback)
-  // The raw body should be available as req.rawBody from our custom middleware
-  const rawBody = req.rawBody;
+  // With the new setup in app.js, req.body should be the raw buffer
+  // NOT req.rawBody since we're using express.raw() middleware
+  const rawBody = req.body;
 
-  // If rawBody is not available, we have a problem with middleware setup
+  // Debug logging
+  console.log("Webhook received with headers:", {
+    "stripe-signature": sig ? "Present" : "Missing",
+    "content-type": req.headers["content-type"],
+    "content-length": req.headers["content-length"],
+  });
+
   if (!rawBody) {
-    console.error("ERROR: No raw body available for webhook verification");
-    console.error(
-      "This means the middleware isn't capturing raw body properly"
-    );
+    console.error("ERROR: No body available for webhook verification");
     console.error("req.body type:", typeof req.body);
-    console.error("req.body:", req.body);
-
     return res.status(400).json({
       success: false,
-      message: "Server configuration error: Raw body not captured",
+      message: "Webhook requires raw body",
     });
   }
 
   let event;
 
   try {
-    // Use rawBody for signature verification - this MUST be the raw string/buffer
+    // Use rawBody directly - it's already a Buffer from express.raw()
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
     console.log(`✅ Webhook signature verified for event: ${event.type}`);
   } catch (err) {
     console.error("❌ Webhook signature verification failed:", err.message);
     console.error("Raw body length:", rawBody.length);
-    console.error("Raw body first 100 chars:", rawBody.substring(0, 100));
+    console.error(
+      "Raw body first 100 chars:",
+      rawBody.toString().substring(0, 100)
+    );
 
     return res.status(400).json({
       success: false,
@@ -243,6 +247,8 @@ export const handleWebhook = async (req, res) => {
         break;
 
       // Add other event types as needed
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
     }
 
     res.json({

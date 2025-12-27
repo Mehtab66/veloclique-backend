@@ -19,6 +19,9 @@ import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
 import donationRoutes from "./routes/donationRoutes.js";
 
+// --- Import webhook handler ---
+import { handleWebhook } from "./controllers/donationController.js";
+
 // --- Initialize Express app ---
 const app = express();
 
@@ -38,7 +41,14 @@ app.use(
   })
 );
 
-// --- Body parsing middleware for MOST routes ---
+// --- CRITICAL: Webhook route MUST come BEFORE json/urlencoded middleware ---
+app.post(
+  "/donation/webhook",
+  express.raw({ type: "application/json" }),
+  handleWebhook
+);
+
+// --- Body parsing middleware for ALL OTHER routes ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -62,7 +72,7 @@ app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
 
-// --- Donation routes MUST come LAST because webhook needs special handling ---
+// --- Donation routes (EXCEPT webhook which is now handled above) ---
 app.use("/donation", donationRoutes);
 
 // Health check
