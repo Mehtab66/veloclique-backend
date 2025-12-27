@@ -38,16 +38,13 @@ app.use(
   })
 );
 
-// ⚠️ Stripe webhook must be registered BEFORE json body parsing
-app.use("/donation", donationRoutes);
-
-// --- Now safe to use body parsers for other routes ---
+// --- Body parsing middleware for MOST routes ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(process.cwd(), "public")));
 
-// --- Session Setup ---
+// --- ALL other routes go here ---
+app.use(express.static(path.join(process.cwd(), "public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret123",
@@ -55,12 +52,8 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-// --- Initialize Passport ---
 app.use(passport.initialize());
 app.use(passport.session());
-
-// --- Routes ---
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
@@ -68,6 +61,9 @@ app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
+
+// --- Donation routes MUST come LAST because webhook needs special handling ---
+app.use("/donation", donationRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

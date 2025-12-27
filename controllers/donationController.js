@@ -189,17 +189,36 @@ export const handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // IMPORTANT: Use rawBody instead of req.body for Stripe signature verification
-  // The raw body was captured in the routes middleware
-  const rawBody = req.rawBody || req.body;
+  // IMPORTANT: Check for both rawBody (from our middleware) and req.body (as fallback)
+  // The raw body should be available as req.rawBody from our custom middleware
+  const rawBody = req.rawBody;
+
+  // If rawBody is not available, we have a problem with middleware setup
+  if (!rawBody) {
+    console.error("ERROR: No raw body available for webhook verification");
+    console.error(
+      "This means the middleware isn't capturing raw body properly"
+    );
+    console.error("req.body type:", typeof req.body);
+    console.error("req.body:", req.body);
+
+    return res.status(400).json({
+      success: false,
+      message: "Server configuration error: Raw body not captured",
+    });
+  }
 
   let event;
 
   try {
-    // Use rawBody for signature verification
+    // Use rawBody for signature verification - this MUST be the raw string/buffer
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+    console.log(`✅ Webhook signature verified for event: ${event.type}`);
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
+    console.error("❌ Webhook signature verification failed:", err.message);
+    console.error("Raw body length:", rawBody.length);
+    console.error("Raw body first 100 chars:", rawBody.substring(0, 100));
+
     return res.status(400).json({
       success: false,
       message: `Webhook Error: ${err.message}`,
@@ -207,6 +226,7 @@ export const handleWebhook = async (req, res) => {
   }
 
   const session = event.data.object;
+  console.log(`📩 Webhook processing: ${event.type}`, session.id);
 
   try {
     switch (event.type) {
@@ -221,6 +241,8 @@ export const handleWebhook = async (req, res) => {
       case "invoice.payment_failed":
         await handlePaymentFailed(session);
         break;
+
+      // Add other event types as needed
     }
 
     res.json({
@@ -232,7 +254,7 @@ export const handleWebhook = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Webhook handler failed",
-      error: error.message,
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
