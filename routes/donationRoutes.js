@@ -11,17 +11,19 @@ import {
   getNameWallEntries,
 } from "../controllers/donationController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
-import bodyParser from "body-parser";
 
 const router = express.Router();
 
 // Public routes
 router.post("/create-checkout", createCheckoutSession);
+
+// ⚠️ Stripe Webhook (raw body required)
 router.post(
   "/webhook",
-  bodyParser.raw({ type: "application/json" }),
+  express.raw({ type: "application/json" }),
   handleWebhook
 );
+
 router.get("/verify-success", verifyDonationSuccess);
 
 // Protected routes
@@ -37,4 +39,5 @@ router.patch(
 router.get("/all", authenticate, getAllDonations);
 router.get("/stats", authenticate, getDonationStats);
 router.get("/namewall-entries", getNameWallEntries);
+
 export default router;

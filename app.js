@@ -17,9 +17,9 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
-import donaionRoutes from "./routes/donationRoutes.js";
-// import subscription from "./routes/subscriptions.js";
-// --- Initialize Express app FIRST ---
+import donationRoutes from "./routes/donationRoutes.js";
+
+// --- Initialize Express app ---
 const app = express();
 
 // --- Connect to MongoDB ---
@@ -37,12 +37,17 @@ app.use(
     credentials: true,
   })
 );
+
+// ⚠️ Stripe webhook must be BEFORE json body parsing
+app.use("/donation", donationRoutes);
+
+// --- Now safe to use body parsers ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// --- Session Setup (important: before passport middleware) ---
+// --- Session Setup ---
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret123",
@@ -63,12 +68,10 @@ app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
-app.use("/donation", donaionRoutes);
 
-// app.use("/subscriptions", subscription);
+// Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// --- Error handling or export ---
 export default app;
