@@ -44,7 +44,22 @@ app.use(
 // --- CRITICAL: Webhook route MUST come BEFORE json/urlencoded middleware ---
 app.post(
   "/donation/webhook",
-  express.raw({ type: "application/json" }),
+  // Custom middleware to capture raw body
+  (req, res, next) => {
+    if (req.headers["content-type"] === "application/json") {
+      let data = "";
+      req.setEncoding("utf8");
+      req.on("data", (chunk) => {
+        data += chunk;
+      });
+      req.on("end", () => {
+        req.rawBody = data;
+        next();
+      });
+    } else {
+      next();
+    }
+  },
   handleWebhook
 );
 
