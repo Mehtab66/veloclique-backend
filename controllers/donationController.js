@@ -189,9 +189,8 @@ export const handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // With the new setup in app.js, req.body should be the raw buffer
-  // NOT req.rawBody since we're using express.raw() middleware
-  const rawBody = req.body;
+  // Use req.rawBody (set by our custom middleware) NOT req.body
+  const rawBody = req.rawBody;
 
   // Debug logging
   console.log("Webhook received with headers:", {
@@ -200,9 +199,13 @@ export const handleWebhook = async (req, res) => {
     "content-length": req.headers["content-length"],
   });
 
+  console.log("req.rawBody exists:", !!req.rawBody);
+  console.log("req.rawBody type:", typeof req.rawBody);
+  console.log("req.rawBody length:", req.rawBody?.length);
+
   if (!rawBody) {
-    console.error("ERROR: No body available for webhook verification");
-    console.error("req.body type:", typeof req.body);
+    console.error("ERROR: No rawBody available for webhook verification");
+    console.error("Available properties on req:", Object.keys(req));
     return res.status(400).json({
       success: false,
       message: "Webhook requires raw body",
@@ -212,16 +215,13 @@ export const handleWebhook = async (req, res) => {
   let event;
 
   try {
-    // Use rawBody directly - it's already a Buffer from express.raw()
+    // Use rawBody string for signature verification
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
     console.log(`✅ Webhook signature verified for event: ${event.type}`);
   } catch (err) {
     console.error("❌ Webhook signature verification failed:", err.message);
     console.error("Raw body length:", rawBody.length);
-    console.error(
-      "Raw body first 100 chars:",
-      rawBody.toString().substring(0, 100)
-    );
+    console.error("Raw body first 100 chars:", rawBody.substring(0, 100));
 
     return res.status(400).json({
       success: false,
