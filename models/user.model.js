@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     name: String,
-    displayName: String,
     email: {
       type: String,
       unique: true,
@@ -30,10 +29,21 @@ const userSchema = new mongoose.Schema(
     googleId: { type: String, sparse: true },
     facebookId: { type: String, sparse: true },
     appleId: { type: String, sparse: true },
+    role: {
+      type: String,
+      enum: ["user", "admin", "shop_owner"],
+      default: "user",
+    },
+    shopId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+    },
+    passwordChangedAt: Date,
 
     // Profile Information
     city: String,
     state: String,
+    profilePicture: String,
 
     // Security Settings
     twoFactorEnabled: { type: Boolean, default: false },

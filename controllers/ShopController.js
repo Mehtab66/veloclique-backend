@@ -1,5 +1,8 @@
-import mongoose from "mongoose";
 import Shop from "../models/shop.model.js";
+import ClaimRequest from "../models/claimRequest.model.js";
+import mongoose from "mongoose";
+import * as shopService from "../services/shopService.js";
+import cloudinary from "../config/cloudinary.js";
 
 const escapeForRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -238,6 +241,197 @@ export const getShopById = async (req, res) => {
     res.json(shop);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch shop", error: error.message });
+  }
+};
+
+export const claimShop = async (req, res) => {
+  try {
+    const { shopName, businessEmail, phone, message, shopId } = req.body;
+    const userId = req.user._id;
+
+    if (!shopName || !businessEmail || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "Shop name, business email and message are required",
+      });
+    }
+
+    let documentUrl = null;
+
+    // Handle file upload if provided
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(
+          `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+          {
+            folder: "veloclique/shop-claims",
+            resource_type: "auto",
+          }
+        );
+        documentUrl = result.secure_url;
+      } catch (uploadError) {
+        console.error("Cloudinary upload error:", uploadError);
+        return res.status(400).json({
+          success: false,
+          message: "Failed to upload document",
+          error: uploadError.message,
+        });
+      }
+    }
+
+    const claimRequest = await ClaimRequest.create({
+      shopName,
+      businessEmail,
+      phone,
+      message,
+      userId,
+      shopId,
+      documentUrl,
+      status: "pending",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Claim request submitted successfully",
+      data: claimRequest,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to submit claim request",
+      error: error.message,
+    });
+  }
+};
+
+// Shop Owner Profile Management
+
+/**
+ * Get the shop profile for the authenticated owner
+ */
+export const getMyShopProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    console.log("!!! CAPTURED USER ID !!!:", userId);
+    console.log("getMyShopProfile: req.user", { _id: req.user._id, role: req.user.role, shopId: req.user.shopId });
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    console.log("Found shop for result:", shop ? { id: shop._id, name: shop.name } : "none");
+
+    res.json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Update the shop profile for the authenticated owner
+ */
+export const updateMyShopProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(userId);
+
+    const updatedShop = await shopService.updateShop(shop._id, req.body);
+
+    res.json({
+      success: true,
+      message: "Shop profile updated successfully",
+      shop: updatedShop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Upload shop profile image
+ */
+export const uploadShopImage = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(userId);
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No file uploaded",
+      });
+    }
+
+    // Upload to cloudinary using buffer
+    const result = await cloudinary.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+      {
+        folder: "veloclique/shops",
+        width: 400,
+        height: 300,
+        crop: "fill",
+      }
+    );
+
+    const updatedShop = await shopService.updateShop(shop._id, {
+      imageUrl: result.secure_url,
+    });
+
+    res.json({
+      success: true,
+      message: "Shop image uploaded successfully",
+      shop: updatedShop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
+/**
+ * Get listing health/completeness
+ */
+export const getListingHealth = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+
+    if (!shop) {
+      return res.json({ success: true, completeness: 0, checks: {} });
+    }
+
+    const checks = {
+      shopName: !!(shop.name && shop.city && shop.state),
+      contactInfo: !!(shop.phone || shop.email || shop.website),
+      operatingHours: !!(shop.hours || (shop.hoursByDay && Object.values(shop.hoursByDay).some(h => h))),
+      shopDescription: !!shop.description,
+      photos: !!shop.imageUrl,
+      reviews: shop.reviewsCount > 0
+    };
+
+    const totalChecks = 6;
+    const passedChecks = Object.values(checks).filter(Boolean).length;
+    const completeness = Math.round((passedChecks / totalChecks) * 100);
+
+    res.json({
+      success: true,
+      completeness,
+      checks
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 

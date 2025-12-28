@@ -13,7 +13,9 @@ import {
   getActiveSessions,
   endAllSessions,
   getProfile,
+  uploadProfilePicture,
 } from "../controllers/userController.js";
+import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -25,6 +27,9 @@ router.get("/profile", getProfile);
 
 // Update profile
 router.put("/profile", updateProfile);
+
+// Upload profile picture
+router.put("/profile-picture", upload.single("profilePicture"), uploadProfilePicture);
 
 // Email change flow
 router.post("/email/change-request", changeEmailRequest);

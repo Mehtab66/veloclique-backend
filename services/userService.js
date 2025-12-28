@@ -27,14 +27,17 @@ export const updateUserProfile = async (userId, profileData) => {
   if (!user) throw new Error("User not found");
 
   // Update allowed fields
-  if (profileData.displayName !== undefined) {
-    user.displayName = profileData.displayName;
+  if (profileData.name !== undefined) {
+    user.name = profileData.name;
   }
   if (profileData.city !== undefined) {
     user.city = profileData.city;
   }
   if (profileData.state !== undefined) {
     user.state = profileData.state;
+  }
+  if (profileData.profilePicture !== undefined) {
+    user.profilePicture = profileData.profilePicture;
   }
 
   await user.save();
@@ -138,6 +141,7 @@ export const updateUserPassword = async (
 
   // Hash and save new password
   user.password = await bcrypt.hash(newPassword, 10);
+  user.passwordChangedAt = new Date();
 
   // Clear all sessions except current (security measure)
   user.sessions = [];
@@ -213,7 +217,6 @@ export const generateDataExport = async (userId) => {
   const userData = {
     profile: {
       name: user.name,
-      displayName: user.displayName,
       email: user.email,
       city: user.city,
       state: user.state,
@@ -263,7 +266,6 @@ export const deleteUserAccount = async (userId, password) => {
   // For now, we'll mark for deletion and schedule actual deletion
   user.email = `deleted_${Date.now()}_${user.email}`;
   user.name = "Deleted User";
-  user.displayName = "Deleted User";
   user.city = undefined;
   user.state = undefined;
   user.googleId = undefined;

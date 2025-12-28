@@ -1,0 +1,10 @@
+Connecting to DB: mongodb+srv://adnanh...
+Connected to MongoDB
+
+Shop with ID 694fcdd59ffca1cfeffb3bd3 not found.
+
+User Found: Aadi Turi (692f55a23f508db092d518ae)
+Current shopId: 694fd2e799f95f3219f766f3
+
+FIXING: Setting user.shopId to 694fcdd59ffca1cfeffb3bd3
+User updated.

@@ -7,6 +7,11 @@ const shopSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      index: true,
+    },
     fullAddress: String,
     streetAddress: String,
     city: {
@@ -81,6 +86,7 @@ const shopSchema = new mongoose.Schema(
       instagram: String,
       youtube: String,
     },
+    description: String,
   },
   {
     timestamps: true,

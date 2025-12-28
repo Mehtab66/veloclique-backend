@@ -17,6 +17,7 @@ import {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user._id;
+    console.log("!!! CAPTURED USER ID (FROM PROFILE) !!!:", userId);
     const user = await getUserProfile(userId);
 
     res.json({
@@ -31,6 +32,10 @@ export const getProfile = async (req, res) => {
         twoFactorEnabled: user.twoFactorEnabled,
         emailPreferences: user.emailPreferences,
         isProfilePrivate: user.isProfilePrivate,
+        profilePicture: user.profilePicture,
+        role: user.role,
+        shopId: user.shopId,
+        passwordChangedAt: user.passwordChangedAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -47,9 +52,9 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { displayName, city, state } = req.body;
+    const { name, city, state } = req.body;
 
-    const user = await updateUserProfile(userId, { displayName, city, state });
+    const user = await updateUserProfile(userId, { name, city, state });
 
     res.json({
       success: true,
@@ -61,6 +66,7 @@ export const updateProfile = async (req, res) => {
         email: user.email,
         city: user.city,
         state: user.state,
+        profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
@@ -117,7 +123,6 @@ export const verifyEmailChange = async (req, res) => {
       user: {
         _id: user._id,
         name: user.name,
-        displayName: user.displayName,
         email: user.email,
       },
       token,
@@ -184,9 +189,8 @@ export const toggleTwoFactor = async (req, res) => {
     const user = await toggleTwoFactorAuth(userId, enable);
     res.json({
       success: true,
-      message: `Two-factor authentication ${
-        enable ? "enabled" : "disabled"
-      } successfully`,
+      message: `Two-factor authentication ${enable ? "enabled" : "disabled"
+        } successfully`,
       user: {
         _id: user._id,
         name: user.name,
@@ -330,6 +334,54 @@ export const endAllSessions = async (req, res) => {
     res.json({
       success: true,
       message: "All other sessions ended successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+import cloudinary from "../config/cloudinary.js";
+
+// ... existing code ...
+
+// Upload profile picture
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No file uploaded",
+      });
+    }
+
+    // Upload to cloudinary using buffer
+    const result = await cloudinary.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+      {
+        folder: "veloclique/avatars",
+        width: 150,
+        height: 150,
+        crop: "fill",
+      }
+    );
+
+    const user = await updateUserProfile(userId, {
+      profilePicture: result.secure_url,
+    });
+
+    res.json({
+      success: true,
+      message: "Profile picture uploaded successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture,
+      },
     });
   } catch (error) {
     res.status(400).json({
