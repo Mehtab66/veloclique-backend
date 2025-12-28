@@ -109,7 +109,7 @@ export const createCheckoutSession = async (req, res) => {
         tier,
         frequency,
         isAnonymous: finalIsAnonymous.toString(),
-        showOnNameWall: finalIsAnonymous ? "false" : showOnNameWall.toString(), // Anonymous donations don't show on name wall
+        showOnNameWall: finalIsAnonymous ? "true" : showOnNameWall.toString(),
         userId: user?._id?.toString() || "anonymous",
         anonymousName: anonymousInfo?.name || "",
         anonymousEmail: anonymousInfo?.email || "",
@@ -137,7 +137,7 @@ export const createCheckoutSession = async (req, res) => {
       tier,
       frequency,
       isAnonymous: finalIsAnonymous,
-      showOnNameWall: finalIsAnonymous ? false : showOnNameWall, // Anonymous donations don't show on name wall
+      showOnNameWall: finalIsAnonymous ? true : showOnNameWall, // Always show anonymous on name wall
       stripe: {
         customerId,
         checkoutSessionId: session.id,
@@ -803,6 +803,7 @@ export const cancelSubscription = async (req, res) => {
   }
 };
 // Get name wall entries
+// Get name wall entries
 export const getNameWallEntries = async (req, res) => {
   try {
     // Find all completed donations that should be shown on name wall
@@ -817,24 +818,41 @@ export const getNameWallEntries = async (req, res) => {
         amount: -1,
         createdAt: -1,
       })
-      .limit(1000); // Limit to prevent overwhelming response
+      .limit(1000);
 
-    // Filter out donations where donor doesn't want to be shown
-    const filteredDonations = donations.filter((donation) => {
-      // If donation is anonymous but has no name, skip it
-      if (
-        donation.isAnonymous &&
-        (!donation.anonymousDonor || !donation.anonymousDonor.name)
-      ) {
-        return false;
+    // Format donations for name wall display
+    const formattedEntries = donations.map((donation) => {
+      // For anonymous donors, always show as "Anonymous"
+      if (donation.isAnonymous) {
+        return {
+          displayName: "Anonymous",
+          amount: donation.amount,
+          tier: donation.tier,
+          isAnonymous: true,
+          createdAt: donation.createdAt,
+          // Include anonymous donor info if available (for admin view)
+          originalInfo: donation.anonymousDonor,
+        };
       }
-      return true;
+
+      // For registered users
+      return {
+        displayName:
+          donation.donorId?.displayName ||
+          donation.donorId?.name ||
+          "Supporter",
+        amount: donation.amount,
+        tier: donation.tier,
+        isAnonymous: false,
+        createdAt: donation.createdAt,
+        userId: donation.donorId?._id,
+      };
     });
 
     res.json({
       success: true,
-      count: filteredDonations.length,
-      data: filteredDonations,
+      count: formattedEntries.length,
+      data: formattedEntries,
     });
   } catch (error) {
     console.error("Error fetching name wall entries:", error);
