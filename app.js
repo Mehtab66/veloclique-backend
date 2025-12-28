@@ -19,16 +19,16 @@ import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
 import donationRoutes from "./routes/donationRoutes.js";
 
-// --- Import webhook handler ---
+// Import webhook handler
 import { handleWebhook } from "./controllers/donationController.js";
 
-// --- Initialize Express app ---
+// Initialize Express app
 const app = express();
 
-// --- Connect to MongoDB ---
+// Connect to MongoDB
 connectDB();
 
-// --- Middleware setup ---
+// Basic middleware that runs for all routes
 app.use(logger("dev"));
 app.use(
   cors({
@@ -41,34 +41,25 @@ app.use(
   })
 );
 
-// --- CRITICAL: Webhook route MUST come BEFORE json/urlencoded middleware ---
+// --- WEBHOOK ROUTE with raw body parser ---
 app.post(
   "/donation/webhook",
-  // Custom middleware to capture raw body
+  // Use express.raw() middleware for this specific route only
+  express.raw({ type: "application/json" }),
   (req, res, next) => {
-    if (req.headers["content-type"] === "application/json") {
-      let data = "";
-      req.setEncoding("utf8");
-      req.on("data", (chunk) => {
-        data += chunk;
-      });
-      req.on("end", () => {
-        req.rawBody = data;
-        next();
-      });
-    } else {
-      next();
-    }
+    // Store the raw body in req.rawBody for Stripe verification
+    req.rawBody = req.body.toString();
+    next();
   },
   handleWebhook
 );
 
-// --- Body parsing middleware for ALL OTHER routes ---
+// --- AFTER webhook route, add JSON parser for all other routes ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// --- ALL other routes go here ---
+// All other routes
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use(
   session({
@@ -87,7 +78,7 @@ app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
 
-// --- Donation routes (EXCEPT webhook which is now handled above) ---
+// Donation routes (except webhook which is already handled above)
 app.use("/donation", donationRoutes);
 
 // Health check

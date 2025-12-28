@@ -189,7 +189,7 @@ export const handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // Use req.rawBody (set by our custom middleware) NOT req.body
+  // Use req.rawBody that should be set by your middleware
   const rawBody = req.rawBody;
 
   // Debug logging
@@ -199,9 +199,14 @@ export const handleWebhook = async (req, res) => {
     "content-length": req.headers["content-length"],
   });
 
-  console.log("req.rawBody exists:", !!req.rawBody);
-  console.log("req.rawBody type:", typeof req.rawBody);
-  console.log("req.rawBody length:", req.rawBody?.length);
+  console.log("req.rawBody exists:", !!rawBody);
+  console.log("req.rawBody type:", typeof rawBody);
+  console.log("req.rawBody length:", rawBody?.length);
+
+  // Log a preview of the raw body for debugging
+  if (rawBody) {
+    console.log("First 200 chars of rawBody:", rawBody.substring(0, 200));
+  }
 
   if (!rawBody) {
     console.error("ERROR: No rawBody available for webhook verification");
@@ -212,59 +217,105 @@ export const handleWebhook = async (req, res) => {
     });
   }
 
+  // Validate endpoint secret
+  if (!endpointSecret) {
+    console.error("ERROR: STRIPE_WEBHOOK_SECRET is not set");
+    return res.status(500).json({
+      success: false,
+      message: "Webhook secret not configured",
+    });
+  }
+
   let event;
 
   try {
     // Use rawBody string for signature verification
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
-    console.log(`✅ Webhook signature verified for event: ${event.type}`);
+    console.log(
+      `✅ Webhook signature verified for event: ${event.type} (ID: ${event.id})`
+    );
   } catch (err) {
     console.error("❌ Webhook signature verification failed:", err.message);
+    console.error("Error details:", err);
     console.error("Raw body length:", rawBody.length);
-    console.error("Raw body first 100 chars:", rawBody.substring(0, 100));
+    console.error("Raw body first 500 chars:", rawBody.substring(0, 500));
+    console.error("Stripe signature header:", sig);
+    console.error("Expected webhook secret configured:", !!endpointSecret);
 
     return res.status(400).json({
       success: false,
-      message: `Webhook Error: ${err.message}`,
+      message: `Webhook signature verification failed: ${err.message}`,
     });
   }
 
+  // Extract the session object from the event
   const session = event.data.object;
   console.log(`📩 Webhook processing: ${event.type}`, session.id);
+  console.log(
+    `Event data:`,
+    JSON.stringify(event.data, null, 2).substring(0, 500)
+  );
 
   try {
+    // Handle different event types
     switch (event.type) {
       case "checkout.session.completed":
+        console.log("Processing checkout.session.completed");
         await handleCompletedSession(session);
         break;
 
       case "customer.subscription.deleted":
+        console.log("Processing customer.subscription.deleted");
         await handleSubscriptionCancelled(session);
         break;
 
       case "invoice.payment_failed":
+        console.log("Processing invoice.payment_failed");
         await handlePaymentFailed(session);
+        break;
+
+      case "checkout.session.async_payment_succeeded":
+        console.log("Processing checkout.session.async_payment_succeeded");
+        await handleCompletedSession(session);
+        break;
+
+      case "checkout.session.async_payment_failed":
+        console.log("Processing checkout.session.async_payment_failed");
+        // Handle failed payment
         break;
 
       // Add other event types as needed
       default:
         console.log(`Unhandled event type: ${event.type}`);
+        // Still return success so Stripe doesn't retry
+        return res.json({
+          success: true,
+          message: `Received unhandled event type: ${event.type}`,
+          received: true,
+        });
     }
 
+    // Return success response
     res.json({
       success: true,
       received: true,
+      eventType: event.type,
+      eventId: event.id,
     });
   } catch (error) {
     console.error("Error handling webhook:", error);
-    res.status(500).json({
+    console.error("Error stack:", error.stack);
+
+    // IMPORTANT: Return 200 to Stripe even on error
+    // Otherwise Stripe will keep retrying
+    res.status(200).json({
       success: false,
       message: "Webhook handler failed",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
+      received: true,
     });
   }
 };
-
 // Helper function: Handle completed session
 const handleCompletedSession = async (session) => {
   const sessionId = session.id;
