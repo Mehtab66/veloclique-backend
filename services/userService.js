@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import User from "../models/user.model.js";
-
-import cloudinary from "../config/cloudinary.js";
-import { PassThrough } from "stream";
+// import { sendOTPEmail, sendEmailChangeNotification } from "./emailService.js";
 import { generateToken } from "../middleware/authMiddleware.js";
 import {
   sendEmailChangeOTP,
@@ -29,8 +27,8 @@ export const updateUserProfile = async (userId, profileData) => {
   if (!user) throw new Error("User not found");
 
   // Update allowed fields
-  if (profileData.displayName !== undefined) {
-    user.displayName = profileData.displayName;
+  if (profileData.name !== undefined) {
+    user.name = profileData.name;
   }
   if (profileData.city !== undefined) {
     user.city = profileData.city;
@@ -38,40 +36,12 @@ export const updateUserProfile = async (userId, profileData) => {
   if (profileData.state !== undefined) {
     user.state = profileData.state;
   }
+  if (profileData.profilePicture !== undefined) {
+    user.profilePicture = profileData.profilePicture;
+  }
 
   await user.save();
   return user;
-};
-
-// Upload profile picture
-export const uploadUserProfilePicture = async (userId, fileBuffer) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
-
-  // Upload to Cloudinary using stream
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "veloclique/profile_pictures",
-        public_id: `profile_picture_${userId}`,
-        overwrite: true,
-        transformation: [{ width: 500, height: 500, crop: "limit" }],
-      },
-      async (error, result) => {
-        if (error) return reject(error);
-
-        // Update user profilePicture
-        user.profilePicture = result.secure_url;
-        await user.save();
-        resolve(user);
-      }
-    );
-
-    // Convert buffer to stream and pipe to Cloudinary
-    const bufferStream = new PassThrough();
-    bufferStream.end(fileBuffer);
-    bufferStream.pipe(uploadStream);
-  });
 };
 
 // Request email change
@@ -247,7 +217,6 @@ export const generateDataExport = async (userId) => {
   const userData = {
     profile: {
       name: user.name,
-      displayName: user.displayName,
       email: user.email,
       city: user.city,
       state: user.state,
@@ -280,60 +249,23 @@ export const generateDataExport = async (userId) => {
   return { downloadLink, expiresAt };
 };
 
-// Generate OTP for account deletion
-const generateAccountDeleteOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
-
-// Request account deletion - sends OTP to email
-export const requestAccountDeletion = async (userId) => {
+// Delete user account
+export const deleteUserAccount = async (userId, password) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
-  // Generate OTP
-  const otp = generateAccountDeleteOTP();
-  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
-  // Save OTP to user
-  user.accountDeleteOTP = otp;
-  user.accountDeleteOTPExpires = otpExpires;
-  await user.save();
-
-  // Send OTP to user's email
-  await sendAccountDeletionEmail(user.email, otp);
-
-  return {
-    message: "Verification code sent to your email",
-    email: user.email,
-  };
-};
-
-// Verify OTP and delete account
-export const verifyAccountDeletion = async (userId, otp) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
-
-  // Verify OTP
-  if (!user.accountDeleteOTP || user.accountDeleteOTP !== otp) {
-    throw new Error("Invalid verification code");
+  // Verify password for local accounts
+  if (user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Incorrect password");
+    }
   }
-
-  // Check if OTP expired
-  if (!user.accountDeleteOTPExpires || new Date() > user.accountDeleteOTPExpires) {
-    user.accountDeleteOTP = undefined;
-    user.accountDeleteOTPExpires = undefined;
-    await user.save();
-    throw new Error("Verification code has expired");
-  }
-
-  // Store original email for notification
-  const originalEmail = user.email;
 
   // For GDPR compliance, we should anonymize instead of delete
   // For now, we'll mark for deletion and schedule actual deletion
   user.email = `deleted_${Date.now()}_${user.email}`;
   user.name = "Deleted User";
-  user.displayName = "Deleted User";
   user.city = undefined;
   user.state = undefined;
   user.googleId = undefined;
@@ -343,12 +275,15 @@ export const verifyAccountDeletion = async (userId, otp) => {
   user.twoFactorEnabled = false;
   user.sessions = [];
   user.isProfilePrivate = true;
-  user.accountDeleteOTP = undefined;
-  user.accountDeleteOTPExpires = undefined;
+  user.markedForDeletion = true;
+  user.deletionScheduledAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
 
   await user.save();
 
-  return { success: true, originalEmail };
+  // Send account deletion confirmation
+  await sendAccountDeletionEmail(user.originalEmail || user.email);
+
+  return true;
 };
 
 // Get user sessions
