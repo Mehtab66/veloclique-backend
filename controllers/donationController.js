@@ -893,9 +893,8 @@ export const getNameWallEntries = async (req, res) => {
       status: "completed",
       showOnNameWall: true,
     })
-      .populate("donorId", "name displayName")
+      .populate("donorId", "name displayName email")
       .sort({
-        // Sort by tier priority, then amount, then date
         tier: 1,
         amount: -1,
         createdAt: -1,
@@ -904,7 +903,7 @@ export const getNameWallEntries = async (req, res) => {
 
     // Format donations for name wall display
     const formattedEntries = donations.map((donation) => {
-      // For anonymous donors, always show as "Anonymous"
+      // For anonymous donors
       if (donation.isAnonymous) {
         return {
           displayName: "Anonymous",
@@ -912,17 +911,30 @@ export const getNameWallEntries = async (req, res) => {
           tier: donation.tier,
           isAnonymous: true,
           createdAt: donation.createdAt,
-          // Include anonymous donor info if available (for admin view)
           originalInfo: donation.anonymousDonor,
         };
       }
 
       // For registered users
+      let displayName;
+
+      if (donation.donorId?.displayName) {
+        // Priority 1: Use displayName
+        displayName = donation.donorId.displayName;
+      } else if (donation.donorId?.name) {
+        // Priority 2: Use name
+        displayName = donation.donorId.name;
+      } else if (donation.donorId?.email) {
+        // Priority 3: Use email username (without @domain and WITHOUT removing numbers)
+        // Get username part before @
+        const username = donation.donorId.email.split("@")[0];
+        displayName = username; // Keep numbers in username
+      } else {
+        displayName = "Supporter";
+      }
+
       return {
-        displayName:
-          donation.donorId?.displayName ||
-          donation.donorId?.name ||
-          "Supporter",
+        displayName,
         amount: donation.amount,
         tier: donation.tier,
         isAnonymous: false,
