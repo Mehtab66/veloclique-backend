@@ -1,6 +1,7 @@
 import { stripe, STRIPE_PRICES } from "../config/stripe.js";
 import Donation from "../models/donation.model.js";
 import User from "../models/user.model.js";
+import jwt from "jsonwebtoken"; // IMPORTANT: Add this line!
 
 // Create Checkout Session
 export const createCheckoutSession = async (req, res) => {
