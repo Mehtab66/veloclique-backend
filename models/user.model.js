@@ -96,6 +96,11 @@ const userSchema = new mongoose.Schema(
       isVisible: { type: Boolean, default: true },
       tierToShow: { type: String, default: "highest" }, // 'highest' or 'current'
     },
+    ownedShop: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+      default: null,
+    },
   },
   {
     timestamps: true,

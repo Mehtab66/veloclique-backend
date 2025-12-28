@@ -81,7 +81,37 @@ const shopSchema = new mongoose.Schema(
       instagram: String,
       youtube: String,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
+    // Subscription Details
+    subscription: {
+      status: {
+        type: String,
+        enum: ["inactive", "active", "past_due", "canceled", "trialing"],
+        default: "inactive",
+      },
+      plan: {
+        type: String,
+        enum: ["commuter", "domestique", "climber", "sprinter", "gc_podium"],
+        default: null,
+      },
+      billingCycle: {
+        type: String,
+        enum: ["monthly", "annual"],
+        default: null,
+      },
+      stripeSubscriptionId: String,
+      stripeCustomerId: String,
+      currentPeriodStart: Date,
+      currentPeriodEnd: Date,
+      cancelAtPeriodEnd: { type: Boolean, default: false },
+    },
   },
+
   {
     timestamps: true,
   }
@@ -90,4 +120,3 @@ const shopSchema = new mongoose.Schema(
 shopSchema.index({ state: 1, city: 1 });
 
 export default mongoose.model("Shop", shopSchema);
-

@@ -44,3 +44,37 @@ export const STRIPE_PRICES = {
     },
   },
 };
+
+// Add SHOP_PRICES object (parallel to your existing STRIPE_PRICES)
+export const SHOP_PRICES = {
+  // Monthly prices
+  monthly: {
+    commuter: process.env.STRIPE_SHOP_COMMUTER_MONTHLY, // $19
+    domestique: process.env.STRIPE_SHOP_DOMESTIQUE_MONTHLY, // $29
+    climber: process.env.STRIPE_SHOP_CLIMBER_MONTHLY, // $39
+    sprinter: process.env.STRIPE_SHOP_SPRINTER_MONTHLY, // $49
+    gc_podium: process.env.STRIPE_SHOP_GC_PODIUM_MONTHLY, // $59
+  },
+  // Annual prices
+  annual: {
+    commuter: process.env.STRIPE_SHOP_COMMUTER_ANNUAL, // $194
+    domestique: process.env.STRIPE_SHOP_DOMESTIQUE_ANNUAL, // $296
+    climber: process.env.STRIPE_SHOP_CLIMBER_ANNUAL, // $398
+    sprinter: process.env.STRIPE_SHOP_SPRINTER_ANNUAL, // $500
+    gc_podium: process.env.STRIPE_SHOP_GC_PODIUM_ANNUAL, // $602
+  },
+};
+
+export function getShopPriceId(plan, interval) {
+  if (!SHOP_PRICES[interval]) {
+    throw new Error(`Invalid billing interval: ${interval}`);
+  }
+
+  const priceId = SHOP_PRICES[interval][plan];
+
+  if (!priceId) {
+    throw new Error(`Invalid shop plan: ${plan} for interval: ${interval}`);
+  }
+
+  return priceId;
+}

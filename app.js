@@ -19,10 +19,11 @@ import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
 import donationRoutes from "./routes/donationRoutes.js";
+import shopSubscriptionRoutes from "./routes/shopSubscription.js";
 
 // Import webhook handler
 import { handleWebhook } from "./controllers/donationController.js";
-
+import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
 // Initialize Express app
 const app = express();
 
@@ -59,7 +60,15 @@ app.post(
   },
   handleWebhook
 );
-
+app.post(
+  "/shop-subscriptions/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    next();
+  },
+  handleShopWebhook // New shop subscription webhook handler
+);
 // --- AFTER webhook route, add JSON parser for all other routes ---
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -86,6 +95,7 @@ app.use("/routes", routeRoutes);
 
 // Donation routes (except webhook which is already handled above)
 app.use("/donation", donationRoutes);
+app.use("/shop-subscriptions", shopSubscriptionRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
