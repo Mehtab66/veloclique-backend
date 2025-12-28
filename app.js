@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
 import cors from "cors";
+import bodyParser from "body-parser"; // Import body-parser
 import passport from "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import locationRoutes from "./routes/LocationRoutes.js";
@@ -44,19 +45,24 @@ app.use(
 // --- WEBHOOK ROUTE with raw body parser ---
 app.post(
   "/donation/webhook",
-  // Use express.raw() middleware for this specific route only
-  express.raw({ type: "application/json" }),
+  // Use body-parser.raw() middleware for this specific route only
+  bodyParser.raw({ type: "application/json" }),
   (req, res, next) => {
     // Store the raw body in req.rawBody for Stripe verification
     req.rawBody = req.body.toString();
+    console.log("Webhook middleware: rawBody length =", req.rawBody.length);
+    console.log(
+      "Webhook middleware: First 100 chars =",
+      req.rawBody.substring(0, 100)
+    );
     next();
   },
   handleWebhook
 );
 
 // --- AFTER webhook route, add JSON parser for all other routes ---
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // All other routes
