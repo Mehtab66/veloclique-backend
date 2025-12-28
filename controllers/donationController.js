@@ -41,8 +41,13 @@ export const createCheckoutSession = async (req, res) => {
     }
 
     // Determine if donation should be anonymous
-    // If user is not logged in OR explicitly chooses anonymous, mark as anonymous
-    const finalIsAnonymous = !user || isAnonymous === true;
+    // Only mark as anonymous if there's NO user (non-logged-in)
+    // Logged-in users are NEVER anonymous
+    const finalIsAnonymous = !user;
+
+    // For logged-in users, always show on Name Wall with their account name
+    // For non-logged-in users, only show if they provided a name
+    const finalShowOnNameWall = user ? true : showOnNameWall;
 
     // Create or get Stripe customer
     let customerId;
@@ -109,7 +114,7 @@ export const createCheckoutSession = async (req, res) => {
         tier,
         frequency,
         isAnonymous: finalIsAnonymous.toString(),
-        showOnNameWall: finalIsAnonymous ? "true" : showOnNameWall.toString(),
+        showOnNameWall: finalShowOnNameWall.toString(),
         userId: user?._id?.toString() || "anonymous",
         anonymousName: anonymousInfo?.name || "",
         anonymousEmail: anonymousInfo?.email || "",
@@ -137,7 +142,7 @@ export const createCheckoutSession = async (req, res) => {
       tier,
       frequency,
       isAnonymous: finalIsAnonymous,
-      showOnNameWall: finalIsAnonymous ? true : showOnNameWall, // Always show anonymous on name wall
+      showOnNameWall: finalShowOnNameWall,
       stripe: {
         customerId,
         checkoutSessionId: session.id,
@@ -162,7 +167,7 @@ export const createCheckoutSession = async (req, res) => {
     console.log(
       `Checkout session created for ${tier} $${amount} - ${
         finalIsAnonymous ? "Anonymous" : "User: " + userId
-      }`
+      } - Name Wall: ${finalShowOnNameWall}`
     );
 
     res.json({
