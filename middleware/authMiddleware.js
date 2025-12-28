@@ -3,7 +3,6 @@ import User from "../models/user.model.js";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"; // Default 7 days
 
 /**
  * Generate JWT token for a user
@@ -15,10 +14,8 @@ export const generateToken = (user) => {
     id: user._id,
     email: user.email,
   };
-
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  });
+  console.log("jwt secret:", JWT_SECRET);
+  return jwt.sign(payload, JWT_SECRET);
 };
 
 /**
