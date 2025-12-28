@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     name: String,
+    displayName: String,
+    profilePicture: {
+      type: String, // Cloudinary URL
+      default: "https://via.placeholder.com/150",
+    },
     email: {
       type: String,
       unique: true,
@@ -17,6 +22,8 @@ const userSchema = new mongoose.Schema(
     },
     emailChangeOTP: String,
     emailChangeOTPExpires: Date,
+    accountDeleteOTP: String,
+    accountDeleteOTPExpires: Date,
     password: {
       type: String,
       validate: {
@@ -26,24 +33,14 @@ const userSchema = new mongoose.Schema(
         message: "Password must be at least 6 characters",
       },
     },
+    passwordChangedAt: Date,
     googleId: { type: String, sparse: true },
     facebookId: { type: String, sparse: true },
     appleId: { type: String, sparse: true },
-    role: {
-      type: String,
-      enum: ["user", "admin", "shop_owner"],
-      default: "user",
-    },
-    shopId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Shop",
-    },
-    passwordChangedAt: Date,
 
     // Profile Information
     city: String,
     state: String,
-    profilePicture: String,
 
     // Security Settings
     twoFactorEnabled: { type: Boolean, default: false },
@@ -77,6 +74,33 @@ const userSchema = new mongoose.Schema(
       expiresAt: Date,
       requestedAt: Date,
     },
+    stripeCustomerId: { type: String, sparse: true },
+    donations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Donation" }],
+    badges: [
+      {
+        tier: {
+          type: String,
+          enum: ["Peloton", "Breakaway", "Yellow Jersey"],
+        },
+        grantedAt: { type: Date, default: Date.now },
+        expiresAt: { type: Date, default: null }, // null = permanent badge
+        isActive: { type: Boolean, default: true },
+        sourceDonation: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Donation",
+        },
+      },
+    ],
+    nameWallPreferences: {
+      displayName: { type: String, default: "" },
+      isVisible: { type: Boolean, default: true },
+      tierToShow: { type: String, default: "highest" }, // 'highest' or 'current'
+    },
+    ownedShop: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -90,6 +114,8 @@ userSchema.methods.toJSON = function () {
   delete user.twoFactorSecret;
   delete user.emailChangeOTP;
   delete user.emailChangeOTPExpires;
+  delete user.accountDeleteOTP;
+  delete user.accountDeleteOTPExpires;
   delete user.sessions;
   delete user.dataExport;
   return user;

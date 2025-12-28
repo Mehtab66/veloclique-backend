@@ -69,6 +69,7 @@ export const verifySignupOTP = async (email, otp) => {
     email: otpRecord.email,
     password: otpRecord.password,
     name: otpRecord.name || null,
+    displayName: otpRecord.name || null,
     emailPreferences: {
       newShops: true,
       routeHighlights: true,

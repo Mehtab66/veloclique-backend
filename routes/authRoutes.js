@@ -40,7 +40,7 @@ router.get("/facebook/callback", facebookCallback, success);
 router.get("/apple", appleAuth);
 router.post("/apple/callback", appleCallback, success);
 
-// Password Reset
+// Password Reset`
 router.post("/forgot-password", sendForgotPasswordOTP);
 router.post("/verify-forgot-password-otp", verifyForgotPasswordOTP);
 router.post("/reset-password", resetPasswordController);

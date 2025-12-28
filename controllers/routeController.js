@@ -51,6 +51,9 @@ export const createRoute = async (req, res) => {
       status: "pending",
     });
 
+    // Populate userId to match the expected response format
+    await route.populate("userId", "name email");
+
     res.status(201).json({
       success: true,
       message: "Route uploaded successfully",
@@ -97,7 +100,7 @@ export const updateRouteStatus = async (req, res) => {
       req.params.id,
       { status },
       { new: true }
-    );
+    ).populate("userId", "name email");
 
     if (!route) {
       return res.status(404).json({
@@ -113,6 +116,57 @@ export const updateRouteStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("Update route status error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+/* ---------------- ADMIN: UPLOAD IMAGE ---------------- */
+// PUT /api/routes/:id/image
+export const uploadRouteImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No image file provided",
+      });
+    }
+
+    const route = await Route.findById(req.params.id);
+
+    if (!route) {
+      return res.status(404).json({
+        success: false,
+        message: "Route not found",
+      });
+    }
+
+    // Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+      {
+        folder: "veloclique/routes",
+      }
+    );
+
+    const imageData = {
+      publicId: uploadResult.public_id,
+      url: uploadResult.secure_url,
+    };
+
+    // Update route image
+    route.image = imageData;
+    await route.save();
+
+    // Populate userId to match the expected response format
+    await route.populate("userId", "name email");
+
+    res.json({
+      success: true,
+      message: "Route image uploaded successfully",
+      data: route,
+    });
+  } catch (error) {
+    console.error("Upload route image error:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

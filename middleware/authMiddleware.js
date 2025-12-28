@@ -3,7 +3,6 @@ import User from "../models/user.model.js";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"; // Default 7 days
 
 /**
  * Generate JWT token for a user
@@ -15,10 +14,8 @@ export const generateToken = (user) => {
     id: user._id,
     email: user.email,
   };
-
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  });
+  console.log("jwt secret:", JWT_SECRET);
+  return jwt.sign(payload, JWT_SECRET);
 };
 
 /**
@@ -92,12 +89,11 @@ export const authenticate = async (req, res, next) => {
         });
       }
 
-      // Update session last active time asynchronously without blocking or causing version conflicts
-      if (user.sessions.some(s => s.token === token)) {
-        User.updateOne(
-          { _id: user._id, "sessions.token": token },
-          { $set: { "sessions.$.lastActive": new Date() } }
-        ).exec().catch(err => console.error("Failed to update session lastActive:", err));
+      // Update session last active time
+      const session = user.sessions.find((s) => s.token === token);
+      if (session) {
+        session.lastActive = new Date();
+        await user.save();
       }
     }
 
@@ -132,7 +128,6 @@ export const authenticate = async (req, res, next) => {
     res.status(500).json({
       success: false,
       error: "Authentication failed. Please try again.",
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

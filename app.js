@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
 import cors from "cors";
+import bodyParser from "body-parser"; // Import body-parser
 import passport from "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import locationRoutes from "./routes/LocationRoutes.js";
@@ -17,16 +18,19 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
-import adminRoutes from "./routes/adminRoutes.js";
+import donationRoutes from "./routes/donationRoutes.js";
+import shopSubscriptionRoutes from "./routes/shopSubscription.js";
 
-// import subscription from "./routes/subscriptions.js";
-// --- Initialize Express app FIRST ---
+// Import webhook handler
+import { handleWebhook } from "./controllers/donationController.js";
+import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
+// Initialize Express app
 const app = express();
 
-// --- Connect to MongoDB ---
+// Connect to MongoDB
 connectDB();
 
-// --- Middleware setup ---
+// Basic middleware that runs for all routes
 app.use(logger("dev"));
 app.use(
   cors({
@@ -38,12 +42,40 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(process.cwd(), "public")));
 
-// --- Session Setup (important: before passport middleware) ---
+// --- WEBHOOK ROUTE with raw body parser ---
+app.post(
+  "/donation/webhook",
+  // Use body-parser.raw() middleware for this specific route only
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    // Store the raw body in req.rawBody for Stripe verification
+    req.rawBody = req.body.toString();
+    console.log("Webhook middleware: rawBody length =", req.rawBody.length);
+    console.log(
+      "Webhook middleware: First 100 chars =",
+      req.rawBody.substring(0, 100)
+    );
+    next();
+  },
+  handleWebhook
+);
+app.post(
+  "/shop-subscriptions/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    next();
+  },
+  handleShopWebhook // New shop subscription webhook handler
+);
+// --- AFTER webhook route, add JSON parser for all other routes ---
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// All other routes
+app.use(express.static(path.join(process.cwd(), "public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret123",
@@ -51,12 +83,8 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-// --- Initialize Passport ---
 app.use(passport.initialize());
 app.use(passport.session());
-
-// --- Routes ---
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
@@ -64,12 +92,14 @@ app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
-app.use("/admin", adminRoutes);
 
-// app.use("/subscriptions", subscription);
+// Donation routes (except webhook which is already handled above)
+app.use("/donation", donationRoutes);
+app.use("/shop-subscriptions", shopSubscriptionRoutes);
+
+// Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// --- Error handling or export ---
 export default app;
