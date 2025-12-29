@@ -39,12 +39,19 @@ const userSchema = new mongoose.Schema(
     appleId: { type: String, sparse: true },
 
     // Profile Information
+    role: {
+      type: String,
+      enum: ["user", "shop_owner", "admin"],
+      default: "user",
+    },
     city: String,
     state: String,
 
     // Security Settings
     twoFactorEnabled: { type: Boolean, default: false },
     twoFactorSecret: String,
+    twoFactorOTP: String,
+    twoFactorOTPExpires: Date,
 
     // Email Preferences
     emailPreferences: {
@@ -116,6 +123,8 @@ userSchema.methods.toJSON = function () {
   delete user.emailChangeOTPExpires;
   delete user.accountDeleteOTP;
   delete user.accountDeleteOTPExpires;
+  delete user.twoFactorOTP;
+  delete user.twoFactorOTPExpires;
   delete user.sessions;
   delete user.dataExport;
   return user;

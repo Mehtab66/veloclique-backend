@@ -77,7 +77,7 @@ export const approveItem = async (req, res) => {
             }
 
             if (targetShop) {
-                targetShop.ownerId = claim.userId;
+                targetShop.owner = claim.userId;
                 // Update specific fields if they were provided in the claim (or merge strategy)
                 if (claim.businessEmail) targetShop.email = claim.businessEmail;
                 if (claim.phone) targetShop.phone = claim.phone;
@@ -88,7 +88,7 @@ export const approveItem = async (req, res) => {
                 // If shop doesn't exist, create it (could be a new shop entry)
                 targetShop = await Shop.create({
                     name: claim.shopName,
-                    ownerId: claim.userId,
+                    owner: claim.userId,
                     phone: claim.phone,
                     email: claim.businessEmail, // Transfer email
                     description: claim.message, // Transfer message/description
@@ -107,7 +107,7 @@ export const approveItem = async (req, res) => {
             const User = (await import("../models/user.model.js")).default;
             await User.findByIdAndUpdate(claim.userId, {
                 role: "shop_owner",
-                shopId: targetShop._id,
+                ownedShop: targetShop._id,
             });
 
             claim.status = "approved";

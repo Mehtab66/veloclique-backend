@@ -110,8 +110,34 @@ const shopSchema = new mongoose.Schema(
       currentPeriodEnd: Date,
       cancelAtPeriodEnd: { type: Boolean, default: false },
     },
-  },
 
+    emailChangeOTP: String,
+    emailChangeOTPExpires: Date,
+    newEmailPending: String,
+
+    // Email Preferences
+    emailPreferences: {
+      newReviews: { type: Boolean, default: true },
+      routeHighlights: { type: Boolean, default: true },
+      monthlyAnalytics: { type: Boolean, default: true },
+      marketingOpportunities: { type: Boolean, default: false },
+    },
+
+    // Two-Step Verification
+    twoFactorEnabled: { type: Boolean, default: false },
+    twoFactorOTP: String,
+    twoFactorOTPExpires: Date,
+
+    // Privacy Settings
+    isProfilePrivate: { type: Boolean, default: false },
+
+    // Shop Deletion
+    deleteOTP: String,
+    deleteOTPExpires: Date,
+
+    // Description
+    description: String,
+  },
   {
     timestamps: true,
   }

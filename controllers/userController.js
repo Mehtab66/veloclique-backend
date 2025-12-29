@@ -18,7 +18,22 @@ export const getProfile = async (req, res) => {
   try {
     const userId = req.user._id;
     console.log("!!! CAPTURED USER ID (FROM PROFILE) !!!:", userId);
-    const user = await getUserProfile(userId);
+    let user = await getUserProfile(userId);
+
+    // Self-healing: If ownedShop is missing but user role implies shop owner, or just check if they own a shop
+    if (!user.ownedShop) {
+      // Import Shop to check
+      const Shop = (await import("../models/shop.model.js")).default;
+      // We might have saved it as ownerId in the past due to bug, OR correct 'owner' not linked to user
+      // But typically we want to see if this user OWNS a shop
+      const shop = await Shop.findOne({ $or: [{ owner: userId }, { ownerId: userId }] }); // Check both legacy bug field and correct field
+      if (shop) {
+        console.log("Self-healing: Found shop for user, linking...", shop._id);
+        user.ownedShop = shop._id;
+        user.role = "shop_owner"; // Ensure they have the role
+        await user.save();
+      }
+    }
 
     res.json({
       success: true,
@@ -34,7 +49,7 @@ export const getProfile = async (req, res) => {
         isProfilePrivate: user.isProfilePrivate,
         profilePicture: user.profilePicture,
         role: user.role,
-        shopId: user.shopId,
+        shopId: user.ownedShop,
         passwordChangedAt: user.passwordChangedAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -206,6 +221,61 @@ export const toggleTwoFactor = async (req, res) => {
   }
 };
 
+// Request 2FA OTP
+export const requestTwoFactorOTP = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = await import("../services/userService.js").then(m => m.requestTwoFactorOTP(userId));
+
+    res.json({
+      success: true,
+      message: "Verification code sent to your email",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Verify 2FA OTP
+export const verifyTwoFactorOTP = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ success: false, error: "OTP is required" });
+    }
+
+    // Dynamic import to avoid circular dependency if any, or just direct import reuse
+    // But userService is already imported at top?
+    // Let's check top imports.
+    // Yes, but I need to ensure `verifyTwoFactorOTP` is exported from userService and imported here.
+    // I will depend on the existing imports being updated or update them.
+    // For now, I'll use the imported `verifyTwoFactorOTP` from top (assuming I update imports).
+    const { verifyTwoFactorOTP } = await import("../services/userService.js");
+    const user = await verifyTwoFactorOTP(userId, otp);
+
+    res.json({
+      success: true,
+      message: "Two-factor authentication enabled successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        twoFactorEnabled: user.twoFactorEnabled,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 // Update email preferences
 export const updateEmailPreferences = async (req, res) => {
   try {
@@ -280,7 +350,52 @@ export const requestDataExport = async (req, res) => {
   }
 };
 
-// Delete account
+// Request account deletion (Send OTP)
+export const requestAccountDeletion = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const result = await import("../services/userService.js").then(m => m.requestAccountDeletion(userId));
+    res.json({
+      success: true,
+      message: "Verification code sent to your email",
+      email: result.email,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Verify OTP and delete account
+export const verifyAccountDeletion = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({
+        success: false,
+        error: "Verification code is required",
+      });
+    }
+
+    await import("../services/userService.js").then(m => m.verifyAccountDeletion(userId, otp));
+    res.json({
+      success: true,
+      message: "Account deleted successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Delete account (Legacy/Password)
 export const deleteAccount = async (req, res) => {
   try {
     const userId = req.user._id;

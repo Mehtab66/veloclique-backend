@@ -6,6 +6,8 @@ import {
   verifyEmailChange,
   changePassword,
   toggleTwoFactor,
+  requestTwoFactorOTP,
+  verifyTwoFactorOTP,
   updateEmailPreferences,
   updatePrivacySettings,
   requestDataExport,
@@ -14,6 +16,8 @@ import {
   endAllSessions,
   getProfile,
   uploadProfilePicture,
+  requestAccountDeletion,
+  verifyAccountDeletion,
 } from "../controllers/userController.js";
 import { upload } from "../middleware/upload.js";
 
@@ -39,7 +43,9 @@ router.post("/email/verify-change", verifyEmailChange);
 router.put("/password", changePassword);
 
 // Two-factor authentication
-router.put("/two-factor/toggle", toggleTwoFactor);
+router.put("/two-factor/toggle", toggleTwoFactor); // For disabling or simple toggle if needed
+router.post("/two-factor/request", requestTwoFactorOTP);
+router.post("/two-factor/verify", verifyTwoFactorOTP);
 
 // Email preferences
 router.put("/preferences/email", updateEmailPreferences);
@@ -51,7 +57,9 @@ router.put("/privacy", updatePrivacySettings);
 router.post("/data/export", requestDataExport);
 
 // Account deletion
-router.delete("/account", deleteAccount);
+router.post("/account/delete-request", requestAccountDeletion);
+router.post("/account/delete-verify", verifyAccountDeletion);
+router.delete("/account", deleteAccount); // Legacy
 
 // Session management
 router.get("/sessions", getActiveSessions);

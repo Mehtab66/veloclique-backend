@@ -2,6 +2,7 @@ import Shop from "../models/shop.model.js";
 import ClaimRequest from "../models/claimRequest.model.js";
 import mongoose from "mongoose";
 import * as shopService from "../services/shopService.js";
+import { updateUserPassword, getUserSessions, endAllUserSessions } from "../services/userService.js";
 import cloudinary from "../config/cloudinary.js";
 
 const escapeForRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -435,3 +436,325 @@ export const getListingHealth = async (req, res) => {
   }
 };
 
+
+/**
+ * Request email change OTP
+ */
+export const requestEmailChange = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { newEmail } = req.body;
+
+    if (!newEmail) {
+      return res.status(400).json({ success: false, error: "New email is required" });
+    }
+
+    const shop = await shopService.getShopByOwner(userId);
+    const otp = await shopService.requestEmailChange(shop._id, newEmail);
+
+    // Send OTP via email
+    // Dynamic import to avoid circular dependency issues if any, or just import at top if fine
+    const { sendEmailChangeOTP } = await import("../services/emailService.js");
+    await sendEmailChangeOTP(newEmail, otp);
+
+    res.json({
+      success: true,
+      message: `Verification code sent to ${newEmail}`,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Verify OTP and update email
+ */
+export const verifyEmailChange = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ success: false, error: "OTP is required" });
+    }
+
+    const shop = await shopService.getShopByOwner(userId);
+    const result = await shopService.verifyEmailChange(shop._id, otp);
+
+    // Send notification to old email (optional but good practice)
+    // const { sendEmailChangeNotification } = await import("../services/emailService.js");
+    // await sendEmailChangeNotification(result.oldEmail, result.newEmail);
+
+    res.json({
+      success: true,
+      message: "Shop email updated successfully",
+      shop: result.shop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Request 2FA OTP for Shop
+ */
+export const requestTwoFactorOTP = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(userId);
+
+    // Request OTP from service (generates and saves it)
+    const { otp, email } = await shopService.requestShopTwoFactorOTP(shop._id);
+
+    // Send OTP via email
+    const { sendTwoFactorOTP } = await import("../services/emailService.js");
+    await sendTwoFactorOTP(email, otp);
+
+    res.json({
+      success: true,
+      message: `Verification code sent to ${email}`,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Verify 2FA OTP for Shop
+ */
+export const verifyTwoFactorOTP = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ success: false, error: "OTP is required" });
+    }
+
+    const shop = await shopService.getShopByOwner(userId);
+    const updatedShop = await shopService.verifyShopTwoFactorOTP(shop._id, otp);
+
+    res.json({
+      success: true,
+      message: "Two-step verification enabled successfully",
+      shop: updatedShop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Toggle 2FA for Shop (Disable only mostly)
+ */
+export const toggleTwoFactor = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { enable } = req.body; // boolean
+
+    const shop = await shopService.getShopByOwner(userId);
+    const updatedShop = await shopService.toggleShopTwoFactor(shop._id, enable);
+
+    res.json({
+      success: true,
+      message: `Two-step verification ${enable ? 'enabled' : 'disabled'}`,
+      shop: updatedShop,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Change Password (Wrapper for User Password)
+ */
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        error: "All password fields are required",
+      });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        error: "New passwords do not match",
+      });
+    }
+
+    await updateUserPassword(userId, currentPassword, newPassword);
+    res.json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Get Active Sessions (Wrapper for User Sessions)
+ */
+export const getActiveSessions = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const sessions = await getUserSessions(userId);
+    res.json({
+      success: true,
+      sessions,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * End All Sessions (Wrapper for User Sessions)
+ */
+export const endAllSessions = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await endAllUserSessions(userId);
+    res.json({
+      success: true,
+      message: "All other sessions ended successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Email Preferences
+export const getEmailPreferences = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const preferences = await shopService.getShopEmailPreferences(shop._id);
+    res.json({ success: true, preferences });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateEmailPreferences = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const preferences = await shopService.updateShopEmailPreferences(shop._id, req.body);
+    res.json({ success: true, preferences });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// Privacy Settings
+export const updatePrivacySettings = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { isProfilePrivate } = req.body;
+
+    if (typeof isProfilePrivate !== 'boolean') {
+      return res.status(400).json({ success: false, error: 'isProfilePrivate must be a boolean' });
+    }
+
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const updatedShop = await shopService.updateShopPrivacy(shop._id, isProfilePrivate);
+
+    res.json({
+      success: true,
+      message: `Shop profile is now ${isProfilePrivate ? 'private' : 'public'}`,
+      shop: updatedShop,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Data Export
+export const requestDataExport = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const exportData = await shopService.requestShopDataExport(shop._id);
+
+    res.json({
+      success: true,
+      message: 'Data export prepared successfully',
+      data: exportData,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Shop Deletion
+export const requestShopDeletion = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const { otp, email, shopName } = await shopService.requestShopDelete(shop._id);
+
+    // Send OTP via email
+    const { sendShopDeletionOTP } = await import('../services/emailService.js');
+    await sendShopDeletionOTP(email, otp, shopName);
+
+    res.json({
+      success: true,
+      message: `Verification code sent to ${email}`,
+      shopName,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+export const verifyShopDeletion = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ success: false, error: 'OTP is required' });
+    }
+
+    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const result = await shopService.verifyShopDelete(shop._id, otp);
+
+    res.json({
+      success: true,
+      message: 'Shop deleted successfully',
+      ...result,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};

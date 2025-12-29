@@ -8,7 +8,10 @@ import {
   sendEmailChangeNotification,
   sendPasswordChangedEmail,
   sendAccountDeletionEmail,
+  sendTwoFactorOTP,
+  sendAccountDeletionOTP,
 } from "./emailService.js";
+
 // Generate OTP for email change
 const generateEmailChangeOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -154,21 +157,68 @@ export const updateUserPassword = async (
   return user;
 };
 
-// Toggle two-factor authentication
+// Toggle two-factor authentication (Disable only or direct toggle)
 export const toggleTwoFactorAuth = async (userId, enable) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
-  if (enable && !user.twoFactorEnabled) {
-    // Generate TOTP secret for enabling
-    user.twoFactorSecret = crypto.randomBytes(20).toString("hex");
+  if (enable) {
+    // Legacy direct enable or if using Authenticator App (not implemented here)
+    // For OTP flow, use requestTwoFactorOTP/verifyTwoFactorOTP
+    // But if we just want to force enable:
     user.twoFactorEnabled = true;
-  } else if (!enable && user.twoFactorEnabled) {
+  } else {
     // Disable 2FA
-    user.twoFactorSecret = undefined;
     user.twoFactorEnabled = false;
+    user.twoFactorSecret = undefined;
+    user.twoFactorOTP = undefined;
+    user.twoFactorOTPExpires = undefined;
   }
 
+  await user.save();
+
+  return user;
+};
+
+// Request 2FA OTP
+export const requestTwoFactorOTP = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  if (user.twoFactorEnabled) {
+    throw new Error("Two-factor authentication is already enabled");
+  }
+
+  // Generate OTP
+  const otp = generateEmailChangeOTP(); // Reuse generic OTP generator
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  user.twoFactorOTP = otp;
+  user.twoFactorOTPExpires = otpExpires;
+  await user.save();
+
+  await sendTwoFactorOTP(user.email, otp);
+
+  return { otp }; // Controller will send email
+};
+
+// Verify 2FA OTP and Enable
+export const verifyTwoFactorOTP = async (userId, otp) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  if (!user.twoFactorOTP || user.twoFactorOTP !== otp) {
+    throw new Error("Invalid OTP");
+  }
+
+  if (!user.twoFactorOTPExpires || new Date() > user.twoFactorOTPExpires) {
+    throw new Error("OTP has expired");
+  }
+
+  // OTP verified, enable 2FA
+  user.twoFactorEnabled = true;
+  user.twoFactorOTP = undefined;
+  user.twoFactorOTPExpires = undefined;
   await user.save();
 
   return user;
@@ -249,7 +299,73 @@ export const generateDataExport = async (userId) => {
   return { downloadLink, expiresAt };
 };
 
-// Delete user account
+// Request account deletion (Generate OTP)
+export const requestAccountDeletion = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  // Generate 6 digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  // Save OTP
+  user.accountDeleteOTP = otp;
+  user.accountDeleteOTPExpires = expiresAt;
+
+  await user.save();
+
+  // Send OTP email
+  await sendAccountDeletionOTP(user.email, otp);
+
+  return { email: user.email };
+};
+
+// Verify OTP and delete account
+export const verifyAccountDeletion = async (userId, otp) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  if (
+    !user.accountDeleteOTP ||
+    user.accountDeleteOTP !== otp ||
+    !user.accountDeleteOTPExpires ||
+    user.accountDeleteOTPExpires < Date.now()
+  ) {
+    throw new Error("Invalid or expired OTP");
+  }
+
+  // Clear OTP fields
+  user.accountDeleteOTP = undefined;
+  user.accountDeleteOTPExpires = undefined;
+
+  const originalEmail = user.email;
+
+  // Proceed with deletion logic (similar to deleteUserAccount)
+  // For GDPR compliance, we should anonymize instead of delete
+  // For now, we'll mark for deletion and schedule actual deletion
+  user.email = `deleted_${Date.now()}_${user.email}`;
+  user.name = "Deleted User";
+  user.city = undefined;
+  user.state = undefined;
+  user.googleId = undefined;
+  user.facebookId = undefined;
+  user.appleId = undefined;
+  user.twoFactorSecret = undefined;
+  user.twoFactorEnabled = false;
+  user.sessions = [];
+  user.isProfilePrivate = true;
+  user.markedForDeletion = true;
+  user.deletionScheduledAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+
+  await user.save();
+
+  // Send account deletion confirmation to ORIGINAL email
+  await sendAccountDeletionEmail(originalEmail);
+
+  return true;
+};
+
+// Delete user account (Legacy/Password based)
 export const deleteUserAccount = async (userId, password) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
@@ -261,6 +377,9 @@ export const deleteUserAccount = async (userId, password) => {
       throw new Error("Incorrect password");
     }
   }
+
+  // Capture original email before modifying it
+  const originalEmail = user.email;
 
   // For GDPR compliance, we should anonymize instead of delete
   // For now, we'll mark for deletion and schedule actual deletion
@@ -281,7 +400,7 @@ export const deleteUserAccount = async (userId, password) => {
   await user.save();
 
   // Send account deletion confirmation
-  await sendAccountDeletionEmail(user.originalEmail || user.email);
+  await sendAccountDeletionEmail(originalEmail);
 
   return true;
 };
