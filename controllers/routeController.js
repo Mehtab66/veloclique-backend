@@ -83,6 +83,31 @@ export const getRoutes = async (req, res) => {
   }
 };
 
+/* ---------------- GET POPULAR ROUTES ---------------- */
+// GET /api/routes/popular
+export const getPopularRoutes = async (req, res) => {
+  try {
+    const { region } = req.query;
+    const query = { status: "approved", isPopular: true };
+
+    if (region) {
+      query.region = region;
+    }
+
+    const routes = await Route.find(query)
+      .sort({ createdAt: -1 })
+      .populate("userId", "name email");
+
+    res.json({
+      success: true,
+      data: routes,
+    });
+  } catch (error) {
+    console.error("Get popular routes error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 /* ---------------- ADMIN: UPDATE STATUS ---------------- */
 // PUT /api/routes/:id/status
 export const updateRouteStatus = async (req, res) => {

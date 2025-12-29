@@ -24,6 +24,7 @@ import shopSubscriptionRoutes from "./routes/shopSubscription.js";
 // Import webhook handler
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
+import adminRoutes from "./routes/adminRoutes.js";
 // Initialize Express app
 const app = express();
 
@@ -96,6 +97,7 @@ app.use("/routes", routeRoutes);
 // Donation routes (except webhook which is already handled above)
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
+app.use("/admin", adminRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
