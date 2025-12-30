@@ -79,99 +79,97 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// ✅ FIXED: Async function to import connect-mongo properly
-let MongoStore = null;
-let mongoStoreAvailable = false;
+// ✅ FIXED: Session Store Configuration
+let sessionStore;
 
-// Async function to initialize session store
-async function initializeSessionStore() {
-  try {
-    // For connect-mongo v6+, the import structure is different
-    const connectMongoModule = await import("connect-mongo");
+try {
+  // Try to create MongoStore with proper error handling
+  console.log("Attempting to configure MongoStore...");
+  console.log("MONGODB_URI available:", !!process.env.MONGODB_URI);
 
-    // Check what the module exports
-    if (connectMongoModule.default) {
-      // v5 style export
-      MongoStore = connectMongoModule.default;
-    } else if (connectMongoModule.MongoStore) {
-      // Named export
-      MongoStore = connectMongoModule.MongoStore;
-    } else {
-      // Try to find any export that looks like MongoStore
-      const possibleExports = Object.values(connectMongoModule);
-      MongoStore =
-        possibleExports.find(
-          (exp) => exp && exp.name && exp.name.includes("Store")
-        ) || possibleExports[0];
-    }
+  // For connect-mongo v6+
+  const { MongoStore } = await import("connect-mongo");
 
-    mongoStoreAvailable = true;
-    console.log("✅ connect-mongo loaded successfully");
-  } catch (error) {
-    console.error("Failed to import connect-mongo:", error.message);
-    console.log("Falling back to MemoryStore - NOT RECOMMENDED FOR PRODUCTION");
-    mongoStoreAvailable = false;
+  sessionStore = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: "sessions",
+    ttl: 14 * 24 * 60 * 60, // 14 days
+    autoRemove: "native",
+    crypto: {
+      secret: process.env.SESSION_SECRET || "fallback-secret-for-crypto",
+    },
+  });
+
+  console.log("✅ MongoStore configured successfully");
+
+  // Test the connection
+  sessionStore.client
+    .then((client) => {
+      console.log("✅ MongoStore connected to MongoDB");
+    })
+    .catch((err) => {
+      console.error("❌ MongoStore connection error:", err.message);
+      throw err; // Re-throw to trigger fallback
+    });
+} catch (error) {
+  console.error("❌ Failed to configure MongoStore:", error.message);
+  console.warn(
+    "⚠️  Falling back to MemoryStore - THIS WILL CAUSE MEMORY LEAKS IN PRODUCTION"
+  );
+
+  // MemoryStore as fallback
+  sessionStore = new session.MemoryStore();
+
+  // Aggressive memory leak mitigation for Railway
+  if (process.env.NODE_ENV === "production") {
+    console.warn("⚠️  Adding aggressive MemoryStore cleanup for Railway");
+
+    // Clear MemoryStore every 15 minutes
+    setInterval(() => {
+      console.log("🔄 Clearing MemoryStore to prevent memory leak");
+      sessionStore.clear((err) => {
+        if (err) {
+          console.error("Error clearing MemoryStore:", err);
+        } else {
+          console.log("✅ MemoryStore cleared successfully");
+        }
+      });
+    }, 15 * 60 * 1000); // Every 15 minutes
+
+    // Also clear on every 1000th request to keep memory usage low
+    let requestCount = 0;
+    app.use((req, res, next) => {
+      requestCount++;
+      if (requestCount >= 1000) {
+        sessionStore.clear(() => {});
+        requestCount = 0;
+        console.log("🔄 MemoryStore cleared after 1000 requests");
+      }
+      next();
+    });
   }
 }
 
-// ✅ FIXED SESSION CONFIGURATION
+// ✅ Session Configuration
 const sessionConfig = {
   secret: process.env.SESSION_SECRET || "secret123",
   resave: false,
   saveUninitialized: false,
+  store: sessionStore,
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   },
+  name: "veloclique.sid", // Explicit session cookie name
 };
 
-// Initialize session store and configure middleware
-await initializeSessionStore();
-
-// Only use MongoStore if available
-if (mongoStoreAvailable && MongoStore && process.env.MONGODB_URI) {
-  try {
-    // For v6+, the syntax might be different
-    sessionConfig.store = MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-      mongoOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
-      collectionName: "sessions",
-      ttl: 14 * 24 * 60 * 60, // 14 days
-      autoRemove: "native",
-    });
-    console.log("✅ Using MongoStore for session management");
-  } catch (storeError) {
-    console.error("Failed to create MongoStore:", storeError.message);
-    console.warn("⚠️  Falling back to MemoryStore");
-    mongoStoreAvailable = false;
-  }
-} else {
-  console.warn("⚠️  Using MemoryStore - NOT RECOMMENDED FOR PRODUCTION!");
-  console.warn("⚠️  Railway will send SIGTERM due to memory leaks!");
-
-  // Add memory leak mitigation for MemoryStore
-  if (process.env.NODE_ENV === "production") {
-    console.warn("⚠️  Adding memory cleanup for MemoryStore (temporary fix)");
-
-    // Clean MemoryStore every 30 minutes to reduce leaks
-    setInterval(() => {
-      if (app.get("sessionStore")) {
-        app.get("sessionStore").clear((err) => {
-          if (!err) {
-            console.log("MemoryStore cleared to reduce memory leak");
-          }
-        });
-      }
-    }, 30 * 60 * 1000); // 30 minutes
-  }
-}
-
+// Apply session middleware
 app.use(session(sessionConfig));
+
+// Store reference to session store for health checks
+app.set("sessionStore", sessionStore);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -188,26 +186,44 @@ app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ IMPROVED Health check
+// ✅ IMPROVED Health check with memory monitoring
 app.get("/health", (req, res) => {
+  const memoryUsage = process.memoryUsage();
+  const usedMB = memoryUsage.heapUsed / 1024 / 1024;
+  const totalMB = memoryUsage.heapTotal / 1024 / 1024;
+
   const healthStatus = {
-    status: "healthy",
+    status: usedMB > 800 ? "warning" : "healthy", // Warning if > 800MB
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    sessionStore: mongoStoreAvailable ? "MongoStore" : "MemoryStore",
+    sessionStore: sessionStore.constructor.name,
     memory: {
-      rss: `${Math.round(process.memoryUsage().rss / 1024 / 1024)}MB`,
-      heapTotal: `${Math.round(
-        process.memoryUsage().heapTotal / 1024 / 1024
-      )}MB`,
-      heapUsed: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`,
+      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(totalMB)}MB`,
+      heapUsed: `${Math.round(usedMB)}MB`,
+      external: `${Math.round(memoryUsage.external / 1024 / 1024)}MB`,
     },
-    warning: mongoStoreAvailable
-      ? null
-      : "MemoryStore in use - may cause SIGTERM",
+    warnings:
+      sessionStore.constructor.name === "MemoryStore"
+        ? ["MemoryStore in use - may cause SIGTERM on Railway"]
+        : [],
+    mongoConnected: sessionStore.constructor.name !== "MemoryStore",
   };
 
   res.status(200).json(healthStatus);
+});
+
+// Simple memory monitoring middleware
+app.use((req, res, next) => {
+  const memoryUsage = process.memoryUsage();
+  const usedMB = memoryUsage.heapUsed / 1024 / 1024;
+
+  // Log warning if memory usage is high
+  if (usedMB > 700) {
+    console.warn(`⚠️  High memory usage detected: ${Math.round(usedMB)}MB`);
+  }
+
+  next();
 });
 
 app.get("/", (req, res) => {
@@ -216,7 +232,22 @@ app.get("/", (req, res) => {
     version: "1.0.0",
     health: "/health",
     docs: "https://docs.veloclique.com",
+    sessionStore: sessionStore.constructor.name,
+    memory: `${Math.round(
+      process.memoryUsage().heapUsed / 1024 / 1024
+    )}MB used`,
   });
+});
+
+// Global error handler for memory issues
+process.on("warning", (warning) => {
+  console.warn("Node.js Warning:", warning.name);
+  console.warn("Message:", warning.message);
+  console.warn("Stack:", warning.stack);
+
+  if (warning.name === "MaxListenersExceededWarning") {
+    console.error("⚠️  MaxListenersExceeded - Possible memory leak!");
+  }
 });
 
 export default app;

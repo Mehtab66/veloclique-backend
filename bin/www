@@ -19,6 +19,50 @@ app.set("port", port);
 const server = http.createServer(app);
 
 /**
+ * Railway-specific memory leak monitoring
+ */
+if (process.env.NODE_ENV === "production") {
+  console.log("🚀 Production mode - Enabling Railway memory monitoring");
+
+  // Monitor memory usage every 30 seconds
+  const memoryMonitor = setInterval(() => {
+    const memoryUsage = process.memoryUsage();
+    const usedMB = memoryUsage.heapUsed / 1024 / 1024;
+    const rssMB = memoryUsage.rss / 1024 / 1024;
+
+    console.log(
+      `📊 Memory - RSS: ${Math.round(rssMB)}MB, Heap: ${Math.round(usedMB)}MB`
+    );
+
+    // Emergency action if memory gets too high
+    if (rssMB > 900) {
+      console.warn(
+        "🚨 CRITICAL: Memory usage exceeds 900MB! Taking emergency action..."
+      );
+
+      // Clear session store if it's MemoryStore
+      const sessionStore = app.get("sessionStore");
+      if (sessionStore && sessionStore.clear) {
+        console.log("🔄 Emergency clearing of session store");
+        sessionStore.clear((err) => {
+          if (err) console.error("Emergency clear error:", err);
+        });
+      }
+
+      // Suggest restart
+      console.warn(
+        "💡 Consider increasing memory limit or fixing session store"
+      );
+    }
+  }, 30000); // Every 30 seconds
+
+  // Clean up on server close
+  server.on("close", () => {
+    clearInterval(memoryMonitor);
+  });
+}
+
+/**
  * Listen on provided port.
  */
 server.listen(port);
@@ -66,4 +110,18 @@ function onListening() {
   debug("Listening on " + bind);
   console.log(`🚀 Server running on port ${addr.port}`);
   console.log(`📡 Environment: ${process.env.NODE_ENV || "development"}`);
+
+  // Log session store info
+  const sessionStore = app.get("sessionStore");
+  console.log(
+    `💾 Session Store: ${
+      sessionStore ? sessionStore.constructor.name : "Unknown"
+    }`
+  );
+
+  // Initial memory usage
+  const memoryUsage = process.memoryUsage();
+  console.log(
+    `🧠 Initial Memory - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
+  );
 }
