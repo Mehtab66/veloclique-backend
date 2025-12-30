@@ -103,5 +103,8 @@ app.use("/admin", adminRoutes);
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
 
 export default app;
