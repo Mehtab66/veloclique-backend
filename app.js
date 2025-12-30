@@ -91,7 +91,7 @@ try {
   const { MongoStore } = await import("connect-mongo");
 
   sessionStore = MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI,
+    mongoUrl: process.env.MONGO_URI,
     collectionName: "sessions",
     ttl: 14 * 24 * 60 * 60, // 14 days
     autoRemove: "native",
