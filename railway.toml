@@ -1,13 +1,12 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm ci --omit=dev"
+buildCommand = "npm install"  # Use npm install instead of npm ci
 
 [deploy]
 startCommand = "node ./bin/www"
 healthcheckPath = "/health"
 healthcheckTimeout = 10
 restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
 
 [variables]
 PORT = "4000"
