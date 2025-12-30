@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken"; // IMPORTANT: Add this line!
 import dotenv from "dotenv";
 dotenv.config();
-
+import mongoose from "mongoose";
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
 // Create Checkout Session
@@ -953,6 +953,107 @@ export const getNameWallEntries = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch name wall entries",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+// Add this function to your donationController.js
+
+// GET BILLING PORTAL FOR DONATIONS
+export const getDonationBillingPortal = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user.stripeCustomerId) {
+      return res.status(400).json({
+        success: false,
+        message: "No Stripe customer found",
+      });
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: user.stripeCustomerId,
+      return_url: `${process.env.FRONTEND_URL}/dashboard`,
+    });
+
+    res.json({
+      success: true,
+      url: session.url,
+    });
+  } catch (error) {
+    console.error("Get billing portal error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create billing portal",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+export const getUserDonationStats = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const objectUserId = new mongoose.Types.ObjectId(userId);
+
+    // Get total lifetime donations
+    const lifetimeDonations = await Donation.aggregate([
+      {
+        $match: {
+          donorId: objectUserId,
+          status: "completed",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Get current month donations
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const monthlyDonations = await Donation.aggregate([
+      {
+        $match: {
+          donorId: objectUserId,
+          status: "completed",
+          createdAt: { $gte: startOfMonth },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Get user's active badge
+    const user = await User.findById(userId).select("badges");
+    const activeBadge = user?.badges?.find((badge) => badge.isActive);
+
+    res.json({
+      success: true,
+      data: {
+        lifetime: lifetimeDonations[0]?.totalAmount || 0,
+        monthly: monthlyDonations[0]?.totalAmount || 0,
+        badge: activeBadge?.tier || "Peloton",
+      },
+    });
+  } catch (error) {
+    console.error("Get donation stats error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get donation stats",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
