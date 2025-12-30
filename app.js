@@ -79,17 +79,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// ✅ FIXED: Dynamic import for connect-mongo to handle ES modules properly
-let MongoStore;
-try {
-  // Try to import connect-mongo (ES module version)
-  const connectMongoModule = await import("connect-mongo");
-  MongoStore = connectMongoModule.default;
-} catch (error) {
-  console.error("Failed to import connect-mongo:", error.message);
-  console.log("Falling back to MemoryStore - NOT RECOMMENDED FOR PRODUCTION");
-  // Fallback to MemoryStore if connect-mongo is not available
-  MongoStore = null;
+// ✅ FIXED: Async function to import connect-mongo properly
+let MongoStore = null;
+let mongoStoreAvailable = false;
+
+// Async function to initialize session store
+async function initializeSessionStore() {
+  try {
+    // For connect-mongo v6+, the import structure is different
+    const connectMongoModule = await import("connect-mongo");
+
+    // Check what the module exports
+    if (connectMongoModule.default) {
+      // v5 style export
+      MongoStore = connectMongoModule.default;
+    } else if (connectMongoModule.MongoStore) {
+      // Named export
+      MongoStore = connectMongoModule.MongoStore;
+    } else {
+      // Try to find any export that looks like MongoStore
+      const possibleExports = Object.values(connectMongoModule);
+      MongoStore =
+        possibleExports.find(
+          (exp) => exp && exp.name && exp.name.includes("Store")
+        ) || possibleExports[0];
+    }
+
+    mongoStoreAvailable = true;
+    console.log("✅ connect-mongo loaded successfully");
+  } catch (error) {
+    console.error("Failed to import connect-mongo:", error.message);
+    console.log("Falling back to MemoryStore - NOT RECOMMENDED FOR PRODUCTION");
+    mongoStoreAvailable = false;
+  }
 }
 
 // ✅ FIXED SESSION CONFIGURATION
@@ -105,18 +127,48 @@ const sessionConfig = {
   },
 };
 
+// Initialize session store and configure middleware
+await initializeSessionStore();
+
 // Only use MongoStore if available
-if (MongoStore && process.env.MONGODB_URI) {
-  sessionConfig.store = MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI,
-    collectionName: "sessions",
-    ttl: 14 * 24 * 60 * 60, // 14 days
-    autoRemove: "native",
-  });
-  console.log("✅ Using MongoStore for session management");
+if (mongoStoreAvailable && MongoStore && process.env.MONGODB_URI) {
+  try {
+    // For v6+, the syntax might be different
+    sessionConfig.store = MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      mongoOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+      collectionName: "sessions",
+      ttl: 14 * 24 * 60 * 60, // 14 days
+      autoRemove: "native",
+    });
+    console.log("✅ Using MongoStore for session management");
+  } catch (storeError) {
+    console.error("Failed to create MongoStore:", storeError.message);
+    console.warn("⚠️  Falling back to MemoryStore");
+    mongoStoreAvailable = false;
+  }
 } else {
   console.warn("⚠️  Using MemoryStore - NOT RECOMMENDED FOR PRODUCTION!");
-  console.warn("⚠️  Install connect-mongo: npm install connect-mongo");
+  console.warn("⚠️  Railway will send SIGTERM due to memory leaks!");
+
+  // Add memory leak mitigation for MemoryStore
+  if (process.env.NODE_ENV === "production") {
+    console.warn("⚠️  Adding memory cleanup for MemoryStore (temporary fix)");
+
+    // Clean MemoryStore every 30 minutes to reduce leaks
+    setInterval(() => {
+      if (app.get("sessionStore")) {
+        app.get("sessionStore").clear((err) => {
+          if (!err) {
+            console.log("MemoryStore cleared to reduce memory leak");
+          }
+        });
+      }
+    }, 30 * 60 * 1000); // 30 minutes
+  }
 }
 
 app.use(session(sessionConfig));
@@ -142,7 +194,7 @@ app.get("/health", (req, res) => {
     status: "healthy",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    sessionStore: MongoStore ? "MongoStore" : "MemoryStore",
+    sessionStore: mongoStoreAvailable ? "MongoStore" : "MemoryStore",
     memory: {
       rss: `${Math.round(process.memoryUsage().rss / 1024 / 1024)}MB`,
       heapTotal: `${Math.round(
@@ -150,6 +202,9 @@ app.get("/health", (req, res) => {
       )}MB`,
       heapUsed: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`,
     },
+    warning: mongoStoreAvailable
+      ? null
+      : "MemoryStore in use - may cause SIGTERM",
   };
 
   res.status(200).json(healthStatus);
