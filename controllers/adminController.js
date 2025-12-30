@@ -2,7 +2,7 @@ import ClaimRequest from "../models/claimRequest.model.js";
 import GearPick from "../models/gearpick.model.js";
 import Route from "../models/route.model.js";
 import Shop from "../models/shop.model.js";
-
+import User from "../models/user.model.js";
 export const getPendingApprovals = async (req, res) => {
   // ... existing getPendingApprovals code ...
 
