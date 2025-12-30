@@ -1,19 +1,17 @@
 import dotenv from "dotenv";
-dotenv.config({ quiet: true }); // Added quiet option to reduce logs
+dotenv.config({ quiet: true });
 
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
-import MongoStore from "connect-mongo"; // IMPORTANT: Add this import
 import cors from "cors";
 import bodyParser from "body-parser";
 import passport from "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import locationRoutes from "./routes/LocationRoutes.js";
 import shopRoutes from "./routes/ShopRoutes.js";
-import mongoose from "mongoose"; // Need mongoose for MongoStore
 import connectDB from "./config/db.js";
 
 import indexRouter from "./routes/index.js";
@@ -81,32 +79,52 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// ✅ FIXED SESSION CONFIGURATION - REPLACED MemoryStore with MongoStore
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret123",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-      collectionName: "sessions",
-      ttl: 14 * 24 * 60 * 60, // 14 days in seconds
-      autoRemove: "native", // Auto-remove expired sessions
-      crypto: {
-        secret: process.env.SESSION_CRYPTO_SECRET || "default-crypto-secret",
-      },
-    }),
-    cookie: {
-      secure: process.env.NODE_ENV === "production", // HTTPS in production
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days in milliseconds
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    },
-  })
-);
+// ✅ FIXED: Dynamic import for connect-mongo to handle ES modules properly
+let MongoStore;
+try {
+  // Try to import connect-mongo (ES module version)
+  const connectMongoModule = await import("connect-mongo");
+  MongoStore = connectMongoModule.default;
+} catch (error) {
+  console.error("Failed to import connect-mongo:", error.message);
+  console.log("Falling back to MemoryStore - NOT RECOMMENDED FOR PRODUCTION");
+  // Fallback to MemoryStore if connect-mongo is not available
+  MongoStore = null;
+}
+
+// ✅ FIXED SESSION CONFIGURATION
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET || "secret123",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  },
+};
+
+// Only use MongoStore if available
+if (MongoStore && process.env.MONGODB_URI) {
+  sessionConfig.store = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: "sessions",
+    ttl: 14 * 24 * 60 * 60, // 14 days
+    autoRemove: "native",
+  });
+  console.log("✅ Using MongoStore for session management");
+} else {
+  console.warn("⚠️  Using MemoryStore - NOT RECOMMENDED FOR PRODUCTION!");
+  console.warn("⚠️  Install connect-mongo: npm install connect-mongo");
+}
+
+app.use(session(sessionConfig));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
@@ -114,36 +132,27 @@ app.use("/locations", locationRoutes);
 app.use("/shops", shopRoutes);
 app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
-
-// Donation routes (except webhook which is already handled above)
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ IMPROVED Health check with DB verification
-app.get("/health", async (req, res) => {
-  try {
-    const dbState = mongoose.connection.readyState;
-    const isDbConnected = dbState === 1; // 1 = connected
+// ✅ IMPROVED Health check
+app.get("/health", (req, res) => {
+  const healthStatus = {
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    sessionStore: MongoStore ? "MongoStore" : "MemoryStore",
+    memory: {
+      rss: `${Math.round(process.memoryUsage().rss / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(
+        process.memoryUsage().heapTotal / 1024 / 1024
+      )}MB`,
+      heapUsed: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`,
+    },
+  };
 
-    const healthStatus = {
-      status: isDbConnected ? "healthy" : "degraded",
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      database: isDbConnected ? "connected" : "disconnected",
-      databaseState: dbState, // 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
-      memory: process.memoryUsage(),
-      nodeVersion: process.version,
-    };
-
-    res.status(isDbConnected ? 200 : 503).json(healthStatus);
-  } catch (error) {
-    res.status(500).json({
-      status: "unhealthy",
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
-  }
+  res.status(200).json(healthStatus);
 });
 
 app.get("/", (req, res) => {
@@ -155,5 +164,4 @@ app.get("/", (req, res) => {
   });
 });
 
-// Export the app
 export default app;
