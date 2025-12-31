@@ -15,7 +15,9 @@ import { authenticate } from "../middleware/authMiddleware.js";
 router.get("/", getGearPicks); // GET /api/gear-picks?category=All&sort=Most Voted&page=1&limit=20
 
 // Protected routes
-router.post("/",authenticate, submitGearPick); // POST /api/gear-picks
+// Use upload.any() to handle form data with optional image, or upload.fields([]) for specific fields
+// upload.single() requires the field to exist, which can cause issues if image is optional
+router.post("/", authenticate, upload.any(), submitGearPick); // POST /api/gear-picks (with optional image upload support)
 router.post("/:id/vote",authenticate, voteOnGearPick); // POST /api/gear-picks/:id/vote
 
 // Admin routes

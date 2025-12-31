@@ -74,8 +74,18 @@ app.post(
 );
 
 // --- AFTER webhook route, add JSON parser for all other routes ---
+// Note: bodyParser.urlencoded should NOT parse multipart/form-data (multer handles that)
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// Only parse urlencoded for application/x-www-form-urlencoded, NOT multipart/form-data
+app.use((req, res, next) => {
+  const contentType = req.headers['content-type'] || '';
+  // Skip body parsing for multipart/form-data (let multer handle it)
+  if (contentType.includes('multipart/form-data')) {
+    return next();
+  }
+  // Use bodyParser.urlencoded for other content types
+  bodyParser.urlencoded({ extended: false })(req, res, next);
+});
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
