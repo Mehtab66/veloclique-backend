@@ -337,3 +337,64 @@ export const uploadGearPickImage = async (req, res) => {
     });
   }
 };
+
+// @desc    Create gear pick as admin (with approved status)
+// @route   POST /api/gear-picks/admin/create
+// @access  Admin
+export const createGearPickAsAdmin = async (req, res) => {
+  try {
+    const { gearName, category, productLink, recommendation } = req.body;
+
+    // Validate required fields
+    if (!gearName || !category || !recommendation) {
+      return res.status(400).json({
+        success: false,
+        message: "Gear name, category, and recommendation are required",
+      });
+    }
+
+    // Create gear pick with approved status
+    const gearPickData = {
+      gearName,
+      category,
+      productLink: productLink || "",
+      recommendation,
+      userId: req.user._id,
+      status: "approved", // Admin-created picks are automatically approved
+    };
+
+    // If image is provided, upload to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(
+        `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+        {
+          folder: "veloclique/gearpicks",
+          resource_type: "image",
+        }
+      );
+
+      gearPickData.image = {
+        publicId: result.public_id,
+        url: result.secure_url,
+      };
+    }
+
+    const gearPick = new GearPick(gearPickData);
+    const createdGearPick = await gearPick.save();
+
+    // Populate userId field
+    await createdGearPick.populate("userId", "username email");
+
+    res.status(201).json({
+      success: true,
+      message: "Gear pick created successfully with approved status",
+      data: createdGearPick,
+    });
+  } catch (error) {
+    console.error("Create gear pick as admin error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

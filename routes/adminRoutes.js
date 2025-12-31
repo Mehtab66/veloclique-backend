@@ -1,5 +1,5 @@
 import express from "express";
-import { getPendingApprovals, approveItem, denyItem } from "../controllers/adminController.js";
+import { getPendingApprovals, approveItem, denyItem, getAdminStats } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -13,6 +13,7 @@ const isAdmin = (req, res, next) => {
     }
 };
 
+router.get("/stats", authenticate, isAdmin, getAdminStats);
 router.get("/pending-approvals", authenticate, isAdmin, getPendingApprovals);
 router.put("/approve/:type/:id", authenticate, isAdmin, approveItem);
 router.put("/deny/:type/:id", authenticate, isAdmin, denyItem);

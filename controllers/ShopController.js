@@ -107,7 +107,7 @@ export const listShops = async (req, res) => {
     } = req.query;
 
     const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
-    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 100);
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 10000); // Increased max limit for admin
 
     const filters = {};
 
@@ -141,27 +141,37 @@ export const listShops = async (req, res) => {
         .sort({ reviewsCount: -1, averageRating: -1 })
         .skip(skip)
         .limit(parsedLimit)
-        .select([
-          "name",
-          "fullAddress",
-          "streetAddress",
-          "city",
-          "state",
-          "zip",
-          "country",
-          "phone",
-          "website",
-          "firstCategory",
-          "secondCategory",
-          "reviewsCount",
-          "averageRating",
-          "businessStatus",
-          "imageUrl",
-          "hours",
-          "location",
-        ]),
+        .lean()
+        .select("name fullAddress streetAddress city state zip country phone website firstCategory secondCategory reviewsCount averageRating businessStatus imageUrl hours location subscription description"),
       Shop.countDocuments(filters),
     ]);
+
+    // Debug: Log subscription data
+    console.log(`[listShops] Total shops returned: ${shops.length}`);
+    const sampleShop = shops[0];
+    if (sampleShop) {
+      console.log(`[listShops] Sample shop subscription field:`, sampleShop.subscription);
+      console.log(`[listShops] Sample shop has subscription:`, !!sampleShop.subscription);
+      if (sampleShop.subscription) {
+        console.log(`[listShops] Sample shop subscription.status:`, sampleShop.subscription.status);
+      }
+    }
+    
+    const shopsWithActiveSubscription = shops.filter(
+      (shop) => shop.subscription?.status === "active"
+    );
+    console.log(
+      `[listShops] Shops with active subscription: ${shopsWithActiveSubscription.length}`
+    );
+    if (shopsWithActiveSubscription.length > 0) {
+      console.log(
+        "[listShops] Active subscription shops:",
+        shopsWithActiveSubscription.map((s) => ({
+          name: s.name,
+          subscriptionStatus: s.subscription?.status,
+        }))
+      );
+    }
 
     res.json({
       page: parsedPage,
