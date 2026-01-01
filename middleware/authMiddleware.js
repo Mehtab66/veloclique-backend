@@ -162,3 +162,25 @@ export const optionalAuth = async (req, res, next) => {
     next();
   }
 };
+
+/**
+ * Middleware to authorize admin users only
+ * Must be used after authenticate middleware
+ */
+export const authorizeAdmin = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: "Authentication required",
+    });
+  }
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "Admin access required",
+    });
+  }
+
+  next();
+};

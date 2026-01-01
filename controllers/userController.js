@@ -12,6 +12,34 @@ import {
   endAllUserSessions,
   getUserProfile,
 } from "../services/userService.js";
+import User from "../models/user.model.js";
+
+// Get saved items (shops, routes, gear)
+export const getSavedItems = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId)
+      .populate("savedShops")
+      .populate("savedRoutes")
+      .populate("savedGear");
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    res.json({
+      success: true,
+      savedShops: user.savedShops || [],
+      savedRoutes: user.savedRoutes || [],
+      savedGear: user.savedGear || [],
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 // Get user profile
 export const getProfile = async (req, res) => {
@@ -497,6 +525,112 @@ export const uploadProfilePicture = async (req, res) => {
         email: user.email,
         profilePicture: user.profilePicture,
       },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Toggle Save Shop
+export const toggleSaveShop = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { shopId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    // Initialize array if it doesn't exist (failsafe)
+    if (!user.savedShops) user.savedShops = [];
+
+    const index = user.savedShops.indexOf(shopId);
+    if (index === -1) {
+      user.savedShops.push(shopId);
+    } else {
+      user.savedShops.splice(index, 1);
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      data: user.savedShops,
+      message: index === -1 ? "Shop saved" : "Shop removed from saved",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Toggle Save Route
+export const toggleSaveRoute = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { routeId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    if (!user.savedRoutes) user.savedRoutes = [];
+
+    const index = user.savedRoutes.indexOf(routeId);
+    if (index === -1) {
+      user.savedRoutes.push(routeId);
+    } else {
+      user.savedRoutes.splice(index, 1);
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      data: user.savedRoutes,
+      message: index === -1 ? "Route saved" : "Route removed from saved",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// Toggle Save Gear
+export const toggleSaveGear = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { gearId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    if (!user.savedGear) user.savedGear = [];
+
+    const index = user.savedGear.indexOf(gearId);
+    if (index === -1) {
+      user.savedGear.push(gearId);
+    } else {
+      user.savedGear.splice(index, 1);
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      data: user.savedGear,
+      message: index === -1 ? "Gear saved" : "Gear removed from saved",
     });
   } catch (error) {
     res.status(400).json({

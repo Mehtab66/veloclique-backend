@@ -20,12 +20,16 @@ import gearpicks from "./routes/gearpick.js";
 import routeRoutes from "./routes/route.js";
 import donationRoutes from "./routes/donationRoutes.js";
 import shopSubscriptionRoutes from "./routes/shopSubscription.js";
+import contentRoutes from "./routes/contentRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
-// Import webhook handler
+// Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
+
 // Initialize Express app
 const app = express();
+
 
 // Connect to MongoDB
 connectDB();
@@ -96,6 +100,9 @@ app.use("/routes", routeRoutes);
 // Donation routes (except webhook which is already handled above)
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
+app.use("/admin", adminRoutes);
+app.use("/content", contentRoutes);
+
 
 // Health check
 app.get("/health", (req, res) => {

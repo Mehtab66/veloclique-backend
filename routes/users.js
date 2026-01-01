@@ -18,6 +18,7 @@ import {
   uploadProfilePicture,
   requestAccountDeletion,
   verifyAccountDeletion,
+  getSavedItems,
 } from "../controllers/userController.js";
 import { upload } from "../middleware/upload.js";
 
@@ -64,5 +65,12 @@ router.delete("/account", deleteAccount); // Legacy
 // Session management
 router.get("/sessions", getActiveSessions);
 router.post("/sessions/end-all", endAllSessions);
+
+// Saved items
+router.get("/saved-items", getSavedItems);
+import { toggleSaveShop, toggleSaveRoute, toggleSaveGear } from "../controllers/userController.js";
+router.post("/saved-shops/:shopId", toggleSaveShop);
+router.post("/saved-routes/:routeId", toggleSaveRoute);
+router.post("/saved-gear/:gearId", toggleSaveGear);
 
 export default router;

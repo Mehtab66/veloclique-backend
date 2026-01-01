@@ -98,7 +98,8 @@ export const listShops = async (req, res) => {
     const {
       state,
       city,
-      status,
+      status, // This is businessStatus (Open, Closed, etc.)
+      verificationStatus, // This is for Verified/Unverified/At Risk
       category,
       search,
       minRating,
@@ -107,18 +108,32 @@ export const listShops = async (req, res) => {
     } = req.query;
 
     const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
-    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 100);
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 100); // Reset max limit to sensible value
 
     const filters = {};
 
     const matchState = toCaseInsensitiveRegex(state);
-    if (matchState) filters.state = matchState;
+    if (matchState && state !== 'All States') filters.state = matchState;
 
     const matchCity = toCaseInsensitiveRegex(city);
     if (matchCity) filters.city = matchCity;
 
     const matchStatus = toCaseInsensitiveRegex(status);
-    if (matchStatus) filters.businessStatus = matchStatus;
+    if (matchStatus && status !== 'All Statuses') filters.businessStatus = matchStatus;
+
+    if (verificationStatus) {
+      if (verificationStatus === 'Verified') {
+        filters['subscription.status'] = 'active';
+      } else if (verificationStatus === 'Unverified') {
+        filters['subscription.status'] = { $ne: 'active' };
+      }
+      // 'At Risk' is complex to filter server-side without aggregation or extra fields. 
+      // For fast pagination, we skipping complex 'At Risk' computation here 
+      // or we accept it might filter nothing if not implemented. 
+      // If the user selects 'At Risk', we might need to handle it differently 
+      // or this implementation assumes filtering happens on returned page if not supported here.
+      // For now, let's strictly handle Verified/Unverified which are the main heavy filters.
+    }
 
     const categoryFilter = buildCategoryFilter(category);
     if (categoryFilter) Object.assign(filters, categoryFilter);
@@ -138,28 +153,11 @@ export const listShops = async (req, res) => {
 
     const [shops, total] = await Promise.all([
       Shop.find(filters)
-        .sort({ reviewsCount: -1, averageRating: -1 })
+        .sort({ createdAt: -1 }) // Sort by newest first or consistent order
         .skip(skip)
         .limit(parsedLimit)
-        .select([
-          "name",
-          "fullAddress",
-          "streetAddress",
-          "city",
-          "state",
-          "zip",
-          "country",
-          "phone",
-          "website",
-          "firstCategory",
-          "secondCategory",
-          "reviewsCount",
-          "averageRating",
-          "businessStatus",
-          "imageUrl",
-          "hours",
-          "location",
-        ]),
+        .lean()
+        .select("name fullAddress streetAddress city state zip country phone website firstCategory secondCategory reviewsCount averageRating businessStatus imageUrl hours location subscription description"),
       Shop.countDocuments(filters),
     ]);
 
