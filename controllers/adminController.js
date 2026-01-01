@@ -2,6 +2,57 @@ import ClaimRequest from "../models/claimRequest.model.js";
 import GearPick from "../models/gearpick.model.js";
 import Route from "../models/route.model.js";
 import Shop from "../models/shop.model.js";
+import User from "../models/user.model.js";
+
+export const getAdminStats = async (req, res) => {
+  try {
+    // Get pending approvals count
+    const pendingClaimsCount = await ClaimRequest.countDocuments({ status: "pending" });
+    const pendingGearPicksCount = await GearPick.countDocuments({ status: "pending" });
+    const pendingRoutesCount = await Route.countDocuments({ status: "pending" });
+    const pendingApprovalsCount = pendingClaimsCount + pendingGearPicksCount + pendingRoutesCount;
+
+    // Get active verified shops count (shops with subscription.status === 'active')
+    const activeVerifiedShopsCount = await Shop.countDocuments({
+      "subscription.status": "active",
+    });
+
+    // Get new sponsorships this month (shops with active subscription where currentPeriodStart is this month)
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const endOfMonth = new Date(startOfMonth);
+    endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+
+    const newSponsorshipsCount = await Shop.countDocuments({
+      "subscription.status": "active",
+      "subscription.currentPeriodStart": {
+        $gte: startOfMonth,
+        $lt: endOfMonth,
+      },
+    });
+
+    // Flagged reviews - for now returning 0 (can be implemented later if review flagging exists)
+    const flaggedReviewsCount = 0;
+
+    res.json({
+      success: true,
+      data: {
+        pendingApprovals: pendingApprovalsCount,
+        activeVerifiedShops: activeVerifiedShopsCount,
+        newSponsorships: newSponsorshipsCount,
+        flaggedReviews: flaggedReviewsCount,
+      },
+    });
+  } catch (error) {
+    console.error("Get admin stats error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get admin statistics",
+      error: error.message,
+    });
+  }
+};
 
 export const getPendingApprovals = async (req, res) => {
   // ... existing getPendingApprovals code ...
@@ -138,16 +189,28 @@ export const approveItem = async (req, res) => {
           .status(404)
           .json({ success: false, message: "Claim not found" });
 
-      // Get User model
-      //   const User = (await import("../models/user.model.js")).default;
+      // Get User and validate
       const user = await User.findById(claim.userId);
-
-      // Check if user already owns a shop (one shop per user limit)
-      if (user.ownedShop) {
-        return res.status(400).json({
+      
+      if (!user) {
+        return res.status(404).json({
           success: false,
-          message: "User already owns a shop. One shop per user limit.",
+          message: "User not found",
         });
+      }
+
+      // Check if user already owns a shop (verify the shop actually exists and user is the owner)
+      if (user.ownedShop) {
+        const existingShop = await Shop.findById(user.ownedShop);
+        // Only block if shop exists and user is actually the owner
+        if (existingShop && (existingShop.owner?.toString() === claim.userId.toString() || existingShop.ownerId?.toString() === claim.userId.toString())) {
+          return res.status(400).json({
+            success: false,
+            message: "User already owns a shop. One shop per user limit.",
+          });
+        }
+        // If shop doesn't exist or user is not the owner, clear the stale reference
+        // We'll allow the claim and update the user's ownedShop later
       }
 
       let targetShop;
@@ -161,15 +224,16 @@ export const approveItem = async (req, res) => {
       }
 
       if (targetShop) {
-        // Check if shop already has an owner
-        if (targetShop.owner) {
+        // Check if shop already has an owner (check both owner and ownerId fields for backward compatibility)
+        const existingOwner = targetShop.owner || targetShop.ownerId;
+        if (existingOwner) {
           return res.status(400).json({
             success: false,
             message: "Shop already has an owner. Cannot be claimed again.",
           });
         }
 
-        // FIXED: Use `owner` as per your schema
+        // Set owner field (primary field per schema)
         targetShop.owner = claim.userId;
 
         // Update specific fields if provided
@@ -181,9 +245,8 @@ export const approveItem = async (req, res) => {
         await targetShop.save();
       } else {
         // Create new shop if doesn't exist
-        targetShop = await Shop.create({
+        const newShopData = {
           name: claim.shopName,
-          // FIXED: Use `owner` as per your schema
           owner: claim.userId,
           phone: claim.phone || "",
           email: claim.businessEmail || "",
@@ -205,7 +268,9 @@ export const approveItem = async (req, res) => {
           },
           hoursByDay: {},
           socialMedia: {},
-        });
+        };
+        
+        targetShop = await Shop.create(newShopData);
       }
 
       // FIXED: Update user with `ownedShop` as per your schema

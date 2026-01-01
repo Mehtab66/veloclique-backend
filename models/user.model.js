@@ -108,6 +108,9 @@ const userSchema = new mongoose.Schema(
       ref: "Shop",
       default: null,
     },
+    savedShops: [{ type: mongoose.Schema.Types.ObjectId, ref: "Shop" }],
+    savedRoutes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Route" }],
+    savedGear: [{ type: mongoose.Schema.Types.ObjectId, ref: "Gearpick" }],
   },
   {
     timestamps: true,

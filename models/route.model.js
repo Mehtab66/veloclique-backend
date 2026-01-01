@@ -43,6 +43,31 @@ const routeSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    type: {
+      type: String,
+      trim: true,
+    },
+    elevationGain: {
+      type: String, // e.g., "1,720 ft"
+      trim: true,
+    },
+    region: {
+      type: String,
+      trim: true,
+      default: "West",
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    isPopular: {
+      type: Boolean,
+      default: false,
+    },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

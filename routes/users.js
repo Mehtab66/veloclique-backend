@@ -65,4 +65,10 @@ router.delete("/account", deleteAccount); // Legacy
 router.get("/sessions", getActiveSessions);
 router.post("/sessions/end-all", endAllSessions);
 
+// Saved items
+import { toggleSaveShop, toggleSaveRoute, toggleSaveGear } from "../controllers/userController.js";
+router.post("/saved-shops/:shopId", toggleSaveShop);
+router.post("/saved-routes/:routeId", toggleSaveRoute);
+router.post("/saved-gear/:gearId", toggleSaveGear);
+
 export default router;
