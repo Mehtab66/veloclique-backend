@@ -144,7 +144,7 @@ try {
     app.use((req, res, next) => {
       requestCount++;
       if (requestCount >= 1000) {
-        sessionStore.clear(() => {});
+        sessionStore.clear(() => { });
         requestCount = 0;
         console.log("🔄 MemoryStore cleared after 1000 requests");
       }
@@ -187,6 +187,7 @@ app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
+app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 
 // ✅ IMPROVED Health check with memory monitoring
