@@ -9,7 +9,10 @@ import {
   getDonationStats,
   cancelSubscription,
   getNameWallEntries,
+  getUserDonationStats,
+  getDonationBillingPortal,
 } from "../controllers/donationController.js";
+
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -34,5 +37,8 @@ router.patch(
 // Admin routes
 router.get("/all", authenticate, getAllDonations);
 router.get("/stats", authenticate, getDonationStats);
+// Add this to your donation routes
+router.get("/billing-portal", authenticate, getDonationBillingPortal);
+router.get("/my-stats", authenticate, getUserDonationStats); // ADD THIS
 
 export default router;

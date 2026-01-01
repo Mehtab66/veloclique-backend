@@ -71,8 +71,9 @@ export const createShopCheckout = async (req, res) => {
           userId: userId.toString(),
         },
       },
-      success_url: `${process.env.FRONTEND_URL}/dashboard/shop/subscription-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/dashboard/shop?canceled=true`,
+      // Change these URLs:
+      success_url: `${process.env.FRONTEND_URL}/ShopSubscriptionDone?session_id={CHECKOUT_SESSION_ID}&success=true`,
+      cancel_url: `${process.env.FRONTEND_URL}/ShopSubscriptionDone?canceled=true`,
       metadata: {
         shopId: shop._id.toString(),
         userId: userId.toString(),
@@ -89,7 +90,7 @@ export const createShopCheckout = async (req, res) => {
     });
 
     // Update shop with pending subscription
-    shop.subscription.status = "pending";
+    shop.subscription.status = "inactive";
     shop.subscription.plan = plan;
     shop.subscription.billingCycle = billingCycle;
     shop.subscription.stripeCustomerId = customerId;
@@ -610,8 +611,18 @@ const handleShopSubscriptionUpdated = async (subscription) => {
     return;
   }
 
-  // Update status
-  shop.subscription.status = subscription.status;
+  // Update status - Map Stripe status to your allowed values
+  let mappedStatus = subscription.status;
+  if (subscription.status === "trialing") mappedStatus = "trialing";
+  else if (subscription.status === "active") mappedStatus = "active";
+  else if (subscription.status === "past_due") mappedStatus = "past_due";
+  else if (
+    subscription.status === "canceled" ||
+    subscription.status === "unpaid"
+  )
+    mappedStatus = "canceled";
+
+  shop.subscription.status = mappedStatus;
   shop.subscription.currentPeriodEnd = new Date(
     subscription.current_period_end * 1000
   );
@@ -623,9 +634,7 @@ const handleShopSubscriptionUpdated = async (subscription) => {
   }
 
   await shop.save();
-  console.log(
-    `✅ Shop ${shop._id} subscription updated to: ${subscription.status}`
-  );
+  console.log(`✅ Shop ${shop._id} subscription updated to: ${mappedStatus}`);
 };
 
 const handleShopSubscriptionDeleted = async (subscription) => {
