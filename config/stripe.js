@@ -1,9 +1,24 @@
 import Stripe from "stripe";
 import dotenv from "dotenv";
 dotenv.config();
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-11-20.acacia",
-});
+
+// Conditional Stripe initialization
+let stripe;
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2024-11-20.acacia",
+  });
+} else {
+  console.warn("⚠️  Stripe not configured - STRIPE_SECRET_KEY required for payment functionality");
+  // Create a mock stripe object that will throw errors if used
+  stripe = new Proxy({}, {
+    get() {
+      throw new Error("Stripe is not configured. Please add STRIPE_SECRET_KEY to your .env file");
+    }
+  });
+}
+
+export { stripe };
 
 // Stripe Price IDs (create these in Stripe Dashboard)
 export const STRIPE_PRICES = {

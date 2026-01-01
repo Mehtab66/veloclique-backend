@@ -26,7 +26,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 // Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
-import adminRoutes from "./routes/adminRoutes.js";
+
 
 // Initialize Express app
 const app = express();
@@ -187,7 +187,6 @@ app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
-app.use("/admin", adminRoutes);
 app.use("/admin", adminRoutes);
 
 // ✅ IMPROVED Health check with memory monitoring
