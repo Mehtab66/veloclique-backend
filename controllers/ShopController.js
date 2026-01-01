@@ -2,10 +2,15 @@ import Shop from "../models/shop.model.js";
 import ClaimRequest from "../models/claimRequest.model.js";
 import mongoose from "mongoose";
 import * as shopService from "../services/shopService.js";
-import { updateUserPassword, getUserSessions, endAllUserSessions } from "../services/userService.js";
+import {
+  updateUserPassword,
+  getUserSessions,
+  endAllUserSessions,
+} from "../services/userService.js";
 import cloudinary from "../config/cloudinary.js";
 
-const escapeForRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeForRegex = (value = "") =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const toCaseInsensitiveRegex = (value = "") => {
   const decoded = decodeURIComponent(value)?.trim();
@@ -23,6 +28,7 @@ const buildCategoryFilter = (category) => {
 
 export const getShopStates = async (req, res) => {
   try {
+    console.log("getShopStates: req.query", req.query);
     const { category } = req.query;
     const matchStage = {};
     const categoryFilter = buildCategoryFilter(category);
@@ -36,7 +42,13 @@ export const getShopStates = async (req, res) => {
     }
 
     pipeline.push(
-      { $group: { _id: "$state", cities: { $addToSet: "$city" }, shops: { $sum: 1 } } },
+      {
+        $group: {
+          _id: "$state",
+          cities: { $addToSet: "$city" },
+          shops: { $sum: 1 },
+        },
+      },
       {
         $project: {
           _id: 0,
@@ -51,7 +63,9 @@ export const getShopStates = async (req, res) => {
     const states = await Shop.aggregate(pipeline);
     res.json({ states });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch states", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch states", error: error.message });
   }
 };
 
@@ -89,7 +103,9 @@ export const getCitiesByState = async (req, res) => {
       cities,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch cities", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch cities", error: error.message });
   }
 };
 
@@ -181,7 +197,9 @@ export const listShops = async (req, res) => {
       shops,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch shops", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch shops", error: error.message });
   }
 };
 
@@ -195,7 +213,9 @@ export const getNearbyShops = async (req, res) => {
     const radiusInMeters = Math.max(Number(radiusMiles) || 25, 1) * 1609.34;
 
     if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
-      return res.status(400).json({ message: "lat and lng are required numbers" });
+      return res
+        .status(400)
+        .json({ message: "lat and lng are required numbers" });
     }
 
     const shops = await Shop.find({
@@ -233,7 +253,9 @@ export const getNearbyShops = async (req, res) => {
       shops,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch nearby shops", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch nearby shops", error: error.message });
   }
 };
 
@@ -251,7 +273,9 @@ export const getShopById = async (req, res) => {
 
     res.json(shop);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch shop", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch shop", error: error.message });
   }
 };
 
@@ -273,7 +297,9 @@ export const claimShop = async (req, res) => {
     if (req.file) {
       try {
         const result = await cloudinary.uploader.upload(
-          `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+          `data:${req.file.mimetype};base64,${req.file.buffer.toString(
+            "base64"
+          )}`,
           {
             folder: "veloclique/shop-claims",
             resource_type: "auto",
@@ -324,9 +350,18 @@ export const getMyShopProfile = async (req, res) => {
   try {
     const userId = req.user._id;
     console.log("!!! CAPTURED USER ID !!!:", userId);
-    console.log("getMyShopProfile: req.user", { _id: req.user._id, role: req.user.role, shopId: req.user.shopId });
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
-    console.log("Found shop for result:", shop ? { id: shop._id, name: shop.name } : "none");
+    console.log("getMyShopProfile: req.user", {
+      _id: req.user._id,
+      role: req.user.role,
+      shopId: req.user.shopId,
+    });
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
+    console.log(
+      "Found shop for result:",
+      shop ? { id: shop._id, name: shop.name } : "none"
+    );
 
     res.json({
       success: true,
@@ -406,14 +441,15 @@ export const uploadShopImage = async (req, res) => {
   }
 };
 
-
 /**
  * Get listing health/completeness
  */
 export const getListingHealth = async (req, res) => {
   try {
     const userId = req.user._id;
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
 
     if (!shop) {
       return res.json({ success: true, completeness: 0, checks: {} });
@@ -422,10 +458,13 @@ export const getListingHealth = async (req, res) => {
     const checks = {
       shopName: !!(shop.name && shop.city && shop.state),
       contactInfo: !!(shop.phone || shop.email || shop.website),
-      operatingHours: !!(shop.hours || (shop.hoursByDay && Object.values(shop.hoursByDay).some(h => h))),
+      operatingHours: !!(
+        shop.hours ||
+        (shop.hoursByDay && Object.values(shop.hoursByDay).some((h) => h))
+      ),
       shopDescription: !!shop.description,
       photos: !!shop.imageUrl,
-      reviews: shop.reviewsCount > 0
+      reviews: shop.reviewsCount > 0,
     };
 
     const totalChecks = 6;
@@ -435,9 +474,8 @@ export const getListingHealth = async (req, res) => {
     res.json({
       success: true,
       completeness,
-      checks
+      checks,
     });
-
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -445,7 +483,6 @@ export const getListingHealth = async (req, res) => {
     });
   }
 };
-
 
 /**
  * Request email change OTP
@@ -456,7 +493,9 @@ export const requestEmailChange = async (req, res) => {
     const { newEmail } = req.body;
 
     if (!newEmail) {
-      return res.status(400).json({ success: false, error: "New email is required" });
+      return res
+        .status(400)
+        .json({ success: false, error: "New email is required" });
     }
 
     const shop = await shopService.getShopByOwner(userId);
@@ -579,7 +618,7 @@ export const toggleTwoFactor = async (req, res) => {
 
     res.json({
       success: true,
-      message: `Two-step verification ${enable ? 'enabled' : 'disabled'}`,
+      message: `Two-step verification ${enable ? "enabled" : "disabled"}`,
       shop: updatedShop,
     });
   } catch (error) {
@@ -667,7 +706,9 @@ export const endAllSessions = async (req, res) => {
 export const getEmailPreferences = async (req, res) => {
   try {
     const userId = req.user._id;
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
     const preferences = await shopService.getShopEmailPreferences(shop._id);
     res.json({ success: true, preferences });
   } catch (error) {
@@ -678,8 +719,13 @@ export const getEmailPreferences = async (req, res) => {
 export const updateEmailPreferences = async (req, res) => {
   try {
     const userId = req.user._id;
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
-    const preferences = await shopService.updateShopEmailPreferences(shop._id, req.body);
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
+    const preferences = await shopService.updateShopEmailPreferences(
+      shop._id,
+      req.body
+    );
     res.json({ success: true, preferences });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -692,16 +738,23 @@ export const updatePrivacySettings = async (req, res) => {
     const userId = req.user._id;
     const { isProfilePrivate } = req.body;
 
-    if (typeof isProfilePrivate !== 'boolean') {
-      return res.status(400).json({ success: false, error: 'isProfilePrivate must be a boolean' });
+    if (typeof isProfilePrivate !== "boolean") {
+      return res
+        .status(400)
+        .json({ success: false, error: "isProfilePrivate must be a boolean" });
     }
 
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
-    const updatedShop = await shopService.updateShopPrivacy(shop._id, isProfilePrivate);
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
+    const updatedShop = await shopService.updateShopPrivacy(
+      shop._id,
+      isProfilePrivate
+    );
 
     res.json({
       success: true,
-      message: `Shop profile is now ${isProfilePrivate ? 'private' : 'public'}`,
+      message: `Shop profile is now ${isProfilePrivate ? "private" : "public"}`,
       shop: updatedShop,
     });
   } catch (error) {
@@ -713,12 +766,14 @@ export const updatePrivacySettings = async (req, res) => {
 export const requestDataExport = async (req, res) => {
   try {
     const userId = req.user._id;
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
     const exportData = await shopService.requestShopDataExport(shop._id);
 
     res.json({
       success: true,
-      message: 'Data export prepared successfully',
+      message: "Data export prepared successfully",
       data: exportData,
     });
   } catch (error) {
@@ -730,11 +785,15 @@ export const requestDataExport = async (req, res) => {
 export const requestShopDeletion = async (req, res) => {
   try {
     const userId = req.user._id;
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
-    const { otp, email, shopName } = await shopService.requestShopDelete(shop._id);
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
+    const { otp, email, shopName } = await shopService.requestShopDelete(
+      shop._id
+    );
 
     // Send OTP via email
-    const { sendShopDeletionOTP } = await import('../services/emailService.js');
+    const { sendShopDeletionOTP } = await import("../services/emailService.js");
     await sendShopDeletionOTP(email, otp, shopName);
 
     res.json({
@@ -753,15 +812,17 @@ export const verifyShopDeletion = async (req, res) => {
     const { otp } = req.body;
 
     if (!otp) {
-      return res.status(400).json({ success: false, error: 'OTP is required' });
+      return res.status(400).json({ success: false, error: "OTP is required" });
     }
 
-    const shop = await shopService.getShopByOwner(new mongoose.Types.ObjectId(userId));
+    const shop = await shopService.getShopByOwner(
+      new mongoose.Types.ObjectId(userId)
+    );
     const result = await shopService.verifyShopDelete(shop._id, otp);
 
     res.json({
       success: true,
-      message: 'Shop deleted successfully',
+      message: "Shop deleted successfully",
       ...result,
     });
   } catch (error) {
