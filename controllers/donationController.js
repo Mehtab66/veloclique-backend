@@ -78,8 +78,8 @@ export const createCheckoutSession = async (req, res) => {
     const finalShowOnNameWall = user
       ? true
       : anonymousInfo?.name
-      ? true
-      : false;
+        ? true
+        : false;
 
     console.log(`📋 Donation Summary:
       Amount: $${amount}
@@ -184,12 +184,10 @@ export const createCheckoutSession = async (req, res) => {
         },
       ],
       mode: frequency === "monthly" ? "subscription" : "payment",
-      success_url: `${
-        process.env.FRONTEND_URL || "https://veloclique.com"
-      }/donation-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${
-        process.env.FRONTEND_URL || "https://veloclique.com"
-      }/donation-canceled`,
+      success_url: `${process.env.FRONTEND_URL || "https://veloclique.com"
+        }/donation-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_URL || "https://veloclique.com"
+        }/donation-canceled`,
       allow_promotion_codes: true,
       metadata: metadata,
       customer_update: {
@@ -205,9 +203,9 @@ export const createCheckoutSession = async (req, res) => {
       anonymousDonor: user
         ? null
         : {
-            name: anonymousInfo?.name || null,
-            email: anonymousInfo?.email || null,
-          },
+          name: anonymousInfo?.name || null,
+          email: anonymousInfo?.email || null,
+        },
       amount,
       currency: "USD",
       tier,
@@ -975,7 +973,7 @@ export const getDonationBillingPortal = async (req, res) => {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.FRONTEND_URL}/dashboard`,
+      return_url: `${process.env.FRONTEND_URL}/client/dashboard`,
     });
 
     res.json({

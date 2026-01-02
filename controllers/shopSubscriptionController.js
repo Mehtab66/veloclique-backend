@@ -354,7 +354,7 @@ export const getBillingPortal = async (req, res) => {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.FRONTEND_URL}/dashboard/shop`,
+      return_url: `${process.env.FRONTEND_URL}/shop/dashboard`,
     });
 
     res.json({
