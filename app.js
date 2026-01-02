@@ -100,7 +100,7 @@ let sessionStore;
 try {
   // Try to create MongoStore with proper error handling
   console.log("Attempting to configure MongoStore...");
-  console.log("MONGODB_URI available:", !!process.env.MONGODB_URI);
+  console.log("MONGODB_URI available:", !!process.env.MONGO_URI);
 
   // For connect-mongo v6+
   const { MongoStore } = await import("connect-mongo");
