@@ -114,8 +114,7 @@ function onListening() {
   // Log session store info
   const sessionStore = app.get("sessionStore");
   console.log(
-    `💾 Session Store: ${
-      sessionStore ? sessionStore.constructor.name : "Unknown"
+    `💾 Session Store: ${sessionStore ? sessionStore.constructor.name : "Unknown"
     }`
   );
 
@@ -125,3 +124,53 @@ function onListening() {
     `🧠 Initial Memory - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
   );
 }
+
+// ====================================================
+// CRITICAL: Railway Keep-Alive Mechanism
+// ====================================================
+
+// Prevent the Node.js event loop from exiting
+const keepAliveInterval = setInterval(() => {
+  // Empty interval keeps Node.js event loop active
+  // Log once per hour to confirm process is alive
+  const now = new Date();
+  if (now.getMinutes() === 0 && process.env.NODE_ENV === "production") {
+    console.log(`🫀 Keep-alive: Server running for ${Math.round(process.uptime() / 3600)} hours`);
+  }
+}, 60 * 60 * 1000); // Every hour
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM received: performing graceful shutdown');
+  clearInterval(keepAliveInterval);
+
+  // Close server gracefully
+  server.close(() => {
+    console.log('✅ HTTP server closed');
+    process.exit(0);
+  });
+
+  // Force shutdown after 10 seconds if graceful fails
+  setTimeout(() => {
+    console.log('⚠️  Forcing shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT received: shutting down');
+  clearInterval(keepAliveInterval);
+  server.close(() => {
+    process.exit(0);
+  });
+});
+
+// Handle uncaught errors
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  // Don't exit immediately - let Railway handle it
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});

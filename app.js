@@ -6,7 +6,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
-import MongoStore from "connect-mongo"; // Direct import
+import MongoStore from "connect-mongo";
 import cors from "cors";
 import bodyParser from "body-parser";
 import passport from "./config/passport.js";
@@ -56,10 +56,6 @@ app.post(
   (req, res, next) => {
     req.rawBody = req.body.toString();
     console.log("Webhook middleware: rawBody length =", req.rawBody.length);
-    console.log(
-      "Webhook middleware: First 100 chars =",
-      req.rawBody.substring(0, 100)
-    );
     next();
   },
   handleWebhook
@@ -91,7 +87,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// ✅ CORRECT Session Configuration according to documentation
+// ✅ Session Store Configuration
 let sessionStore;
 
 try {
@@ -104,7 +100,6 @@ try {
     throw new Error("No MongoDB URI found in environment variables");
   }
 
-  // According to documentation: store: MongoStore.create(options)
   sessionStore = MongoStore.create({
     mongoUrl: mongoUri,
     collectionName: "sessions",
@@ -122,24 +117,16 @@ try {
   console.error("❌ Failed to configure MongoStore:", error.message);
   console.warn("⚠️  Falling back to MemoryStore");
 
-  // MemoryStore as fallback
   sessionStore = new session.MemoryStore();
 
-  // Aggressive memory leak mitigation for Railway
   if (process.env.NODE_ENV === "production") {
-    console.warn("⚠️  Adding aggressive MemoryStore cleanup for Railway");
+    console.warn("⚠️  Adding MemoryStore cleanup");
 
-    // Clear MemoryStore every 5 minutes
     setInterval(() => {
-      console.log("🔄 Clearing MemoryStore to prevent memory leak");
       sessionStore.clear((err) => {
-        if (err) {
-          console.error("Error clearing MemoryStore:", err);
-        } else {
-          console.log("✅ MemoryStore cleared successfully");
-        }
+        if (err) console.error("Error clearing MemoryStore:", err);
       });
-    }, 5 * 60 * 1000); // Every 5 minutes
+    }, 5 * 60 * 1000);
   }
 }
 
@@ -155,7 +142,7 @@ const sessionConfig = {
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   },
-  name: "veloclique.sid", // Explicit session cookie name
+  name: "veloclique.sid",
 };
 
 // Apply session middleware
@@ -181,7 +168,7 @@ app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ Health check endpoint
+// ✅ Health check endpoint (CRITICAL for Railway)
 app.get("/health", (req, res) => {
   const memoryUsage = process.memoryUsage();
   const healthStatus = {
@@ -200,18 +187,10 @@ app.get("/health", (req, res) => {
   res.status(200).json(healthStatus);
 });
 
-// Simple memory monitoring
-if (process.env.NODE_ENV === "production") {
-  setInterval(() => {
-    const memoryUsage = process.memoryUsage();
-    const usedMB = memoryUsage.heapUsed / 1024 / 1024;
-    console.log(`📊 Memory - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB, Heap: ${Math.round(usedMB)}MB`);
-
-    if (usedMB > 500) {
-      console.warn(`⚠️  High memory usage: ${Math.round(usedMB)}MB`);
-    }
-  }, 60000); // Log every minute
-}
+// ✅ Liveness probe for Railway (simple version)
+app.get("/live", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // Root endpoint
 app.get("/", (req, res) => {
@@ -219,23 +198,12 @@ app.get("/", (req, res) => {
     message: "Veloclique API",
     version: "1.0.0",
     health: "/health",
+    live: "/live",
     sessionStore: sessionStore.constructor.name,
   });
 });
 
-// Graceful shutdown for Railway
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received. Performing graceful shutdown...");
-  process.exit(0);
-});
-
-process.on("SIGINT", () => {
-  console.log("SIGINT received. Shutting down...");
-  process.exit(0);
-});
-
 export default app;
-
 
 
 // import dotenv from "dotenv";
