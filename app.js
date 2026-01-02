@@ -6,10 +6,9 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo"; // Direct import
 import cors from "cors";
 import bodyParser from "body-parser";
-import MongoStore from "connect-mongo";
-
 import passport from "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import locationRoutes from "./routes/LocationRoutes.js";
@@ -26,72 +25,144 @@ import contentRoutes from "./routes/contentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import userDonationRoutes from "./routes/userDonationRoutes.js";
 
+// Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
 import { handleUserDonationWebhook } from "./controllers/userDonationController.js";
 
+// Initialize Express app
 const app = express();
 
-// DB
-await connectDB();
+// Connect to MongoDB
+connectDB();
 
-// Logging
+// Basic middleware that runs for all routes
 app.use(logger("dev"));
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN?.split(",") || [
+      "http://localhost:5173",
+      "https://www.veloclique.com",
+      "https://veloclique.com",
+    ],
+    credentials: true,
+  })
+);
 
-// CORS
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN?.split(",") || [
-    "http://localhost:5173",
-    "https://veloclique.com",
-    "https://www.veloclique.com",
-  ],
-  credentials: true,
-}));
+// --- WEBHOOK ROUTE with raw body parser ---
+app.post(
+  "/donation/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    console.log("Webhook middleware: rawBody length =", req.rawBody.length);
+    console.log(
+      "Webhook middleware: First 100 chars =",
+      req.rawBody.substring(0, 100)
+    );
+    next();
+  },
+  handleWebhook
+);
 
-// Webhooks
-app.post("/donation/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
-  req.rawBody = req.body.toString();
-  next();
-}, handleWebhook);
+app.post(
+  "/shop-subscriptions/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    next();
+  },
+  handleShopWebhook
+);
 
-app.post("/shop-subscriptions/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
-  req.rawBody = req.body.toString();
-  next();
-}, handleShopWebhook);
+app.post(
+  "/user-donation/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    next();
+  },
+  handleUserDonationWebhook
+);
 
-app.post("/user-donation/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
-  req.rawBody = req.body.toString();
-  next();
-}, handleUserDonationWebhook);
-
-// Parsers
+// --- AFTER webhook route, add JSON parser for all other routes ---
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// Sessions
-const sessionStore = MongoStore.create({
-  mongoUrl: process.env.MONGO_URI,
-  collectionName: "sessions",
-  ttl: 14 * 24 * 60 * 60,
-  autoRemove: "native",
-  crypto: { secret: process.env.SESSION_SECRET },
-});
+// ✅ CORRECT Session Configuration according to documentation
+let sessionStore;
 
-app.use(session({
-  name: "veloclique.sid",
-  secret: process.env.SESSION_SECRET,
+try {
+  console.log("Attempting to configure MongoStore...");
+
+  const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+  console.log("MongoDB URI available:", !!mongoUri);
+
+  if (!mongoUri) {
+    throw new Error("No MongoDB URI found in environment variables");
+  }
+
+  // According to documentation: store: MongoStore.create(options)
+  sessionStore = MongoStore.create({
+    mongoUrl: mongoUri,
+    collectionName: "sessions",
+    ttl: 14 * 24 * 60 * 60, // 14 days
+    autoRemove: "native",
+    crypto: {
+      secret: process.env.SESSION_SECRET || "fallback-secret-for-crypto",
+    },
+    touchAfter: 24 * 3600, // Lazy session update - 24 hours
+  });
+
+  console.log("✅ MongoStore configured successfully");
+
+} catch (error) {
+  console.error("❌ Failed to configure MongoStore:", error.message);
+  console.warn("⚠️  Falling back to MemoryStore");
+
+  // MemoryStore as fallback
+  sessionStore = new session.MemoryStore();
+
+  // Aggressive memory leak mitigation for Railway
+  if (process.env.NODE_ENV === "production") {
+    console.warn("⚠️  Adding aggressive MemoryStore cleanup for Railway");
+
+    // Clear MemoryStore every 5 minutes
+    setInterval(() => {
+      console.log("🔄 Clearing MemoryStore to prevent memory leak");
+      sessionStore.clear((err) => {
+        if (err) {
+          console.error("Error clearing MemoryStore:", err);
+        } else {
+          console.log("✅ MemoryStore cleared successfully");
+        }
+      });
+    }, 5 * 60 * 1000); // Every 5 minutes
+  }
+}
+
+// ✅ Session Configuration
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET || "secret123",
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
   cookie: {
     secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
+    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   },
-}));
+  name: "veloclique.sid", // Explicit session cookie name
+};
+
+// Apply session middleware
+app.use(session(sessionConfig));
+
+// Store reference to session store for health checks
+app.set("sessionStore", sessionStore);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -110,11 +181,60 @@ app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 
-// Health
-app.get("/health", (_, res) => res.json({ status: "ok" }));
+// ✅ Health check endpoint
+app.get("/health", (req, res) => {
+  const memoryUsage = process.memoryUsage();
+  const healthStatus = {
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    sessionStore: sessionStore.constructor.name,
+    memory: {
+      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+      heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+    },
+    mongoConnected: sessionStore.constructor.name !== "MemoryStore",
+  };
+
+  res.status(200).json(healthStatus);
+});
+
+// Simple memory monitoring
+if (process.env.NODE_ENV === "production") {
+  setInterval(() => {
+    const memoryUsage = process.memoryUsage();
+    const usedMB = memoryUsage.heapUsed / 1024 / 1024;
+    console.log(`📊 Memory - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB, Heap: ${Math.round(usedMB)}MB`);
+
+    if (usedMB > 500) {
+      console.warn(`⚠️  High memory usage: ${Math.round(usedMB)}MB`);
+    }
+  }, 60000); // Log every minute
+}
+
+// Root endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Veloclique API",
+    version: "1.0.0",
+    health: "/health",
+    sessionStore: sessionStore.constructor.name,
+  });
+});
+
+// Graceful shutdown for Railway
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received. Performing graceful shutdown...");
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("SIGINT received. Shutting down...");
+  process.exit(0);
+});
 
 export default app;
-
 
 
 
