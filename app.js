@@ -22,10 +22,12 @@ import donationRoutes from "./routes/donationRoutes.js";
 import shopSubscriptionRoutes from "./routes/shopSubscription.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import userDonationRoutes from "./routes/userDonationRoutes.js";
 
 // Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
+import { handleUserDonationWebhook } from "./controllers/userDonationController.js";
 
 
 // Initialize Express app
@@ -74,6 +76,16 @@ app.post(
     next();
   },
   handleShopWebhook // New shop subscription webhook handler
+);
+
+app.post(
+  "/user-donation/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res, next) => {
+    req.rawBody = req.body.toString();
+    next();
+  },
+  handleUserDonationWebhook
 );
 
 // --- AFTER webhook route, add JSON parser for all other routes ---
@@ -187,6 +199,7 @@ app.use("/gearpicks", gearpicks);
 app.use("/routes", routeRoutes);
 app.use("/donation", donationRoutes);
 app.use("/shop-subscriptions", shopSubscriptionRoutes);
+app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 
