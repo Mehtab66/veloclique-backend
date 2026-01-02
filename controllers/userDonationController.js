@@ -56,8 +56,8 @@ export const createDonationSession = async (req, res) => {
                 },
             ],
             mode: "payment",
-            success_url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/donation-success?session_id={CHECKOUT_SESSION_ID}&type=custom`,
-            cancel_url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/donation-canceled`,
+            success_url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/user-donation-success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/user-donation-failure`,
             metadata: {
                 donationType: "custom_amount",
                 userId: userId ? userId.toString() : "anonymous",
@@ -138,4 +138,54 @@ export const handleUserDonationWebhook = async (req, res) => {
     }
 
     res.json({ received: true });
+};
+
+/**
+ * Verify custom donation success after redirect
+ */
+export const verifyDonationSuccess = async (req, res) => {
+    try {
+        const { session_id } = req.query;
+
+        if (!session_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Session ID is required",
+            });
+        }
+
+        // Verify session with Stripe
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+
+        if (session.payment_status === "paid") {
+            // Find the user donation record
+            const donation = await UserDonation.findOne({
+                stripeSessionId: session_id,
+            });
+
+            if (donation) {
+                return res.json({
+                    success: true,
+                    data: {
+                        amount: donation.amount,
+                        status: donation.status,
+                        createdAt: donation.createdAt,
+                        donationType: "custom",
+                    },
+                });
+            }
+        }
+
+        res.json({
+            success: false,
+            message: "Payment not completed or record not found",
+        });
+    } catch (error) {
+        console.error("Error verifying custom donation:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to verify donation",
+            error: error.message,
+        });
+    }
 };
