@@ -8,6 +8,8 @@ import logger from "morgan";
 import session from "express-session";
 import cors from "cors";
 import bodyParser from "body-parser";
+import MongoStore from "connect-mongo";
+
 import passport from "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import locationRoutes from "./routes/LocationRoutes.js";
@@ -24,172 +26,89 @@ import contentRoutes from "./routes/contentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import userDonationRoutes from "./routes/userDonationRoutes.js";
 
-// Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
 import { handleShopWebhook } from "./controllers/shopSubscriptionController.js";
 import { handleUserDonationWebhook } from "./controllers/userDonationController.js";
 
-
-// Initialize Express app
 const app = express();
 
+// Connect DB
+await connectDB();
 
-// Connect to MongoDB
-connectDB();
-
-// Basic middleware that runs for all routes
+// Middleware
 app.use(logger("dev"));
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN?.split(",") || [
-      "http://localhost:5173",
-      "https://www.veloclique.com",
-      "https://veloclique.com",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN?.split(",") || [
+    "http://localhost:5173",
+    "https://veloclique.com",
+    "https://www.veloclique.com",
+  ],
+  credentials: true,
+}));
 
-// --- WEBHOOK ROUTE with raw body parser ---
-app.post(
-  "/donation/webhook",
-  // Use body-parser.raw() middleware for this specific route only
-  bodyParser.raw({ type: "application/json" }),
-  (req, res, next) => {
-    // Store the raw body in req.rawBody for Stripe verification
-    req.rawBody = req.body.toString();
-    console.log("Webhook middleware: rawBody length =", req.rawBody.length);
-    console.log(
-      "Webhook middleware: First 100 chars =",
-      req.rawBody.substring(0, 100)
-    );
-    next();
-  },
-  handleWebhook
-);
+// Webhooks (raw body)
+app.post("/donation/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
+  req.rawBody = req.body.toString();
+  next();
+}, handleWebhook);
 
-app.post(
-  "/shop-subscriptions/webhook",
-  bodyParser.raw({ type: "application/json" }),
-  (req, res, next) => {
-    req.rawBody = req.body.toString();
-    next();
-  },
-  handleShopWebhook // New shop subscription webhook handler
-);
+app.post("/shop-subscriptions/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
+  req.rawBody = req.body.toString();
+  next();
+}, handleShopWebhook);
 
-app.post(
-  "/user-donation/webhook",
-  bodyParser.raw({ type: "application/json" }),
-  (req, res, next) => {
-    req.rawBody = req.body.toString();
-    next();
-  },
-  handleUserDonationWebhook
-);
+app.post("/user-donation/webhook", bodyParser.raw({ type: "application/json" }), (req, _, next) => {
+  req.rawBody = req.body.toString();
+  next();
+}, handleUserDonationWebhook);
 
-// --- AFTER webhook route, add JSON parser for all other routes ---
+// Normal parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// ✅ FIXED: Session Store Configuration
+// ================= SESSION =================
+
 let sessionStore;
 
 try {
-  // Try to create MongoStore with proper error handling
   console.log("Attempting to configure MongoStore...");
-  console.log("MONGODB_URI available:", !!process.env.MONGO_URI);
-
-  // For connect-mongo v6+
-  const { MongoStore } = await import("connect-mongo");
+  console.log("MONGO_URI available:", !!process.env.MONGO_URI);
 
   sessionStore = MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     collectionName: "sessions",
-    ttl: 14 * 24 * 60 * 60, // 14 days
+    ttl: 14 * 24 * 60 * 60,
     autoRemove: "native",
-    crypto: {
-      secret: process.env.SESSION_SECRET || "fallback-secret-for-crypto",
-    },
+    crypto: { secret: process.env.SESSION_SECRET },
   });
 
-  console.log("✅ MongoStore configured successfully");
-
-  // Test the connection
-  sessionStore.client
-    .then((client) => {
-      console.log("✅ MongoStore connected to MongoDB");
-    })
-    .catch((err) => {
-      console.error("❌ MongoStore connection error:", err.message);
-      throw err; // Re-throw to trigger fallback
-    });
-} catch (error) {
-  console.error("❌ Failed to configure MongoStore:", error.message);
-  console.warn(
-    "⚠️  Falling back to MemoryStore - THIS WILL CAUSE MEMORY LEAKS IN PRODUCTION"
-  );
-
-  // MemoryStore as fallback
-  sessionStore = new session.MemoryStore();
-
-  // Aggressive memory leak mitigation for Railway
-  if (process.env.NODE_ENV === "production") {
-    console.warn("⚠️  Adding aggressive MemoryStore cleanup for Railway");
-
-    // Clear MemoryStore every 15 minutes
-    setInterval(() => {
-      console.log("🔄 Clearing MemoryStore to prevent memory leak");
-      sessionStore.clear((err) => {
-        if (err) {
-          console.error("Error clearing MemoryStore:", err);
-        } else {
-          console.log("✅ MemoryStore cleared successfully");
-        }
-      });
-    }, 15 * 60 * 1000); // Every 15 minutes
-
-    // Also clear on every 1000th request to keep memory usage low
-    let requestCount = 0;
-    app.use((req, res, next) => {
-      requestCount++;
-      if (requestCount >= 1000) {
-        sessionStore.clear(() => { });
-        requestCount = 0;
-        console.log("🔄 MemoryStore cleared after 1000 requests");
-      }
-      next();
-    });
-  }
+  console.log("✅ MongoStore configured");
+} catch (err) {
+  console.error("❌ Session store init failed:", err);
+  process.exit(1);
 }
 
-// ✅ Session Configuration
-const sessionConfig = {
-  secret: process.env.SESSION_SECRET || "secret123",
+app.use(session({
+  name: "veloclique.sid",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
   cookie: {
     secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
   },
-  name: "veloclique.sid", // Explicit session cookie name
-};
-
-// Apply session middleware
-app.use(session(sessionConfig));
-
-// Store reference to session store for health checks
-app.set("sessionStore", sessionStore);
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
+// ================= ROUTES =================
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRoutes);
@@ -203,68 +122,13 @@ app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ IMPROVED Health check with memory monitoring
-app.get("/health", (req, res) => {
-  const memoryUsage = process.memoryUsage();
-  const usedMB = memoryUsage.heapUsed / 1024 / 1024;
-  const totalMB = memoryUsage.heapTotal / 1024 / 1024;
+// Health
+app.get("/health", (_, res) => res.json({ status: "ok" }));
 
-  const healthStatus = {
-    status: usedMB > 800 ? "warning" : "healthy", // Warning if > 800MB
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    sessionStore: sessionStore.constructor.name,
-    memory: {
-      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
-      heapTotal: `${Math.round(totalMB)}MB`,
-      heapUsed: `${Math.round(usedMB)}MB`,
-      external: `${Math.round(memoryUsage.external / 1024 / 1024)}MB`,
-    },
-    warnings:
-      sessionStore.constructor.name === "MemoryStore"
-        ? ["MemoryStore in use - may cause SIGTERM on Railway"]
-        : [],
-    mongoConnected: sessionStore.constructor.name !== "MemoryStore",
-  };
+// ================= START =================
 
-  res.status(200).json(healthStatus);
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-// Simple memory monitoring middleware
-app.use((req, res, next) => {
-  const memoryUsage = process.memoryUsage();
-  const usedMB = memoryUsage.heapUsed / 1024 / 1024;
-
-  // Log warning if memory usage is high
-  if (usedMB > 700) {
-    console.warn(`⚠️  High memory usage detected: ${Math.round(usedMB)}MB`);
-  }
-
-  next();
-});
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Veloclique API",
-    version: "1.0.0",
-    health: "/health",
-    docs: "https://docs.veloclique.com",
-    sessionStore: sessionStore.constructor.name,
-    memory: `${Math.round(
-      process.memoryUsage().heapUsed / 1024 / 1024
-    )}MB used`,
-  });
-});
-
-// Global error handler for memory issues
-process.on("warning", (warning) => {
-  console.warn("Node.js Warning:", warning.name);
-  console.warn("Message:", warning.message);
-  console.warn("Stack:", warning.stack);
-
-  if (warning.name === "MaxListenersExceededWarning") {
-    console.error("⚠️  MaxListenersExceeded - Possible memory leak!");
-  }
-});
-
-export default app;
