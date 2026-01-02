@@ -10,6 +10,7 @@ const JWT_SECRET =
  * @returns {string} JWT token
  */
 export const generateToken = (user) => {
+  console.log("Generating token for user:", user.email);
   const payload = {
     id: user._id,
     email: user.email,
