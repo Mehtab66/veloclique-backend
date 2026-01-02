@@ -1,6 +1,7 @@
 import { stripe, STRIPE_PRICES } from "../config/stripe.js";
 import Donation from "../models/donation.model.js";
 import User from "../models/user.model.js";
+import UserDonation from "../models/userDonation.model.js";
 import jwt from "jsonwebtoken"; // IMPORTANT: Add this line!
 import dotenv from "dotenv";
 dotenv.config();
@@ -993,32 +994,19 @@ export const getDonationBillingPortal = async (req, res) => {
 export const getUserDonationStats = async (req, res) => {
   try {
     const userId = req.user._id;
-
     const objectUserId = new mongoose.Types.ObjectId(userId);
 
-    // Get total lifetime donations
-    const lifetimeDonations = await Donation.aggregate([
-      {
-        $match: {
-          donorId: objectUserId,
-          status: "completed",
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$amount" },
-          count: { $sum: 1 },
-        },
-      },
+    // 1. Get stats from regular Donation model
+    const lifetimeRegular = await Donation.aggregate([
+      { $match: { donorId: objectUserId, status: "completed" } },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
 
-    // Get current month donations
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
 
-    const monthlyDonations = await Donation.aggregate([
+    const monthlyRegular = await Donation.aggregate([
       {
         $match: {
           donorId: objectUserId,
@@ -1026,25 +1014,58 @@ export const getUserDonationStats = async (req, res) => {
           createdAt: { $gte: startOfMonth },
         },
       },
-      {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$amount" },
-          count: { $sum: 1 },
-        },
-      },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
 
-    // Get user's active badge
+    // 2. Get stats from UserDonation (Custom) model
+    const lifetimeCustom = await UserDonation.aggregate([
+      { $match: { userId: objectUserId, status: "completed" } },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]);
+
+    const monthlyCustom = await UserDonation.aggregate([
+      {
+        $match: {
+          userId: objectUserId,
+          status: "completed",
+          createdAt: { $gte: startOfMonth },
+        },
+      },
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]);
+
+    // 3. Combine stats
+    const totalLifetime = (lifetimeRegular[0]?.total || 0) + (lifetimeCustom[0]?.total || 0);
+    const totalMonthly = (monthlyRegular[0]?.total || 0) + (monthlyCustom[0]?.total || 0);
+
+    // 4. Determine Tier Info
+    let currentTier = "Peloton";
+    let nextTier = "Breakaway";
+    let amountToNextTier = 26 - totalMonthly;
+
+    if (totalMonthly >= 51) {
+      currentTier = "Yellow Jersey";
+      nextTier = null;
+      amountToNextTier = 0;
+    } else if (totalMonthly >= 26) {
+      currentTier = "Breakaway";
+      nextTier = "Yellow Jersey";
+      amountToNextTier = 51 - totalMonthly;
+    }
+
+    // 5. Get user's active badge (optional, for verification)
     const user = await User.findById(userId).select("badges");
     const activeBadge = user?.badges?.find((badge) => badge.isActive);
 
     res.json({
       success: true,
       data: {
-        lifetime: lifetimeDonations[0]?.totalAmount || 0,
-        monthly: monthlyDonations[0]?.totalAmount || 0,
-        badge: activeBadge?.tier || "Peloton",
+        lifetime: totalLifetime,
+        monthly: totalMonthly,
+        currentTier,
+        nextTier,
+        amountToNextTier,
+        activeBadge: activeBadge?.tier || null,
       },
     });
   } catch (error) {
