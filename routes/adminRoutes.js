@@ -1,5 +1,5 @@
 import express from "express";
-import { getPendingApprovals, approveItem, denyItem, getAdminStats } from "../controllers/adminController.js";
+import { getPendingApprovals, approveItem, denyItem, getAdminStats, suspendShop } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -17,5 +17,6 @@ router.get("/stats", authenticate, isAdmin, getAdminStats);
 router.get("/pending-approvals", authenticate, isAdmin, getPendingApprovals);
 router.put("/approve/:type/:id", authenticate, isAdmin, approveItem);
 router.put("/deny/:type/:id", authenticate, isAdmin, denyItem);
+router.put("/suspend-shop/:id", authenticate, isAdmin, suspendShop);
 
 export default router;

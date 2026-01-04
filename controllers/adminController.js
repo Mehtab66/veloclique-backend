@@ -191,7 +191,7 @@ export const approveItem = async (req, res) => {
 
       // Get User and validate
       const user = await User.findById(claim.userId);
-      
+
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -269,7 +269,7 @@ export const approveItem = async (req, res) => {
           hoursByDay: {},
           socialMedia: {},
         };
-        
+
         targetShop = await Shop.create(newShopData);
       }
 
@@ -342,5 +342,41 @@ export const denyItem = async (req, res) => {
     res.json({ success: true, message: "Item denied", data: updated });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const suspendShop = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find shop and update subscription status to 'suspended'
+    const shop = await Shop.findByIdAndUpdate(
+      id,
+      {
+        "subscription.status": "suspended"
+      },
+      { new: true }
+    );
+
+    if (!shop) {
+      return res.status(404).json({
+        success: false,
+        message: "Shop not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Shop suspended successfully",
+      data: shop
+    });
+
+  } catch (error) {
+    console.error("Suspend shop error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to suspend shop",
+      error: error.message
+    });
   }
 };

@@ -398,3 +398,50 @@ export const createGearPickAsAdmin = async (req, res) => {
     });
   }
 };
+
+// @desc    Update gear pick details (Admin)
+// @route   PUT /api/gear-picks/:id/details
+// @access  Admin
+export const updateGearPickDetails = async (req, res) => {
+  try {
+    const { gearName, category, productLink, recommendation } = req.body;
+
+    if (!gearName || !category || !recommendation) {
+      return res.status(400).json({
+        success: false,
+        message: "Gear name, category, and recommendation are required",
+      });
+    }
+
+    const gearPick = await GearPick.findById(req.params.id);
+
+    if (!gearPick) {
+      return res.status(404).json({
+        success: false,
+        message: "Gear pick not found",
+      });
+    }
+
+    gearPick.gearName = gearName;
+    gearPick.category = category;
+    gearPick.productLink = productLink || "";
+    gearPick.recommendation = recommendation;
+
+    const updatedGearPick = await gearPick.save();
+
+    // Populate user info for frontend consistency
+    await updatedGearPick.populate("userId", "username email");
+
+    res.json({
+      success: true,
+      message: "Gear pick updated successfully",
+      data: updatedGearPick,
+    });
+  } catch (error) {
+    console.error("Update gear pick details error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

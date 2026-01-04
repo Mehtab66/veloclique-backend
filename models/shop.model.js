@@ -91,7 +91,7 @@ const shopSchema = new mongoose.Schema(
     subscription: {
       status: {
         type: String,
-        enum: ["inactive", "active", "past_due", "canceled", "trialing"],
+        enum: ["inactive", "active", "past_due", "canceled", "trialing", "suspended"],
         default: "inactive",
       },
       plan: {

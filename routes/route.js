@@ -7,6 +7,7 @@ import {
   uploadRouteImage,
   createRouteAsAdmin,
   updateRouteFeature,
+  updateRouteDetails
 } from "../controllers/routeController.js";
 import { upload } from "../middleware/upload.js";
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -31,5 +32,6 @@ router.put("/:id/image", upload.single("image"), uploadRouteImage);
 // Admin routes
 router.post("/admin/create", authenticate, isAdmin, upload.single("image"), createRouteAsAdmin);
 router.put("/:id/feature", authenticate, isAdmin, updateRouteFeature);
+router.put("/:id/details", authenticate, isAdmin, updateRouteDetails);
 
 export default router;

@@ -294,6 +294,7 @@ export const createRouteAsAdmin = async (req, res) => {
       success: true,
       message: "Route created successfully with approved status",
       data: route,
+
     });
   } catch (error) {
     console.error("Create route as admin error:", error);
@@ -301,5 +302,66 @@ export const createRouteAsAdmin = async (req, res) => {
       success: false,
       message: "Server error",
     });
+  }
+};
+
+/* ---------------- ADMIN: UPDATE ROUTE DETAILS ---------------- */
+// PUT /api/routes/:id/details
+export const updateRouteDetails = async (req, res) => {
+  try {
+    const {
+      title,
+      location,
+      routeLink,
+      distance,
+      difficulty,
+      description,
+      type,
+      elevationGain,
+      region,
+      highlights
+    } = req.body;
+
+    if (!title || !location || !routeLink) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, location, and route command are required",
+      });
+    }
+
+    const route = await Route.findById(req.params.id);
+
+    if (!route) {
+      return res.status(404).json({
+        success: false,
+        message: "Route not found",
+      });
+    }
+
+    // Update fields
+    route.title = title;
+    route.location = location;
+    route.routeLink = routeLink;
+    if (distance !== undefined) route.distance = distance;
+    if (difficulty !== undefined) route.difficulty = difficulty;
+    if (description !== undefined) route.description = description;
+    if (type !== undefined) route.type = type;
+    if (elevationGain !== undefined) route.elevationGain = elevationGain;
+    if (region !== undefined) route.region = region;
+    if (highlights !== undefined) route.highlights = highlights;
+
+    const updatedRoute = await route.save();
+
+    // Populate user info
+    await updatedRoute.populate("userId", "name email");
+
+    res.json({
+      success: true,
+      message: "Route details updated successfully",
+      data: updatedRoute,
+    });
+  } catch (error) {
+    console.error("Update route details error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

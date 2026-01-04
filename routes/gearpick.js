@@ -8,6 +8,7 @@ import {
   voteOnGearPick,
   uploadGearPickImage,
   createGearPickAsAdmin,
+  updateGearPickDetails,
 } from "../controllers/gearpickController.js";
 import { upload } from "../middleware/upload.js";
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -25,8 +26,8 @@ const isAdmin = (req, res, next) => {
 router.get("/", getGearPicks); // GET /api/gear-picks?category=All&sort=Most Voted&page=1&limit=20
 
 // Protected routes
-router.post("/",authenticate, submitGearPick); // POST /api/gear-picks
-router.post("/:id/vote",authenticate, voteOnGearPick); // POST /api/gear-picks/:id/vote
+router.post("/", authenticate, submitGearPick); // POST /api/gear-picks
+router.post("/:id/vote", authenticate, voteOnGearPick); // POST /api/gear-picks/:id/vote
 
 // Admin routes
 router.get("/admin/all", authenticate, isAdmin, getGearPicksForAdmin); // GET /api/gear-picks/admin/all?status=pending&category=All&page=1&limit=20
