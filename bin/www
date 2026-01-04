@@ -77,14 +77,14 @@ function onError(error) {
   switch (error.code) {
     case "EACCES":
       console.error(`❌ ${bind} requires elevated privileges`);
-      process.exit(1);
+      // Removed process.exit(1)
       break;
     case "EADDRINUSE":
       console.error(`❌ ${bind} is already in use`);
-      process.exit(1);
+      // Removed process.exit(1)
       break;
     default:
-      throw error;
+      console.error(`❌ Server error: ${error.message}`);
   }
 }
 
@@ -140,6 +140,10 @@ function gracefulShutdown(signal) {
   const SHUTDOWN_TIMEOUT = 8000; // 8 seconds (Railway gives 10s)
 
   console.log(`⏳ Starting ${signal} shutdown process...`);
+  console.log(`🕐 Received at: ${new Date().toISOString()}`);
+
+  // Clear the keep-alive interval to allow Node to exit naturally
+  clearInterval(keepAlive);
 
   // Stop accepting new connections
   server.close((err) => {
@@ -147,19 +151,20 @@ function gracefulShutdown(signal) {
 
     if (err) {
       console.error(`❌ Error closing HTTP server:`, err.message);
-      console.log(`⚠️  Force exiting after ${elapsed}ms`);
-      process.exit(1);
+      console.log(`⚠️  Forcing shutdown would happen here, but removed process.exit`);
     } else {
       console.log(`✅ HTTP server closed gracefully after ${elapsed}ms`);
       console.log(`👋 Shutdown complete`);
-      process.exit(0);
+      // Removed process.exit(0)
     }
   });
 
-  // Force shutdown after timeout
+  // Log timeout warning but don't force exit
   setTimeout(() => {
-    console.error(`⏰ Shutdown timeout after ${SHUTDOWN_TIMEOUT}ms - forcing exit`);
-    process.exit(1);
+    const dbConnected = typeof getConnectionStatus === 'function' ? getConnectionStatus() : 'unknown';
+    if (!isShuttingDown) {
+      console.error(`⏰ Shutdown timeout after ${SHUTDOWN_TIMEOUT}ms - server might still be closing handles`);
+    }
   }, SHUTDOWN_TIMEOUT);
 }
 
