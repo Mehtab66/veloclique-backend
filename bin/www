@@ -30,6 +30,9 @@ console.log(`🚀 Starting server in ${process.env.NODE_ENV || 'development'} mo
 console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`🌐 Port: ${port}`);
 
+// Track server start time
+const startTime = Date.now();
+
 /**
  * Listen on provided port, on all network interfaces.
  * CRITICAL: Must bind to 0.0.0.0 for Railway
@@ -39,6 +42,7 @@ server.listen(port, "0.0.0.0", () => {
   const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
   console.log(`✅ Server listening on ${bind} (0.0.0.0:${addr.port})`);
+  console.log(`⏱️  Server started in ${Date.now() - startTime}ms`);
 
   // Log session store info
   const sessionStore = app.get("sessionStore");
@@ -85,7 +89,18 @@ function onError(error) {
 }
 
 // ====================================================
-// Graceful Shutdown Handlers (Critical for Railway)
+// Railway Health Check Simulator (For Debugging)
+// ====================================================
+if (process.env.NODE_ENV === "production") {
+  // Simulate Railway's health check behavior
+  setTimeout(() => {
+    console.log("🔍 Simulating Railway health check...");
+    console.log("🔍 Health check would hit: GET http://localhost:" + port + "/health");
+  }, 5000);
+}
+
+// ====================================================
+// Graceful Shutdown Handlers
 // ====================================================
 
 // Track if we're already shutting down
@@ -96,8 +111,13 @@ process.on('SIGTERM', () => {
   if (isShuttingDown) return;
   isShuttingDown = true;
 
+  const uptime = process.uptime();
   console.log('🛑 SIGTERM received: performing graceful shutdown');
+  console.log(`⏱️  Server was running for ${Math.round(uptime)} seconds`);
   console.log('⏳ Graceful shutdown started...');
+
+  // Log the exact time we received SIGTERM
+  console.log(`🕐 SIGTERM received at: ${new Date().toISOString()}`);
 
   // Start graceful shutdown
   gracefulShutdown('SIGTERM');
@@ -110,18 +130,6 @@ process.on('SIGINT', () => {
 
   console.log('🛑 SIGINT received: shutting down');
   gracefulShutdown('SIGINT');
-});
-
-// Handle uncaught errors
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error.message);
-  console.error(error.stack);
-  // Don't exit immediately - let Railway handle it
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise);
-  console.error('Reason:', reason);
 });
 
 // ====================================================
@@ -138,7 +146,7 @@ function gracefulShutdown(signal) {
     const elapsed = Date.now() - shutdownStart;
 
     if (err) {
-      console.error(`❌ Error closing HTTP server:`, err);
+      console.error(`❌ Error closing HTTP server:`, err.message);
       console.log(`⚠️  Force exiting after ${elapsed}ms`);
       process.exit(1);
     } else {
@@ -155,30 +163,10 @@ function gracefulShutdown(signal) {
   }, SHUTDOWN_TIMEOUT);
 }
 
-// ====================================================
-// Simple Memory Monitoring (Less intrusive)
-// ====================================================
-if (process.env.NODE_ENV === "production") {
-  // Log memory usage every 5 minutes instead of 30 seconds
-  setInterval(() => {
-    const memoryUsage = process.memoryUsage();
-    const rssMB = Math.round(memoryUsage.rss / 1024 / 1024);
-    const heapMB = Math.round(memoryUsage.heapUsed / 1024 / 1024);
-
-    // Only log if memory is getting high
-    if (rssMB > 500) {
-      console.log(`📊 Memory Usage - RSS: ${rssMB}MB, Heap: ${heapMB}MB`);
-    }
-  }, 5 * 60 * 1000); // 5 minutes
-}
-
-// ====================================================
-// Keep Process Alive (Simple Version)
-// ====================================================
-// This is just to keep the event loop active
+// Keep the process alive
 const keepAlive = setInterval(() => {
-  // Do nothing, just keep the interval alive
-}, 60000); // 1 minute
+  // Empty - just keeps event loop alive
+}, 2147483647); // Maximum interval
 
 // Clear on shutdown
 process.on('exit', () => {
