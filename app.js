@@ -33,6 +33,9 @@ import { handleUserDonationWebhook } from "./controllers/userDonationController.
 // Initialize Express app
 const app = express();
 
+// Enable trust proxy for correct protocol detection on Railway/behind proxies
+app.set("trust proxy", 1);
+
 // Connect to MongoDB
 connectDB();
 
