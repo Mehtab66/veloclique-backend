@@ -3,6 +3,7 @@ dotenv.config();
 
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import { findOrCreateOAuthUser } from "../services/authService.js";
 
 // Function to initialize Google OAuth strategy
@@ -45,11 +46,58 @@ const initializeGoogleStrategy = () => {
   }
 };
 
-// Initialize Google strategy on module load
-initializeGoogleStrategy();
+// Function to initialize Facebook OAuth strategy
+const initializeFacebookStrategy = () => {
+  if (passport._strategies && passport._strategies.facebook) {
+    return true;
+  }
 
-// Export function to re-initialize if needed
-export { initializeGoogleStrategy };
+  if (process.env.FB_CLIENT_ID && process.env.FB_CLIENT_SECRET) {
+    try {
+      passport.use(
+        "facebook",
+        new FacebookStrategy(
+          {
+            clientID: process.env.FB_CLIENT_ID,
+            clientSecret: process.env.FB_CLIENT_SECRET,
+            callbackURL:
+              process.env.FB_CALLBACK_URL ||
+              "https://veloclique.com/auth/facebook/callback",
+            profileFields: ["id", "displayName", "emails", "name"],
+          },
+          async (accessToken, refreshToken, profile, done) => {
+            try {
+              const user = await findOrCreateOAuthUser("facebook", profile);
+              done(null, user);
+            } catch (err) {
+              done(err, null);
+            }
+          }
+        )
+      );
+      console.log("✅ Facebook OAuth strategy initialized");
+      return true;
+    } catch (error) {
+      console.error(
+        "❌ Failed to initialize Facebook OAuth strategy:",
+        error.message
+      );
+      return false;
+    }
+  } else {
+    console.warn(
+      "⚠️  Facebook OAuth not configured - FB_CLIENT_ID and FB_CLIENT_SECRET required"
+    );
+    return false;
+  }
+};
+
+// Initialize strategies on module load
+initializeGoogleStrategy();
+initializeFacebookStrategy();
+
+// Export functions to re-initialize if needed
+export { initializeGoogleStrategy, initializeFacebookStrategy };
 
 // Serialize user for session (minimal - we use JWT)
 passport.serializeUser((user, done) => {
@@ -67,24 +115,8 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // // Facebook
-// passport.use(
-//   new FacebookStrategy(
-//     {
-//       clientID: process.env.FB_CLIENT_ID,
-//       clientSecret: process.env.FB_CLIENT_SECRET,
-//       callbackURL: process.env.FB_CALLBACK_URL,
-//       profileFields: ["id", "displayName", "emails"],
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         const user = await findOrCreateOAuthUser("facebook", profile);
-//         done(null, user);
-//       } catch (err) {
-//         done(err);
-//       }
-//     }
-//   )
-// );
+// Strategies are now initialized via initializeFacebookStrategy()
+// to allow for dynamic configuration and better error handling.
 
 // // Apple
 // passport.use(
