@@ -6,7 +6,7 @@ import cloudinary from "../config/cloudinary.js";
 // @access  Private
 export const submitGearPick = async (req, res) => {
   try {
-    const { gearName, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation } = req.body;
 
     // Validate required fields
     if (!gearName || !category || !recommendation) {
@@ -18,6 +18,7 @@ export const submitGearPick = async (req, res) => {
 
     const gearPick = new GearPick({
       gearName,
+      subtitle: subtitle || "",
       category,
       productLink: productLink || "",
       recommendation,
@@ -343,7 +344,7 @@ export const uploadGearPickImage = async (req, res) => {
 // @access  Admin
 export const createGearPickAsAdmin = async (req, res) => {
   try {
-    const { gearName, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation } = req.body;
 
     // Validate required fields
     if (!gearName || !category || !recommendation) {
@@ -356,6 +357,7 @@ export const createGearPickAsAdmin = async (req, res) => {
     // Create gear pick with approved status
     const gearPickData = {
       gearName,
+      subtitle: subtitle || "",
       category,
       productLink: productLink || "",
       recommendation,
@@ -404,7 +406,7 @@ export const createGearPickAsAdmin = async (req, res) => {
 // @access  Admin
 export const updateGearPickDetails = async (req, res) => {
   try {
-    const { gearName, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation } = req.body;
 
     if (!gearName || !category || !recommendation) {
       return res.status(400).json({
@@ -423,6 +425,7 @@ export const updateGearPickDetails = async (req, res) => {
     }
 
     gearPick.gearName = gearName;
+    gearPick.subtitle = subtitle || "";
     gearPick.category = category;
     gearPick.productLink = productLink || "";
     gearPick.recommendation = recommendation;
@@ -439,6 +442,47 @@ export const updateGearPickDetails = async (req, res) => {
     });
   } catch (error) {
     console.error("Update gear pick details error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+// @desc    Delete gear pick (Admin)
+// @route   DELETE /api/gear-picks/:id
+// @access  Admin
+export const deleteGearPick = async (req, res) => {
+  try {
+    const gearPick = await GearPick.findById(req.params.id);
+
+    if (!gearPick) {
+      return res.status(404).json({
+        success: false,
+        message: "Gear pick not found",
+      });
+    }
+
+    // Delete image from Cloudinary if exists
+    if (gearPick.image?.publicId) {
+      try {
+        await cloudinary.uploader.destroy(gearPick.image.publicId);
+      } catch (cloudinaryError) {
+        console.error("Cloudinary deletion error:", cloudinaryError);
+        // Continue with database deletion even if Cloudinary fails
+      }
+    }
+
+    // Delete from database
+    await GearPick.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Gear pick deleted successfully",
+      data: { _id: req.params.id },
+    });
+  } catch (error) {
+    console.error("Delete gear pick error:", error);
     res.status(500).json({
       success: false,
       message: "Server error",

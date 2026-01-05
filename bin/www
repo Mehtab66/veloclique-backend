@@ -1,8 +1,3 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -23,36 +18,56 @@ app.set("port", port);
  */
 const server = http.createServer(app);
 
-// ====================================================
-// Railway-Specific Configuration
-// ====================================================
-console.log(`🚀 Starting server in ${process.env.NODE_ENV || 'development'} mode`);
-console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
-console.log(`🌐 Port: ${port}`);
+/**
+ * Railway-specific memory leak monitoring
+ */
+if (process.env.NODE_ENV === "production") {
+  console.log("🚀 Production mode - Enabling Railway memory monitoring");
 
-// Track server start time
-const startTime = Date.now();
+  // Monitor memory usage every 30 seconds
+  const memoryMonitor = setInterval(() => {
+    const memoryUsage = process.memoryUsage();
+    const usedMB = memoryUsage.heapUsed / 1024 / 1024;
+    const rssMB = memoryUsage.rss / 1024 / 1024;
+
+    console.log(
+      `📊 Memory - RSS: ${Math.round(rssMB)}MB, Heap: ${Math.round(usedMB)}MB`
+    );
+
+    // Emergency action if memory gets too high
+    if (rssMB > 900) {
+      console.warn(
+        "🚨 CRITICAL: Memory usage exceeds 900MB! Taking emergency action..."
+      );
+
+      // Clear session store if it's MemoryStore
+      const sessionStore = app.get("sessionStore");
+      if (sessionStore && sessionStore.clear) {
+        console.log("🔄 Emergency clearing of session store");
+        sessionStore.clear((err) => {
+          if (err) console.error("Emergency clear error:", err);
+        });
+      }
+
+      // Suggest restart
+      console.warn(
+        "💡 Consider increasing memory limit or fixing session store"
+      );
+    }
+  }, 30000); // Every 30 seconds
+
+  // Clean up on server close
+  server.on("close", () => {
+    clearInterval(memoryMonitor);
+  });
+}
 
 /**
- * Listen on provided port, on all network interfaces.
- * CRITICAL: Must bind to 0.0.0.0 for Railway
+ * Listen on provided port.
  */
-server.listen(port, "0.0.0.0", () => {
-  const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
-  console.log(`✅ Server listening on ${bind} (0.0.0.0:${addr.port})`);
-  console.log(`⏱️  Server started in ${Date.now() - startTime}ms`);
-
-  // Log session store info
-  const sessionStore = app.get("sessionStore");
-  console.log(
-    `💾 Session Store: ${sessionStore ? sessionStore.constructor.name : "Unknown"
-    }`
-  );
-});
-
+server.listen(port);
 server.on("error", onError);
+server.on("listening", onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -65,115 +80,97 @@ function normalizePort(val) {
 }
 
 /**
- * Error handler for server errors
+ * Error handler
  */
 function onError(error) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
+  if (error.syscall !== "listen") throw error;
 
   const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   switch (error.code) {
     case "EACCES":
-      console.error(`❌ ${bind} requires elevated privileges`);
-      // Removed process.exit(1)
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
       break;
     case "EADDRINUSE":
-      console.error(`❌ ${bind} is already in use`);
-      // Removed process.exit(1)
+      console.error(bind + " is already in use");
+      process.exit(1);
       break;
     default:
-      console.error(`❌ Server error: ${error.message}`);
+      throw error;
   }
 }
 
-// ====================================================
-// Railway Health Check Simulator (For Debugging)
-// ====================================================
-if (process.env.NODE_ENV === "production") {
-  // Simulate Railway's health check behavior
-  setTimeout(() => {
-    console.log("🔍 Simulating Railway health check...");
-    console.log("🔍 Health check would hit: GET http://localhost:" + port + "/health");
-  }, 5000);
+/**
+ * Listener
+ */
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+  console.log(`🚀 Server running on port ${addr.port}`);
+  console.log(`📡 Environment: ${process.env.NODE_ENV || "development"}`);
+
+  // Log session store info
+  const sessionStore = app.get("sessionStore");
+  console.log(
+    `💾 Session Store: ${sessionStore ? sessionStore.constructor.name : "Unknown"
+    }`
+  );
+
+  // Initial memory usage
+  const memoryUsage = process.memoryUsage();
+  console.log(
+    `🧠 Initial Memory - RSS: ${Math.round(memoryUsage.rss / 1024 / 1024)}MB`
+  );
 }
 
 // ====================================================
-// Graceful Shutdown Handlers
+// CRITICAL: Railway Keep-Alive Mechanism
 // ====================================================
 
-// Track if we're already shutting down
-let isShuttingDown = false;
+// Prevent the Node.js event loop from exiting
+const keepAliveInterval = setInterval(() => {
+  // Empty interval keeps Node.js event loop active
+  // Log once per hour to confirm process is alive
+  const now = new Date();
+  if (now.getMinutes() === 0 && process.env.NODE_ENV === "production") {
+    console.log(`🫀 Keep-alive: Server running for ${Math.round(process.uptime() / 3600)} hours`);
+  }
+}, 60 * 60 * 1000); // Every hour
 
-// Handle SIGTERM (Railway sends this before stopping container)
+// Handle graceful shutdown
 process.on('SIGTERM', () => {
-  if (isShuttingDown) return;
-  isShuttingDown = true;
-
-  const uptime = process.uptime();
   console.log('🛑 SIGTERM received: performing graceful shutdown');
-  console.log(`⏱️  Server was running for ${Math.round(uptime)} seconds`);
-  console.log('⏳ Graceful shutdown started...');
+  clearInterval(keepAliveInterval);
 
-  // Log the exact time we received SIGTERM
-  console.log(`🕐 SIGTERM received at: ${new Date().toISOString()}`);
-
-  // Start graceful shutdown
-  gracefulShutdown('SIGTERM');
-});
-
-// Handle SIGINT (Ctrl+C in local development)
-process.on('SIGINT', () => {
-  if (isShuttingDown) return;
-  isShuttingDown = true;
-
-  console.log('🛑 SIGINT received: shutting down');
-  gracefulShutdown('SIGINT');
-});
-
-// ====================================================
-// Graceful Shutdown Function
-// ====================================================
-function gracefulShutdown(signal) {
-  const shutdownStart = Date.now();
-  const SHUTDOWN_TIMEOUT = 8000; // 8 seconds (Railway gives 10s)
-
-  console.log(`⏳ Starting ${signal} shutdown process...`);
-  console.log(`🕐 Received at: ${new Date().toISOString()}`);
-
-  // Clear the keep-alive interval to allow Node to exit naturally
-  clearInterval(keepAlive);
-
-  // Stop accepting new connections
-  server.close((err) => {
-    const elapsed = Date.now() - shutdownStart;
-
-    if (err) {
-      console.error(`❌ Error closing HTTP server:`, err.message);
-      console.log(`⚠️  Forcing shutdown would happen here, but removed process.exit`);
-    } else {
-      console.log(`✅ HTTP server closed gracefully after ${elapsed}ms`);
-      console.log(`👋 Shutdown complete`);
-      // Removed process.exit(0)
-    }
+  // Close server gracefully
+  server.close(() => {
+    console.log('✅ HTTP server closed');
+    process.exit(0);
   });
 
-  // Log timeout warning but don't force exit
+  // Force shutdown after 10 seconds if graceful fails
   setTimeout(() => {
-    const dbConnected = typeof getConnectionStatus === 'function' ? getConnectionStatus() : 'unknown';
-    if (!isShuttingDown) {
-      console.error(`⏰ Shutdown timeout after ${SHUTDOWN_TIMEOUT}ms - server might still be closing handles`);
-    }
-  }, SHUTDOWN_TIMEOUT);
-}
+    console.log('⚠️  Forcing shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+});
 
-// Keep the process alive
-const keepAlive = setInterval(() => {
-  // Empty - just keeps event loop alive
-}, 2147483647); // Maximum interval
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT received: shutting down');
+  clearInterval(keepAliveInterval);
+  server.close(() => {
+    process.exit(0);
+  });
+});
 
-// Clear on shutdown
-process.on('exit', () => {
-  clearInterval(keepAlive);
+// Handle uncaught errors
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  // Don't exit immediately - let Railway handle it
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
 });

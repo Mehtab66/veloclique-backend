@@ -28,6 +28,10 @@ const FeaturedContentSchema = new mongoose.Schema(
             type: String,
             default: ""
         },
+        productLink: {
+            type: String,
+            default: ""
+        },
         buttonText: {
             type: String,
             default: ""

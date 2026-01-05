@@ -9,6 +9,7 @@ import {
   uploadGearPickImage,
   createGearPickAsAdmin,
   updateGearPickDetails,
+  deleteGearPick,
 } from "../controllers/gearpickController.js";
 import { upload } from "../middleware/upload.js";
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -34,4 +35,6 @@ router.get("/admin/all", authenticate, isAdmin, getGearPicksForAdmin); // GET /a
 router.post("/admin/create", authenticate, isAdmin, upload.single("image"), createGearPickAsAdmin); // POST /api/gear-picks/admin/create
 router.put("/:id/status", authenticate, isAdmin, updateGearPickStatus); // PUT /api/gear-picks/:id/status
 router.post("/:id/image", authenticate, isAdmin, upload.single("image"), uploadGearPickImage);
+router.put("/:id/details", authenticate, isAdmin, updateGearPickDetails);
+router.delete("/:id", authenticate, isAdmin, deleteGearPick);
 export default router;

@@ -10,7 +10,6 @@ const getTransporter = () => {
   if (transporter) {
     return transporter;
   }
-  console.log("helo")
 
   // Validate required environment variables
   const smtpHost = process.env.SMTP_HOST;
@@ -44,7 +43,7 @@ const getTransporter = () => {
   });
 
   console.log(`📧 SMTP configured: ${smtpHost}:${port}`);
-
+  
   // Verify connection (async, don't block)
   transporter.verify((err) => {
     if (err) {

@@ -38,6 +38,7 @@ export const updateContent = async (req, res) => {
             description,
             label1,
             label2,
+            productLink,
             additionalData
         } = req.body;
 
@@ -73,6 +74,7 @@ export const updateContent = async (req, res) => {
             description,
             label1,
             label2,
+            productLink,
             updatedBy: req.user._id
         };
 
