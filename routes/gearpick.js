@@ -12,7 +12,7 @@ import {
   deleteGearPick,
 } from "../controllers/gearpickController.js";
 import { upload } from "../middleware/upload.js";
-import { authenticate } from "../middleware/authMiddleware.js";
+import { authenticate, optionalAuth } from "../middleware/authMiddleware.js";
 
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
@@ -24,7 +24,7 @@ const isAdmin = (req, res, next) => {
 };
 
 // Public routes
-router.get("/", getGearPicks); // GET /api/gear-picks?category=All&sort=Most Voted&page=1&limit=20
+router.get("/", optionalAuth, getGearPicks); // GET /api/gear-picks?category=All&sort=Most Voted&page=1&limit=20
 
 // Protected routes
 router.post("/", authenticate, submitGearPick); // POST /api/gear-picks

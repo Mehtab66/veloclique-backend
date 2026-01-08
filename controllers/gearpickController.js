@@ -51,7 +51,7 @@ export const getGearPicks = async (req, res) => {
       category = "All",
       sort = "Most Voted",
       page = 1,
-      limit = 20,
+      limit = 1000,
       status = "approved", // Non-admins only see approved by default
     } = req.query;
 
@@ -95,7 +95,12 @@ export const getGearPicks = async (req, res) => {
 
     // Pagination
     const pageNum = parseInt(page);
-    const limitNum = parseInt(limit);
+    let limitNum = parseInt(limit);
+
+    // If fetching for public view, allow a very high limit to get everything
+    if (!req.user || req.user.role !== "admin") {
+      if (limitNum === 1000) limitNum = 10000; // Allow fetching up to 10k for public
+    }
     const skip = (pageNum - 1) * limitNum;
 
     // Execute query
@@ -103,7 +108,8 @@ export const getGearPicks = async (req, res) => {
       .sort(sortObj)
       .skip(skip)
       .limit(limitNum)
-      .populate("userId", "username");
+      .populate("userId", "username")
+      .lean();
 
     const total = await GearPick.countDocuments(query);
 
