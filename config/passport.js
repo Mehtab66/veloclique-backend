@@ -53,6 +53,10 @@ const initializeFacebookStrategy = () => {
   }
 
   if (process.env.FB_CLIENT_ID && process.env.FB_CLIENT_SECRET) {
+    // Debug log (temporary)
+    const appId = process.env.FB_CLIENT_ID;
+    console.log(`🔍 FB_CLIENT_ID found. Length: ${appId.length}, Starts with: ${appId.substring(0, 3)}..., Ends with: ...${appId.substring(appId.length - 3)}`);
+
     try {
       passport.use(
         "facebook",
