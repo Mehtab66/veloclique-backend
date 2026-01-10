@@ -22,10 +22,14 @@ const initializeGoogleStrategy = () => {
           {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_CALLBACK_URL || "https://veloclique.com/auth/google/callback",
+            callbackURL: (
+              process.env.GOOGLE_CALLBACK_URL ||
+              "https://veloclique.com/auth/google/callback"
+            ).trim(),
             proxy: true,
           },
           async (accessToken, refreshToken, profile, done) => {
+            console.log("🔍 Google OAuth Callback Strategy Executed");
             try {
               const user = await findOrCreateOAuthUser("google", profile);
               done(null, user);
@@ -35,7 +39,7 @@ const initializeGoogleStrategy = () => {
           }
         )
       );
-      console.log("✅ Google OAuth strategy initialized");
+      console.log("✅ Google OAuth strategy initialized with callback:", (process.env.GOOGLE_CALLBACK_URL || "https://veloclique.com/auth/google/callback").trim());
       return true;
     } catch (error) {
       console.error("❌ Failed to initialize Google OAuth strategy:", error.message);

@@ -125,6 +125,24 @@ export const login = async (req, res) => {
 };
 
 export const googleAuth = async (req, res, next) => {
+  // Debug logging
+  console.log("🔍 --- Google OAuth Debug Start ---");
+  console.log("🔍 Request Protocol:", req.protocol);
+  console.log("🔍 Request Host:", req.get("host"));
+  console.log("🔍 X-Forwarded-Proto:", req.get("x-forwarded-proto"));
+  console.log("🔍 X-Forwarded-Host:", req.get("x-forwarded-host"));
+  console.log(
+    "🔍 GOOGLE_CLIENT_ID:",
+    process.env.GOOGLE_CLIENT_ID
+      ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 10)}...`
+      : "MISSING"
+  );
+  console.log(
+    "🔍 GOOGLE_CALLBACK_URL:",
+    process.env.GOOGLE_CALLBACK_URL || "NOT SET (Using default)"
+  );
+  console.log("🔍 --- Google OAuth Debug End ---");
+
   // Check if Google OAuth is configured
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     return res.status(503).json({
