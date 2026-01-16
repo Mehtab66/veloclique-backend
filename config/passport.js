@@ -24,7 +24,7 @@ const initializeGoogleStrategy = () => {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: (
               process.env.GOOGLE_CALLBACK_URL ||
-              "https://veloclique.com/auth/google/callback"
+              "https://veloclique-backend-empu.onrender.com/auth/google/callback"
             ).trim(),
             proxy: true,
           },
