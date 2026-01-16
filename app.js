@@ -25,6 +25,7 @@ import contentRoutes from "./routes/contentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import userDonationRoutes from "./routes/userDonationRoutes.js";
 import feedbackRoutes from "./routes/feedback.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 // Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
@@ -169,6 +170,7 @@ app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
 app.use("/feedback", feedbackRoutes);
+app.use("/reviews", reviewRoutes);
 
 // ✅ Health check endpoint (CRITICAL for Railway)
 app.get("/health", (req, res) => {
