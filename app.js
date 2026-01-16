@@ -24,6 +24,7 @@ import shopSubscriptionRoutes from "./routes/shopSubscription.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import userDonationRoutes from "./routes/userDonationRoutes.js";
+import feedbackRoutes from "./routes/feedback.js";
 
 // Import webhook handlers
 import { handleWebhook } from "./controllers/donationController.js";
@@ -32,9 +33,6 @@ import { handleUserDonationWebhook } from "./controllers/userDonationController.
 
 // Initialize Express app
 const app = express();
-
-// Trust proxy (CRITICAL for OAuth on Render/Railway)
-app.set("trust proxy", 1);
 
 // Connect to MongoDB
 connectDB();
@@ -170,6 +168,7 @@ app.use("/shop-subscriptions", shopSubscriptionRoutes);
 app.use("/user-donation", userDonationRoutes);
 app.use("/content", contentRoutes);
 app.use("/admin", adminRoutes);
+app.use("/feedback", feedbackRoutes);
 
 // ✅ Health check endpoint (CRITICAL for Railway)
 app.get("/health", (req, res) => {

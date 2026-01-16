@@ -8,7 +8,6 @@ import cloudinary from "../config/cloudinary.js";
 export const getContent = async (req, res) => {
     try {
         const { slug } = req.params;
-        console.log("df");
 
         // Find content, or return default structure if not found (lazy init approach optional, or just 404)
         // Here we'll return null or empty object if not found, let frontend handle defaults

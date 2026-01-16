@@ -10,6 +10,7 @@ import {
   createGearPickAsAdmin,
   updateGearPickDetails,
   deleteGearPick,
+  getGearPickById,
 } from "../controllers/gearpickController.js";
 import { upload } from "../middleware/upload.js";
 import { authenticate, optionalAuth } from "../middleware/authMiddleware.js";
@@ -25,6 +26,8 @@ const isAdmin = (req, res, next) => {
 
 // Public routes
 router.get("/", optionalAuth, getGearPicks); // GET /api/gear-picks?category=All&sort=Most Voted&page=1&limit=20
+router.get("/:id", optionalAuth, getGearPickById); // GET /api/gear-picks/:id
+
 
 // Protected routes
 router.post("/", authenticate, submitGearPick); // POST /api/gear-picks

@@ -66,7 +66,6 @@ const businessSchema = new mongoose.Schema(
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
-        index: "2dsphere",
       },
     },
     gmbUrl: String,
@@ -87,7 +86,8 @@ const businessSchema = new mongoose.Schema(
   }
 );
 
-// Index for location-based queries (location.coordinates already has 2dsphere index)
+// Index for location-based queries
+businessSchema.index({ location: "2dsphere" });
 businessSchema.index({ state: 1, city: 1 });
 
 export default mongoose.model("Business", businessSchema);

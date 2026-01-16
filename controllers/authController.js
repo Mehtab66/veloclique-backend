@@ -125,24 +125,6 @@ export const login = async (req, res) => {
 };
 
 export const googleAuth = async (req, res, next) => {
-  // Debug logging
-  console.log("🔍 --- Google OAuth Debug Start ---");
-  console.log("🔍 Request Protocol:", req.protocol);
-  console.log("🔍 Request Host:", req.get("host"));
-  console.log("🔍 X-Forwarded-Proto:", req.get("x-forwarded-proto"));
-  console.log("🔍 X-Forwarded-Host:", req.get("x-forwarded-host"));
-  console.log(
-    "🔍 GOOGLE_CLIENT_ID:",
-    process.env.GOOGLE_CLIENT_ID
-      ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 10)}...`
-      : "MISSING"
-  );
-  console.log(
-    "🔍 GOOGLE_CALLBACK_URL:",
-    process.env.GOOGLE_CALLBACK_URL || "NOT SET (Using default)"
-  );
-  console.log("🔍 --- Google OAuth Debug End ---");
-
   // Check if Google OAuth is configured
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     return res.status(503).json({
@@ -194,57 +176,13 @@ export const googleCallback = async (req, res, next) => {
   })(req, res, next);
 };
 
-export const facebookAuth = async (req, res, next) => {
-  // Check if Facebook OAuth is configured
-  if (!process.env.FB_CLIENT_ID || !process.env.FB_CLIENT_SECRET) {
-    return res.status(503).json({
-      error:
-        "Facebook OAuth is not configured. Please set FB_CLIENT_ID and FB_CLIENT_SECRET environment variables.",
-    });
-  }
-
-  // Try to initialize strategy if not already registered
-  const { initializeFacebookStrategy } = await import("../config/passport.js");
-  const isInitialized = initializeFacebookStrategy();
-
-  if (!isInitialized) {
-    return res.status(503).json({
-      error:
-        "Facebook OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
-    });
-  }
-
-  passport.authenticate("facebook", {
-    scope: ["email"],
-    session: false, // We use JWT, not sessions
-  })(req, res, next);
-};
-
-export const facebookCallback = async (req, res, next) => {
-  // Check if Facebook OAuth is configured
-  if (!process.env.FB_CLIENT_ID || !process.env.FB_CLIENT_SECRET) {
-    return res.status(503).json({
-      error:
-        "Facebook OAuth is not configured. Please set FB_CLIENT_ID and FB_CLIENT_SECRET environment variables.",
-    });
-  }
-
-  // Try to initialize strategy if not already registered
-  const { initializeFacebookStrategy } = await import("../config/passport.js");
-  const isInitialized = initializeFacebookStrategy();
-
-  if (!isInitialized) {
-    return res.status(503).json({
-      error:
-        "Facebook OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
-    });
-  }
-
-  passport.authenticate("facebook", {
-    failureRedirect: "/auth/failure",
-    session: false, // We use JWT, not sessions
-  })(req, res, next);
-};
+export const facebookAuth = passport.authenticate("facebook", {
+  scope: ["email"],
+});
+export const facebookCallback = passport.authenticate("facebook", {
+  failureRedirect: "/auth/failure",
+  session: true,
+});
 
 export const appleAuth = passport.authenticate("apple");
 export const appleCallback = passport.authenticate("apple", {
@@ -286,7 +224,8 @@ export const success = async (req, res) => {
   try {
     if (!req.user) {
       return res.redirect(
-        `${process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com"
+        `${
+          process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com"
         }/login?error=authentication_failed`
       );
     }
