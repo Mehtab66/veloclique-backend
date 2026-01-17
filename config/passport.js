@@ -16,12 +16,22 @@ const initializeGoogleStrategy = () => {
   // Check if credentials are provided
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     try {
+      console.log(
+        `🔍 GOOGLE_CLIENT_ID: "${(process.env.GOOGLE_CLIENT_ID || "")
+          .trim()
+          .substring(0, 10)}..."`
+      );
+      console.log(
+        `🔍 GOOGLE_CALLBACK: "${(
+          process.env.GOOGLE_CALLBACK_URL || "using default"
+        ).trim()}"`
+      );
       passport.use(
         "google",
         new GoogleStrategy(
           {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientID: (process.env.GOOGLE_CLIENT_ID || "").trim(),
+            clientSecret: (process.env.GOOGLE_CLIENT_SECRET || "").trim(),
             callbackURL: (
               process.env.GOOGLE_CALLBACK_URL ||
               "https://veloclique-backend.onrender.com/auth/google/callback"
@@ -41,11 +51,16 @@ const initializeGoogleStrategy = () => {
       console.log("✅ Google OAuth strategy initialized");
       return true;
     } catch (error) {
-      console.error("❌ Failed to initialize Google OAuth strategy:", error.message);
+      console.error(
+        "❌ Failed to initialize Google OAuth strategy:",
+        error.message
+      );
       return false;
     }
   } else {
-    console.warn("⚠️  Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required");
+    console.warn(
+      "⚠️  Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required"
+    );
     return false;
   }
 };
@@ -58,19 +73,21 @@ const initializeFacebookStrategy = () => {
 
   if (process.env.FB_CLIENT_ID && process.env.FB_CLIENT_SECRET) {
     // Debug log (temporary)
-    const appId = process.env.FB_CLIENT_ID;
-    console.log(`🔍 FB_CLIENT_ID found. Length: ${appId.length}, Starts with: ${appId.substring(0, 3)}..., Ends with: ...${appId.substring(appId.length - 3)}`);
+    const appId = (process.env.FB_CLIENT_ID || "").trim();
+    console.log(`🔍 FB_CLIENT_ID: "${appId}" (Length: ${appId.length})`);
+    console.log(`🔍 FB_CALLBACK: "${(process.env.FB_CALLBACK_URL || "using default").trim()}"`);
 
     try {
       passport.use(
         "facebook",
         new FacebookStrategy(
           {
-            clientID: process.env.FB_CLIENT_ID,
-            clientSecret: process.env.FB_CLIENT_SECRET,
-            callbackURL:
+            clientID: (process.env.FB_CLIENT_ID || "").trim(),
+            clientSecret: (process.env.FB_CLIENT_SECRET || "").trim(),
+            callbackURL: (
               process.env.FB_CALLBACK_URL ||
-              "https://veloclique-backend.onrender.com/auth/facebook/callback",
+              "https://veloclique-backend.onrender.com/auth/facebook/callback"
+            ).trim(),
             profileFields: ["id", "displayName", "emails", "name"],
             proxy: true,
           },
