@@ -286,7 +286,7 @@ export const success = async (req, res) => {
   try {
     if (!req.user) {
       return res.redirect(
-        `${process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com"
+        `${process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173"
         }/login?error=authentication_failed`
       );
     }
@@ -307,14 +307,14 @@ export const success = async (req, res) => {
 
     // Redirect to frontend with token
     const clientOrigin =
-      process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com";
+      process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
     res.redirect(
       `${clientOrigin}/auth/callback?token=${token}&provider=${provider}`
     );
   } catch (error) {
     console.error("OAuth success error:", error);
     const clientOrigin =
-      process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com";
+      process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
     res.redirect(
       `${clientOrigin}/login?error=${encodeURIComponent(
         error.message || "Authentication failed"

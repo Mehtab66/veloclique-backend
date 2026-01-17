@@ -24,7 +24,7 @@ const initializeGoogleStrategy = () => {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: (
               process.env.GOOGLE_CALLBACK_URL ||
-              "https://veloclique-backend-empu.onrender.com/auth/google/callback"
+              "https://veloclique-backend.onrender.com/auth/google/callback"
             ).trim(),
             proxy: true,
           },
@@ -71,8 +71,9 @@ const initializeFacebookStrategy = () => {
             clientSecret: process.env.FB_CLIENT_SECRET,
             callbackURL:
               process.env.FB_CALLBACK_URL ||
-              "https://veloclique.com/auth/facebook/callback",
+              "https://veloclique-backend.onrender.com/auth/facebook/callback",
             profileFields: ["id", "displayName", "emails", "name"],
+            proxy: true,
           },
           async (accessToken, refreshToken, profile, done) => {
             try {
