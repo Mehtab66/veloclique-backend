@@ -66,7 +66,6 @@ const shopSchema = new mongoose.Schema(
       },
       coordinates: {
         type: [Number],
-        index: "2dsphere",
       },
     },
     gmbUrl: String,
@@ -143,6 +142,7 @@ const shopSchema = new mongoose.Schema(
   }
 );
 
+shopSchema.index({ location: "2dsphere" });
 shopSchema.index({ state: 1, city: 1 });
 
 export default mongoose.model("Shop", shopSchema);

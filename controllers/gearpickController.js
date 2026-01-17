@@ -495,3 +495,32 @@ export const deleteGearPick = async (req, res) => {
     });
   }
 };
+
+// @desc    Get single gear pick by ID
+// @route   GET /api/gear-picks/:id
+// @access  Public
+export const getGearPickById = async (req, res) => {
+  try {
+    const gearPick = await GearPick.findById(req.params.id)
+      .populate("userId", "username email")
+      .populate("voteHistory.userId", "username");
+
+    if (!gearPick) {
+      return res.status(404).json({
+        success: false,
+        message: "Gear pick not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: gearPick,
+    });
+  } catch (error) {
+    console.error("Get gear pick by ID error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
