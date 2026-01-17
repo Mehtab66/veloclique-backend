@@ -3,6 +3,7 @@ dotenv.config();
 
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import { findOrCreateOAuthUser } from "../services/authService.js";
 
 // Function to initialize Google OAuth strategy
@@ -102,9 +103,10 @@ const initializeFacebookStrategy = () => {
 
 // Initialize strategies on module load
 initializeGoogleStrategy();
+initializeFacebookStrategy();
 
-// Export function to re-initialize if needed
-export { initializeGoogleStrategy };
+// Export functions to re-initialize if needed
+export { initializeGoogleStrategy, initializeFacebookStrategy };
 
 // Serialize user for session (minimal - we use JWT)
 passport.serializeUser((user, done) => {
