@@ -86,7 +86,7 @@ const initializeFacebookStrategy = () => {
             clientSecret: (process.env.FB_CLIENT_SECRET || "").trim(),
             callbackURL: (
               process.env.FB_CALLBACK_URL ||
-              "https://veloclique-backend.onrender.com/auth/facebook/callback"
+              "http://localhost:4000/auth/facebook/callback"
             ).trim(),
             profileFields: ["id", "displayName", "emails", "name"],
             proxy: true,
