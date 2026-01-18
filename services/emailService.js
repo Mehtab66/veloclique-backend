@@ -611,3 +611,68 @@ export const sendAccountDeletionOTP = async (email, otp) => {
     );
   }
 };
+
+/**
+ * Send contact form submission email to Admin
+ * @param {Object} formData 
+ * @param {Object} attachment (Optional) { filename, content, path }
+ */
+export const sendContactFormEmail = async (formData, attachment = null) => {
+  const { fullName, email, topic, message } = formData;
+  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
+  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
+  const adminEmail = process.env.ADMIN_EMAIL || fromAddress;
+
+  if (!fromAddress) {
+    throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
+  }
+
+  const mailOptions = {
+    to: adminEmail,
+    from: fromAddress,
+    replyTo: email,
+    subject: `[Contact Form] ${topic}: From ${fullName}`,
+    text: `Topic: ${topic}\nName: ${fullName}\nEmail: ${email}\n\nMessage:\n${message}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #FF6A13; border-bottom: 2px solid #FF6A13; padding-bottom: 10px;">New Contact Form Submission</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 120px;">Topic:</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${topic}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">From:</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${fullName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${email}</td>
+          </tr>
+        </table>
+        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
+          <h3 style="margin-top: 0; color: #555;">Message:</h3>
+          <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
+        </div>
+        <p style="font-size: 12px; color: #777; margin-top: 30px;">
+          This message was sent via the contact form on ${ORG_NAME}.
+        </p>
+      </div>
+    `,
+    attachments: attachment ? [{
+      filename: attachment.originalname || attachment.filename,
+      content: attachment.buffer || attachment.content,
+      path: attachment.path
+    }] : []
+  };
+
+  try {
+    const transporter = getTransporter();
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ Contact form email sent to admin. Message ID: ${info.messageId}`);
+    return info;
+  } catch (error) {
+    console.error("❌ Failed to send contact form email:", error.message);
+    throw new Error(`Unable to send contact form email: ${error.message}`);
+  }
+};
