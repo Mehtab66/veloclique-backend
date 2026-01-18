@@ -134,17 +134,47 @@ export const loginUser = async (email, password) => {
 };
 
 export const findOrCreateOAuthUser = async (provider, profile) => {
-  const query = {};
-  query[`${provider}Id`] = profile.id;
+  const providerIdField = `${provider}Id`;
+  const email = profile.emails?.[0]?.value?.toLowerCase();
 
-  let user = await User.findOne(query);
+  // 1. Try to find user by social provider ID
+  let user = await User.findOne({ [providerIdField]: profile.id });
+
+  // 2. If not found by ID, but we have an email, try to find by email
+  if (!user && email) {
+    user = await User.findOne({ email });
+
+    // Link the provider ID to this existing account
+    if (user) {
+      user[providerIdField] = profile.id;
+      // Also update display name if not set
+      if (!user.displayName && profile.displayName) {
+        user.displayName = profile.displayName;
+      }
+      await user.save();
+      console.log(`✅ Linked existing user ${email} with ${provider} account`);
+    }
+  }
+
+  // 3. Still not found? Create a new user
   if (!user) {
+    console.log(`🆕 Creating new user from ${provider} account: ${email}`);
     user = await User.create({
-      [provider + "Id"]: profile.id,
+      [providerIdField]: profile.id,
       name: profile.displayName || profile.name?.givenName || "Unnamed User",
-      email: profile.emails?.[0]?.value || undefined,
+      displayName: profile.displayName || profile.name?.givenName || "Unnamed User",
+      email: email || undefined,
+      // Default preferences for social users
+      emailPreferences: {
+        newShops: true,
+        routeHighlights: true,
+        monthlyUpdates: true,
+        specialOffers: false,
+      },
+      isProfilePrivate: true,
     });
   }
+
   return user;
 };
 

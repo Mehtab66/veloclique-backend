@@ -176,13 +176,57 @@ export const googleCallback = async (req, res, next) => {
   })(req, res, next);
 };
 
-export const facebookAuth = passport.authenticate("facebook", {
-  scope: ["email"],
-});
-export const facebookCallback = passport.authenticate("facebook", {
-  failureRedirect: "/auth/failure",
-  session: true,
-});
+export const facebookAuth = async (req, res, next) => {
+  // Check if Facebook OAuth is configured
+  if (!process.env.FB_CLIENT_ID || !process.env.FB_CLIENT_SECRET) {
+    return res.status(503).json({
+      error:
+        "Facebook OAuth is not configured. Please set FB_CLIENT_ID and FB_CLIENT_SECRET environment variables.",
+    });
+  }
+
+  // Try to initialize strategy if not already registered
+  const { initializeFacebookStrategy } = await import("../config/passport.js");
+  const isInitialized = initializeFacebookStrategy();
+
+  if (!isInitialized) {
+    return res.status(503).json({
+      error:
+        "Facebook OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
+    });
+  }
+
+  passport.authenticate("facebook", {
+    scope: ["email"],
+    session: false, // We use JWT, not sessions
+  })(req, res, next);
+};
+
+export const facebookCallback = async (req, res, next) => {
+  // Check if Facebook OAuth is configured
+  if (!process.env.FB_CLIENT_ID || !process.env.FB_CLIENT_SECRET) {
+    return res.status(503).json({
+      error:
+        "Facebook OAuth is not configured. Please set FB_CLIENT_ID and FB_CLIENT_SECRET environment variables.",
+    });
+  }
+
+  // Try to initialize strategy if not already registered
+  const { initializeFacebookStrategy } = await import("../config/passport.js");
+  const isInitialized = initializeFacebookStrategy();
+
+  if (!isInitialized) {
+    return res.status(503).json({
+      error:
+        "Facebook OAuth strategy failed to initialize. Please check your environment variables and restart the server.",
+    });
+  }
+
+  passport.authenticate("facebook", {
+    failureRedirect: "/auth/failure",
+    session: false, // We use JWT, not sessions
+  })(req, res, next);
+};
 
 export const appleAuth = passport.authenticate("apple");
 export const appleCallback = passport.authenticate("apple", {
@@ -224,8 +268,7 @@ export const success = async (req, res) => {
   try {
     if (!req.user) {
       return res.redirect(
-        `${
-          process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com"
+        `${process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173"
         }/login?error=authentication_failed`
       );
     }
@@ -246,14 +289,14 @@ export const success = async (req, res) => {
 
     // Redirect to frontend with token
     const clientOrigin =
-      process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com";
+      process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
     res.redirect(
       `${clientOrigin}/auth/callback?token=${token}&provider=${provider}`
     );
   } catch (error) {
     console.error("OAuth success error:", error);
     const clientOrigin =
-      process.env.CLIENT_ORIGIN?.split(",")[0] || "https://veloclique.com";
+      process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN?.split(",")[0] || "http://localhost:5173";
     res.redirect(
       `${clientOrigin}/login?error=${encodeURIComponent(
         error.message || "Authentication failed"
