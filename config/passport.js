@@ -48,7 +48,7 @@ const initializeGoogleStrategy = () => {
           }
         )
       );
-      console.log("✅ Google OAuth strategy initialized");
+      console.log("✅ Goojjjgle OAuth strategy initialized");
       return true;
     } catch (error) {
       console.error(
