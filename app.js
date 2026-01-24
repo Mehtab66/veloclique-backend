@@ -173,7 +173,7 @@ app.use("/admin", adminRoutes);
 app.use("/feedback", feedbackRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/contact-us", contactRoutes);
-
+console.log("ss");
 // ✅ Health check endpoint (CRITICAL for Railway)
 app.get("/health", (req, res) => {
   const memoryUsage = process.memoryUsage();
