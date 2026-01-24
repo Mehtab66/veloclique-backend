@@ -111,15 +111,23 @@ export const getGearPicks = async (req, res) => {
       .populate("userId", "username")
       .lean();
 
+    // Ensure images array is populated for frontend, migrating from single image if necessary
+    const processedGearPicks = gearPicks.map(gp => {
+      if ((!gp.images || gp.images.length === 0) && gp.image && gp.image.url) {
+        gp.images = [gp.image];
+      }
+      return gp;
+    });
+
     const total = await GearPick.countDocuments(query);
 
     res.json({
       success: true,
-      count: gearPicks.length,
+      count: processedGearPicks.length,
       total,
       totalPages: Math.ceil(total / limitNum),
       currentPage: pageNum,
-      data: gearPicks,
+      data: processedGearPicks,
     });
   } catch (error) {
     console.error("Get gear picks error:", error);
@@ -160,17 +168,26 @@ export const getGearPicksForAdmin = async (req, res) => {
       .skip(skip)
       .limit(limitNum)
       .populate("userId", "username email")
-      .populate("voteHistory.userId", "username");
+      .populate("voteHistory.userId", "username")
+      .lean();
+
+    // Ensure images array is populated
+    const processedGearPicks = gearPicks.map(gp => {
+      if ((!gp.images || gp.images.length === 0) && gp.image && gp.image.url) {
+        gp.images = [gp.image];
+      }
+      return gp;
+    });
 
     const total = await GearPick.countDocuments(query);
 
     res.json({
       success: true,
-      count: gearPicks.length,
+      count: processedGearPicks.length,
       total,
       totalPages: Math.ceil(total / limitNum),
       currentPage: pageNum,
-      data: gearPicks,
+      data: processedGearPicks,
     });
   } catch (error) {
     console.error("Admin get gear picks error:", error);
@@ -298,10 +315,10 @@ export const voteOnGearPick = async (req, res) => {
 
 export const uploadGearPickImage = async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Please upload an image",
+        message: "Please upload at least one image",
       });
     }
 
@@ -314,27 +331,37 @@ export const uploadGearPickImage = async (req, res) => {
       });
     }
 
-    // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(
-      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
-      {
-        folder: "veloclique/gearpicks",
-        resource_type: "image",
-      }
+    const uploadPromises = req.files.map((file) =>
+      cloudinary.uploader.upload(
+        `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+        {
+          folder: "veloclique/gearpicks",
+          resource_type: "image",
+        }
+      )
     );
 
-    // Save image data
-    gearPick.image = {
+    const uploadResults = await Promise.all(uploadPromises);
+
+    const newImages = uploadResults.map((result) => ({
       publicId: result.public_id,
       url: result.secure_url,
-    };
+    }));
+
+    // Add new images to existing array
+    gearPick.images = [...(gearPick.images || []), ...newImages];
+
+    // For backward compatibility, set the first image as the primary 'image' field
+    if (gearPick.images.length > 0) {
+      gearPick.image = gearPick.images[0];
+    }
 
     await gearPick.save();
 
     res.json({
       success: true,
-      message: "Image uploaded successfully",
-      data: gearPick.image,
+      message: "Images uploaded successfully",
+      data: gearPick.images,
     });
   } catch (error) {
     console.error("Upload gear pick image error:", error);
@@ -369,22 +396,32 @@ export const createGearPickAsAdmin = async (req, res) => {
       recommendation,
       userId: req.user._id,
       status: "approved", // Admin-created picks are automatically approved
+      images: [],
     };
 
-    // If image is provided, upload to Cloudinary
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(
-        `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
-        {
-          folder: "veloclique/gearpicks",
-          resource_type: "image",
-        }
+    // If images are provided, upload to Cloudinary
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(
+          `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+          {
+            folder: "veloclique/gearpicks",
+            resource_type: "image",
+          }
+        )
       );
 
-      gearPickData.image = {
+      const uploadResults = await Promise.all(uploadPromises);
+
+      gearPickData.images = uploadResults.map((result) => ({
         publicId: result.public_id,
         url: result.secure_url,
-      };
+      }));
+
+      // For backward compatibility
+      if (gearPickData.images.length > 0) {
+        gearPickData.image = gearPickData.images[0];
+      }
     }
 
     const gearPick = new GearPick(gearPickData);
@@ -503,13 +540,19 @@ export const getGearPickById = async (req, res) => {
   try {
     const gearPick = await GearPick.findById(req.params.id)
       .populate("userId", "username email")
-      .populate("voteHistory.userId", "username");
+      .populate("voteHistory.userId", "username")
+      .lean();
 
     if (!gearPick) {
       return res.status(404).json({
         success: false,
         message: "Gear pick not found",
       });
+    }
+
+    // Ensure images array is populated
+    if ((!gearPick.images || gearPick.images.length === 0) && gearPick.image && gearPick.image.url) {
+      gearPick.images = [gearPick.image];
     }
 
     res.json({

@@ -75,10 +75,12 @@ export const createCheckoutSession = async (req, res) => {
     const finalIsAnonymous = !user;
 
     // For logged-in users: ALWAYS show on Name Wall with their real name
-    // For anonymous users: always show on Name Wall (will use "Anonymous" if no name provided)
+    // For anonymous users: only show if they provided a display name
     const finalShowOnNameWall = user
       ? true
-      : true; // Default to true for anonymous users as well
+      : anonymousInfo?.name
+        ? true
+        : false;
 
     console.log(`📋 Donation Summary:
       Amount: $${amount}
@@ -903,7 +905,7 @@ export const getNameWallEntries = async (req, res) => {
       // For anonymous donors
       if (donation.isAnonymous) {
         return {
-          displayName: donation.anonymousDonor?.name || "Anonymous",
+          displayName: "Anonymous",
           amount: donation.amount,
           tier: donation.tier,
           isAnonymous: true,

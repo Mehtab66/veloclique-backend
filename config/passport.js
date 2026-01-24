@@ -3,7 +3,6 @@ dotenv.config();
 
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as FacebookStrategy } from "passport-facebook";
 import { findOrCreateOAuthUser } from "../services/authService.js";
 
 // Function to initialize Google OAuth strategy
@@ -16,27 +15,13 @@ const initializeGoogleStrategy = () => {
   // Check if credentials are provided
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     try {
-      console.log(
-        `🔍 GOOGLE_CLIENT_ID: "${(process.env.GOOGLE_CLIENT_ID || "")
-          .trim()
-          .substring(0, 10)}..."`
-      );
-      console.log(
-        `🔍 GOOGLE_CALLBACK: "${(
-          process.env.GOOGLE_CALLBACK_URL || "using default"
-        ).trim()}"`
-      );
       passport.use(
         "google",
         new GoogleStrategy(
           {
-            clientID: (process.env.GOOGLE_CLIENT_ID || "").trim(),
-            clientSecret: (process.env.GOOGLE_CLIENT_SECRET || "").trim(),
-            callbackURL: (
-              process.env.GOOGLE_CALLBACK_URL ||
-              "https://veloclique-backend.onrender.com/auth/google/callback"
-            ).trim(),
-            proxy: true,
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL || "https://veloclique.com/auth/google/callback",
           },
           async (accessToken, refreshToken, profile, done) => {
             try {
@@ -48,82 +33,23 @@ const initializeGoogleStrategy = () => {
           }
         )
       );
-      console.log("✅ Goojjjgle OAuth strategy initialized");
+      console.log("✅ Google OAuth strategy initialized");
       return true;
     } catch (error) {
-      console.error(
-        "❌ Failed to initialize Google OAuth strategy:",
-        error.message
-      );
+      console.error("❌ Failed to initialize Google OAuth strategy:", error.message);
       return false;
     }
   } else {
-    console.warn(
-      "⚠️  Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required"
-    );
+    console.warn("⚠️  Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required");
     return false;
   }
 };
 
-// Function to initialize Facebook OAuth strategy
-const initializeFacebookStrategy = () => {
-  if (passport._strategies && passport._strategies.facebook) {
-    return true;
-  }
-
-  if (process.env.FB_CLIENT_ID && process.env.FB_CLIENT_SECRET) {
-    // Debug log (temporary)
-    const appId = (process.env.FB_CLIENT_ID || "").trim();
-    console.log(`🔍 FB_CLIENT_ID: "${appId}" (Length: ${appId.length})`);
-    console.log(`🔍 FB_CALLBACK: "${(process.env.FB_CALLBACK_URL || "using default").trim()}"`);
-
-    try {
-      passport.use(
-        "facebook",
-        new FacebookStrategy(
-          {
-            clientID: (process.env.FB_CLIENT_ID || "").trim(),
-            clientSecret: (process.env.FB_CLIENT_SECRET || "").trim(),
-            callbackURL: (
-              process.env.FB_CALLBACK_URL ||
-              "http://localhost:4000/auth/facebook/callback"
-            ).trim(),
-            profileFields: ["id", "displayName", "emails", "name"],
-            proxy: true,
-          },
-          async (accessToken, refreshToken, profile, done) => {
-            try {
-              const user = await findOrCreateOAuthUser("facebook", profile);
-              done(null, user);
-            } catch (err) {
-              done(err, null);
-            }
-          }
-        )
-      );
-      console.log("✅ Facebook OAuth strategy initialized");
-      return true;
-    } catch (error) {
-      console.error(
-        "❌ Failed to initialize Facebook OAuth strategy:",
-        error.message
-      );
-      return false;
-    }
-  } else {
-    console.warn(
-      "⚠️  Facebook OAuth not configured - FB_CLIENT_ID and FB_CLIENT_SECRET required"
-    );
-    return false;
-  }
-};
-
-// Initialize strategies on module load
+// Initialize Google strategy on module load
 initializeGoogleStrategy();
-initializeFacebookStrategy();
 
-// Export functions to re-initialize if needed
-export { initializeGoogleStrategy, initializeFacebookStrategy };
+// Export function to re-initialize if needed
+export { initializeGoogleStrategy };
 
 // Serialize user for session (minimal - we use JWT)
 passport.serializeUser((user, done) => {

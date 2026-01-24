@@ -35,9 +35,9 @@ router.post("/:id/vote", authenticate, voteOnGearPick); // POST /api/gear-picks/
 
 // Admin routes
 router.get("/admin/all", authenticate, isAdmin, getGearPicksForAdmin); // GET /api/gear-picks/admin/all?status=pending&category=All&page=1&limit=20
-router.post("/admin/create", authenticate, isAdmin, upload.single("image"), createGearPickAsAdmin); // POST /api/gear-picks/admin/create
+router.post("/admin/create", authenticate, isAdmin, upload.array("images", 5), createGearPickAsAdmin); // POST /api/gear-picks/admin/create
 router.put("/:id/status", authenticate, isAdmin, updateGearPickStatus); // PUT /api/gear-picks/:id/status
-router.post("/:id/image", authenticate, isAdmin, upload.single("image"), uploadGearPickImage);
+router.post("/:id/image", authenticate, isAdmin, upload.array("images", 5), uploadGearPickImage);
 router.put("/:id/details", authenticate, isAdmin, updateGearPickDetails);
 router.delete("/:id", authenticate, isAdmin, deleteGearPick);
 export default router;
