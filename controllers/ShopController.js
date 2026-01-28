@@ -8,6 +8,7 @@ import {
   endAllUserSessions,
 } from "../services/userService.js";
 import cloudinary from "../config/cloudinary.js";
+import { sendShopClaimNotification } from "../services/emailService.js";
 
 const escapeForRegex = (value = "") =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -187,7 +188,7 @@ export const listShops = async (req, res) => {
         console.log(`[listShops] Sample shop subscription.status:`, sampleShop.subscription.status);
       }
     }
-    
+
     const shopsWithActiveSubscription = shops.filter(
       (shop) => shop.subscription?.status === "active"
     );
@@ -341,6 +342,13 @@ export const claimShop = async (req, res) => {
       documentUrl,
       status: "pending",
     });
+
+    // Trigger shop claim notification email
+    try {
+      await sendShopClaimNotification(businessEmail, req.user.name || "Owner", shopName, "Address Pending", claimRequest._id);
+    } catch (mailError) {
+      console.error("Failed to send shop claim notification email:", mailError.message);
+    }
 
     res.status(201).json({
       success: true,

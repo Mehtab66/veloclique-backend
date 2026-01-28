@@ -1,678 +1,301 @@
-import getTransporter from "../config/mailer.js";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import resend from '../config/resend.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Path to email templates directory
+const TEMPLATES_DIR = path.join(__dirname, '../../src/email-templates');
 
 const ORG_NAME = process.env.APP_NAME || "VéloCliqué";
+const DEFAULT_FROM = process.env.EMAIL_FROM_DEFAULT || 'VéloCliqué <hello@veloclique.com>';
+const NOREPLY_FROM = process.env.EMAIL_FROM_NOREPLY || 'VéloCliqué <noreply@veloclique.com>';
+const REPLY_TO = process.env.EMAIL_REPLY_TO || 'hello@veloclique.com';
 
 /**
- * Send a signup verification OTP to the provided email address.
- * @param {string} email
- * @param {string} otp
+ * Load and compile an HTML template
+ * @param {string} templateName - The filename of the template
+ * @param {Object} variables - Key-value pairs to replace in the template
+ * @returns {string} - The compiled HTML
  */
-export const sendOTPEmail = async (email, otp) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the verification code");
-  }
-
-  // Get FROM address dynamically (in case env vars load later)
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} verification code`,
-    text: `Your ${ORG_NAME} verification code is ${otp}. This code will expire in 10 minutes.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Use the following verification code to finish signing up for ${ORG_NAME}:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
+const loadTemplate = (templateName, variables = {}) => {
   try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ OTP email sent to ${email}. Message ID: ${info.messageId}`);
-    return info;
+    const filePath = path.join(TEMPLATES_DIR, templateName);
+    let html = fs.readFileSync(filePath, 'utf8');
+
+    // Replace variables {{key}} with values
+    Object.keys(variables).forEach(key => {
+      const regex = new RegExp(`{{${key}}}`, 'g');
+      html = html.replace(regex, variables[key] || '');
+    });
+
+    return html;
   } catch (error) {
-    console.error("❌ Failed to send OTP email:", error.message);
-    throw new Error(`Unable to send verification email: ${error.message}`);
+    console.warn(`Warning: Template ${templateName} not found at ${path.join(TEMPLATES_DIR, templateName)}. Falling back to simple delivery.`);
+    return null;
   }
 };
 
 /**
- * Send password reset OTP email
- * @param {string} email
- * @param {string} otp
+ * Common sendEmail function using Resend
  */
-export const sendPasswordResetOTPEmail = async (email, otp) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the verification code");
+const sendEmail = async ({ to, subject, html, text, from = DEFAULT_FROM, replyTo = REPLY_TO, attachments = [] }) => {
+  try {
+    const payload = {
+      from,
+      to,
+      subject,
+      html,
+      reply_to: replyTo,
+      attachments
+    };
+
+    if (text) payload.text = text;
+
+    const { data, error } = await resend.emails.send(payload);
+
+    if (error) {
+      console.error('❌ Resend logic error:', error);
+      throw error;
+    }
+
+    console.log(`✅ Email sent successfully to ${to}. ID: ${data.id}`);
+    return data;
+  } catch (error) {
+    console.error('❌ Failed to send email via Resend:', error.message);
+    throw new Error(`Email delivery failed: ${error.message}`);
   }
+};
 
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
-  }
-
-  const mailOptions = {
+/**
+ * 01 - Welcome Email
+ */
+export const sendWelcomeEmail = async (email, firstName) => {
+  const html = loadTemplate('01-welcome-email.html', { firstName });
+  return sendEmail({
     to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} password reset code`,
-    text: `Your ${ORG_NAME} password reset code is ${otp}. This code will expire in 10 minutes.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Use the following verification code to reset your password for ${ORG_NAME}:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Password reset OTP email sent to ${email}. Message ID: ${info.messageId}`);
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send password reset OTP email:", error.message);
-    throw new Error(`Unable to send password reset email: ${error.message}`);
-  }
+    subject: `Welcome to ${ORG_NAME}, ${firstName}!`,
+    html: html || `<h1>Welcome to ${ORG_NAME}, ${firstName}!</h1>`,
+    from: DEFAULT_FROM
+  });
 };
 
-// Email change notification
-export const sendEmailChangeNotification = async (oldEmail, newEmail) => {
-  if (!oldEmail || !newEmail) {
-    throw new Error("Both old and new email addresses are required");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: oldEmail,
-    from: fromAddress,
-    subject: `${ORG_NAME} Email Address Changed`,
-    text: `Your ${ORG_NAME} email address has been changed from ${oldEmail} to ${newEmail}. If you didn't make this change, please contact support immediately.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Your email address for ${ORG_NAME} has been successfully updated.
-        </p>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #FF6A13; padding: 16px; margin: 20px 0;">
-          <p style="margin: 0;"><strong>Previous Email:</strong> ${oldEmail}</p>
-          <p style="margin: 8px 0 0 0;"><strong>New Email:</strong> ${newEmail}</p>
-        </div>
-        <p style="font-size: 14px; color: #555;">
-          If you did not make this change, please contact our support team immediately to secure your account.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Email change notification sent to ${oldEmail}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error(
-      "❌ Failed to send email change notification:",
-      error.message
-    );
-    throw new Error(
-      `Unable to send email change notification: ${error.message}`
-    );
-  }
-};
-
-// Data export notification
-export const sendDataExportEmail = async (email, downloadLink, expiresAt) => {
-  if (!email || !downloadLink || !expiresAt) {
-    throw new Error("Email, download link, and expiration date are required");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const formattedDate = new Date(expiresAt).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+/**
+ * 02 - Email Verification / OTP
+ */
+export const sendOTPEmail = async (email, otp, firstName = "Rider") => {
+  const html = loadTemplate('02-email-verification.html', {
+    firstName,
+    verificationUrl: otp // User will see the OTP code where the URL would be
   });
 
-  const mailOptions = {
+  return sendEmail({
     to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Your Data Export is Ready`,
-    text: `Your ${ORG_NAME} data export is ready for download. Download link: ${downloadLink}. This link expires on ${formattedDate}.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Your ${ORG_NAME} data export has been prepared and is ready for download.
-        </p>
-        <div style="text-align: center; margin: 24px 0;">
-          <a href="${downloadLink}" style="background-color: #FF6A13; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block;">
-            Download My Data
-          </a>
-        </div>
-        <p style="font-size: 14px; color: #555; text-align: center;">
-          This download link will expire on <strong>${formattedDate}</strong>
-        </p>
-        <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; padding: 16px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Security Notice:</strong></p>
-          <p style="margin: 0; font-size: 14px; color: #555;">
-            • This link is unique to you and should not be shared<br/>
-            • The download will be available for 24 hours<br/>
-            • If you did not request this export, please contact support immediately
-          </p>
-        </div>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Data export email sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send data export email:", error.message);
-    throw new Error(`Unable to send data export email: ${error.message}`);
-  }
+    subject: `Verify your email address`,
+    html: html || `<p>Your verification code is: <strong>${otp}</strong></p>`,
+    from: NOREPLY_FROM
+  });
 };
 
-// Account deletion confirmation
-export const sendAccountDeletionEmail = async (email) => {
-  if (!email) {
-    throw new Error("Email is required");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const deletionDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-  const formattedDate = deletionDate.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+/**
+ * 03 - Password Reset (OTP version)
+ */
+export const sendPasswordResetOTPEmail = async (email, otp, firstName = "Rider") => {
+  const html = loadTemplate('03-password-reset.html', {
+    firstName,
+    resetUrl: otp
   });
 
-  const mailOptions = {
+  return sendEmail({
     to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Account Deletion Confirmation`,
-    text: `Your ${ORG_NAME} account deletion has been scheduled and will be permanently deleted on ${formattedDate}. If you didn't request this, please contact support immediately.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          We've received your request to delete your ${ORG_NAME} account.
-        </p>
-        <div style="background-color: #fff3f3; border: 1px solid #ffcdd2; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0 0 12px 0; font-size: 18px; color: #d32f2f; font-weight: bold;">
-            ⚠️ Account Deletion Scheduled
-          </p>
-          <p style="margin: 0; font-size: 16px;">
-            Your account has been scheduled for permanent deletion on:<br/>
-            <strong style="font-size: 18px;">${formattedDate}</strong>
-          </p>
-        </div>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          During this 30-day period, your account will be in a deactivated state. If you change your mind, you can:
-        </p>
-        <ul style="font-size: 16px; color: #555; margin-bottom: 20px;">
-          <li>Contact our support team to cancel the deletion</li>
-          <li>Log in to your account (you'll have access until the deletion date)</li>
-        </ul>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #555; padding: 16px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px; color: #555;">
-            <strong>Important:</strong> After ${formattedDate}, all your data will be permanently removed and cannot be recovered.
-          </p>
-        </div>
-        <p style="font-size: 14px; color: #777; margin-top: 24px;">
-          If you did not request this account deletion, please contact our support team immediately to secure your account.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Account deletion email sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send account deletion email:", error.message);
-    throw new Error(`Unable to send account deletion email: ${error.message}`);
-  }
+    subject: `Reset your ${ORG_NAME} password`,
+    html: html || `<p>Your password reset code is: <strong>${otp}</strong></p>`,
+    from: NOREPLY_FROM
+  });
 };
 
+/**
+ * 04 - Contribution Confirmation
+ */
+export const sendContributionConfirmation = async (email, firstName, tierName, amount, contributionType) => {
+  const html = loadTemplate('04-contribution-confirmation.html', {
+    firstName,
+    tierName,
+    amount,
+    contributionType,
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  });
+
+  return sendEmail({
+    to: email,
+    subject: `Thank you for supporting ${ORG_NAME}!`,
+    html: html || `<h1>Thank you for your contribution!</h1>`,
+    from: DEFAULT_FROM
+  });
+};
+
+/**
+ * 05 - Contact Form Confirmation (To User)
+ */
+export const sendContactFormConfirmation = async (email, firstName, subject, message) => {
+  const html = loadTemplate('05-contact-form-confirmation.html', {
+    firstName,
+    subject,
+    message,
+    date: new Date().toLocaleString()
+  });
+
+  return sendEmail({
+    to: email,
+    subject: `We received your message`,
+    html: html || `<h1>We received your message</h1>`,
+    from: DEFAULT_FROM
+  });
+};
+
+/**
+ * 06 - Account Deletion Confirmation (After Deletion)
+ */
+export const sendAccountDeletionEmail = async (email, firstName = "Rider") => {
+  const html = loadTemplate('06-account-deletion-confirmation.html', {
+    firstName,
+    deletionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  });
+
+  return sendEmail({
+    to: email,
+    subject: `Your ${ORG_NAME} account has been deleted`,
+    html: html || `<h1>Account Deleted</h1>`,
+    from: NOREPLY_FROM
+  });
+};
+
+// Alias for compatibility
+export const sendAccountDeletionConfirmation = sendAccountDeletionEmail;
+
+/**
+ * 07 - Shop Claim Notification
+ */
+export const sendShopClaimNotification = async (email, firstName, shopName, shopAddress, requestId) => {
+  const html = loadTemplate('07-shop-claim-notification.html', {
+    firstName,
+    shopName,
+    shopAddress,
+    requestId
+  });
+
+  return sendEmail({
+    to: email,
+    subject: `Shop claim request received`,
+    html: html || `<h1>Shop claim request received</h1>`,
+    from: DEFAULT_FROM
+  });
+};
+
+/**
+ * 08 - Internal Contact Notification (To Admin)
+ */
+export const sendInternalContactNotification = async (senderName, senderEmail, subject, message, attachments = []) => {
+  const html = loadTemplate('08-internal-contact-notification.html', {
+    senderName,
+    senderEmail,
+    subject,
+    message,
+    timestamp: new Date().toLocaleString()
+  });
+
+  return sendEmail({
+    to: REPLY_TO,
+    subject: `New contact form submission: ${subject}`,
+    html: html || `<h1>New submission from ${senderName}</h1>`,
+    from: NOREPLY_FROM,
+    attachments
+  });
+};
+
+/**
+ * OTP for email change
+ */
 export const sendEmailChangeOTP = async (email, otp) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the verification code");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Email Change Verification`,
-    text: `Your ${ORG_NAME} email change verification code is ${otp}. This code will expire in 10 minutes.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          You've requested to change your email address for ${ORG_NAME}. Use the following verification code to confirm this change:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. If you didn't request this email change, please secure your account immediately.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Email change OTP sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send email change OTP:", error.message);
-    throw new Error(
-      `Unable to send email change verification: ${error.message}`
-    );
-  }
-};
-
-export const sendPasswordChangedEmail = async (email) => {
-  if (!email) {
-    throw new Error("Email is required");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Password Changed Successfully`,
-    text: `Your ${ORG_NAME} password has been changed successfully. If you didn't make this change, please contact support immediately.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Your ${ORG_NAME} password was recently changed.
-        </p>
-        <div style="background-color: #f0f9ff; border: 1px solid #b3e0ff; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0; font-size: 16px;">
-            ✅ <strong>Password Change Confirmed</strong><br/>
-            <span style="color: #555; font-size: 14px;">The password for your account has been updated successfully.</span>
-          </p>
-        </div>
-        <p style="font-size: 14px; color: #555;">
-          For security, all other active sessions have been logged out. You'll need to log in again on other devices.
-        </p>
-        <div style="background-color: #f9f9f9; border-left: 4px solid #ff6a13; padding: 16px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px; color: #555;">
-            <strong>Security Notice:</strong> If you did not make this password change, please contact our support team immediately to secure your account.
-          </p>
-        </div>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Password changed email sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send password changed email:", error.message);
-    throw new Error(`Unable to send password changed email: ${error.message}`);
-  }
-};
-
-export const sendTwoFactorOTP = async (email, otp) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the 2FA code");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Two-Factor Authentication Code`,
-    text: `Your ${ORG_NAME} 2FA verification code is ${otp}. This code will expire in 10 minutes.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Use the following code to enable Two-Factor Authentication for your ${ORG_NAME} account:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. 
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ 2FA OTP sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send 2FA OTP:", error.message);
-    throw new Error(
-      `Unable to send 2FA verification: ${error.message}`
-    );
-  }
-};
-
-export const sendShopDeletionOTP = async (email, otp, shopName) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the deletion code");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Shop Deletion Verification Code`,
-    text: `Your verification code to delete shop "${shopName || 'your shop'}" is ${otp}. This code will expire in 10 minutes. If you did not request this, please ignore this email.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          You've requested to delete your shop <strong>"${shopName || 'your shop'}"</strong> from ${ORG_NAME}.
-        </p>
-        <div style="background-color: #fff3f3; border: 1px solid #ffcdd2; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0 0 12px 0; font-size: 14px; color: #d32f2f;">
-            ⚠️ <strong>Warning:</strong> This action is permanent and cannot be undone.
-          </p>
-        </div>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Enter the following verification code to confirm deletion:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. If you did not request this, please ignore this email and your shop will remain safe.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Shop deletion OTP sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send shop deletion OTP:", error.message);
-    throw new Error(
-      `Unable to send shop deletion verification: ${error.message}`
-    );
-  }
+  return sendOTPEmail(email, otp);
 };
 
 /**
- * Send account deletion OTP
- * @param {string} email
- * @param {string} otp
+ * 2FA OTP
+ */
+export const sendTwoFactorOTP = async (email, otp) => {
+  return sendOTPEmail(email, otp);
+};
+
+/**
+ * Account Deletion OTP (Code to confirm deletion)
  */
 export const sendAccountDeletionOTP = async (email, otp) => {
-  if (!email || !otp) {
-    throw new Error("Email and OTP are required to send the deletion code");
-  }
-
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-
-  if (!fromAddress) {
-    throw new Error(
-      "MAIL_FROM or SMTP_USER environment variable is not configured"
-    );
-  }
-
-  const mailOptions = {
-    to: email,
-    from: fromAddress,
-    subject: `${ORG_NAME} Account Deletion Verification Code`,
-    text: `Your verification code to delete your ${ORG_NAME} account is ${otp}. This code will expire in 10 minutes. If you did not request this, please ignore this email.`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111;">
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi there,</p>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          You've requested to delete your ${ORG_NAME} account.
-        </p>
-        <div style="background-color: #fff3f3; border: 1px solid #ffcdd2; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <p style="margin: 0 0 12px 0; font-size: 14px; color: #d32f2f;">
-            ⚠️ <strong>Warning:</strong> This action is permanent and cannot be undone.
-          </p>
-        </div>
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Enter the following verification code to confirm deletion:
-        </p>
-        <p style="font-size: 32px; letter-spacing: 8px; font-weight: bold; margin: 24px 0; text-align: center;">
-          ${otp}
-        </p>
-        <p style="font-size: 14px; color: #555;">
-          This code expires in 10 minutes. If you did not request this, please ignore this email and your account will remain safe.
-        </p>
-        <p style="font-size: 16px; margin-top: 24px;">
-          Ride on,<br/>
-          Team ${ORG_NAME}
-        </p>
-      </div>
-    `,
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(
-      `✅ Account deletion OTP sent to ${email}. Message ID: ${info.messageId}`
-    );
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send account deletion OTP:", error.message);
-    throw new Error(
-      `Unable to send account deletion verification: ${error.message}`
-    );
-  }
+  return sendOTPEmail(email, otp);
 };
 
 /**
- * Send contact form submission email to Admin
- * @param {Object} formData 
- * @param {Object} attachment (Optional) { filename, content, path }
+ * Email change notification (to old email)
+ */
+export const sendEmailChangeNotification = async (oldEmail, newEmail) => {
+  return sendEmail({
+    to: oldEmail,
+    subject: `${ORG_NAME} Email Address Changed`,
+    html: `<div style="font-family: Arial, sans-serif;">
+      <h2>Email Address Changed</h2>
+      <p>Your email address for ${ORG_NAME} has been changed from <strong>${oldEmail}</strong> to <strong>${newEmail}</strong>.</p>
+      <p>If you did not make this change, please contact support immediately.</p>
+    </div>`,
+    from: NOREPLY_FROM
+  });
+};
+
+/**
+ * Password changed notification
+ */
+export const sendPasswordChangedEmail = async (email) => {
+  return sendEmail({
+    to: email,
+    subject: `${ORG_NAME} Password Changed Successfully`,
+    html: `<div style="font-family: Arial, sans-serif;">
+      <h2>Password Changed</h2>
+      <p>Your password for ${ORG_NAME} has been updated successfully.</p>
+      <p>If you did not make this change, please contact support immediately.</p>
+    </div>`,
+    from: NOREPLY_FROM
+  });
+};
+
+/**
+ * Legacy support for old calls
  */
 export const sendContactFormEmail = async (formData, attachment = null) => {
-  const { fullName, email, topic, message } = formData;
-  const ORG_NAME = process.env.ORG_NAME || "VéloCliqué";
-  const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER;
-  const adminEmail = process.env.ADMIN_EMAIL || fromAddress;
-
-  if (!fromAddress) {
-    throw new Error("MAIL_FROM or SMTP_USER environment variable is not configured");
+  let attachments = [];
+  if (attachment) {
+    attachments.push({
+      filename: attachment.originalname || 'attachment',
+      content: attachment.buffer || attachment.content
+    });
   }
+  return sendInternalContactNotification(formData.fullName, formData.email, formData.topic, formData.message, attachments);
+};
 
-  const mailOptions = {
-    to: adminEmail,
-    from: fromAddress,
-    replyTo: email,
-    subject: `[Contact Form] ${topic}: From ${fullName}`,
-    text: `Topic: ${topic}\nName: ${fullName}\nEmail: ${email}\n\nMessage:\n${message}`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #FF6A13; border-bottom: 2px solid #FF6A13; padding-bottom: 10px;">New Contact Form Submission</h2>
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-          <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 120px;">Topic:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #eee;">${topic}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">From:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #eee;">${fullName}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #eee;">${email}</td>
-          </tr>
-        </table>
-        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
-          <h3 style="margin-top: 0; color: #555;">Message:</h3>
-          <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
-        </div>
-        <p style="font-size: 12px; color: #777; margin-top: 30px;">
-          This message was sent via the contact form on ${ORG_NAME}.
-        </p>
-      </div>
-    `,
-    attachments: attachment ? [{
-      filename: attachment.originalname || attachment.filename,
-      content: attachment.buffer || attachment.content,
-      path: attachment.path
-    }] : []
-  };
-
-  try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Contact form email sent to admin. Message ID: ${info.messageId}`);
-    return info;
-  } catch (error) {
-    console.error("❌ Failed to send contact form email:", error.message);
-    throw new Error(`Unable to send contact form email: ${error.message}`);
-  }
+export default {
+  sendWelcomeEmail,
+  sendOTPEmail,
+  sendPasswordResetOTPEmail,
+  sendContributionConfirmation,
+  sendContactFormConfirmation,
+  sendAccountDeletionEmail,
+  sendAccountDeletionConfirmation,
+  sendShopClaimNotification,
+  sendInternalContactNotification,
+  sendContactFormEmail,
+  sendEmailChangeOTP,
+  sendEmailChangeNotification,
+  sendPasswordChangedEmail,
+  sendTwoFactorOTP,
+  sendAccountDeletionOTP
 };

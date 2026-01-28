@@ -3,6 +3,7 @@ import UserDonation from "../models/userDonation.model.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { sendContributionConfirmation } from "../services/emailService.js";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
@@ -130,6 +131,20 @@ export const handleUserDonationWebhook = async (req, res) => {
                     donation.paymentIntentId = session.payment_intent;
                     await donation.save();
                     console.log(`Custom donation ${donation._id} marked as completed.`);
+
+                    // Trigger contribution confirmation email
+                    if (session.customer_email || (session.metadata && session.metadata.userEmail)) {
+                        const email = session.customer_email || session.metadata.userEmail;
+                        const firstName = session.metadata.firstName || "Rider";
+                        const amount = `$${(session.amount_total / 100).toFixed(2)}`;
+                        const tierName = session.metadata.tierName || "Supporter";
+
+                        try {
+                            await sendContributionConfirmation(email, firstName, tierName, amount, "One-time contribution");
+                        } catch (mailError) {
+                            console.error("Failed to send contribution confirmation email:", mailError.message);
+                        }
+                    }
                 }
             } catch (error) {
                 console.error("Error updating custom donation in webhook:", error);
