@@ -2,6 +2,8 @@ import { stripe, STRIPE_PRICES } from "../config/stripe.js";
 import Donation from "../models/donation.model.js";
 import User from "../models/user.model.js";
 import UserDonation from "../models/userDonation.model.js";
+import Shop from "../models/shop.model.js";
+
 import jwt from "jsonwebtoken"; // IMPORTANT: Add this line!
 import dotenv from "dotenv";
 dotenv.config();
@@ -885,14 +887,15 @@ export const cancelSubscription = async (req, res) => {
 };
 // Get name wall entries
 // Get name wall entries
+// Get name wall entries
 export const getNameWallEntries = async (req, res) => {
   try {
-    // Find all completed donations that should be shown on name wall
+    // 1. Fetch regular donations
     const donations = await Donation.find({
       status: "completed",
       showOnNameWall: true,
     })
-      .populate("donorId", "name displayName email")
+      .populate("donorId", "name displayName email role")
       .sort({
         tier: 1,
         amount: -1,
@@ -900,8 +903,14 @@ export const getNameWallEntries = async (req, res) => {
       })
       .limit(1000);
 
-    // Format donations for name wall display
-    const formattedEntries = donations.map((donation) => {
+    // 2. Fetch active shops
+    const shops = await Shop.find({
+      "subscription.status": "active",
+      isProfilePrivate: false, // assuming we don't show private shops
+    }).populate("owner", "name displayName email role");
+
+    // Format regular donations
+    const donorEntries = donations.map((donation) => {
       // For anonymous donors
       if (donation.isAnonymous) {
         return {
@@ -911,23 +920,18 @@ export const getNameWallEntries = async (req, res) => {
           isAnonymous: true,
           createdAt: donation.createdAt,
           originalInfo: donation.anonymousDonor,
+          isShopSponsor: false,
         };
       }
 
       // For registered users
       let displayName;
-
       if (donation.donorId?.displayName) {
-        // Priority 1: Use displayName
         displayName = donation.donorId.displayName;
       } else if (donation.donorId?.name) {
-        // Priority 2: Use name
         displayName = donation.donorId.name;
       } else if (donation.donorId?.email) {
-        // Priority 3: Use email username (without @domain and WITHOUT removing numbers)
-        // Get username part before @
-        const username = donation.donorId.email.split("@")[0];
-        displayName = username; // Keep numbers in username
+        displayName = donation.donorId.email.split("@")[0];
       } else {
         displayName = "Supporter";
       }
@@ -939,13 +943,64 @@ export const getNameWallEntries = async (req, res) => {
         isAnonymous: false,
         createdAt: donation.createdAt,
         userId: donation.donorId?._id,
+        isShopSponsor: donation.donorId?.role === "shop_owner",
       };
+    });
+
+    // Format shop entries
+    const shopEntries = shops.map((shop) => {
+      // Map shop plans to UI tiers if necessary, otherwise use plan name capitalized
+      const planToTier = {
+        commuter: "Commuter",
+        domestique: "Domestique",
+        climber: "Climber",
+        sprinter: "Sprinter",
+        gc_podium: "GC Podium",
+      };
+
+      const tier = planToTier[shop.subscription.plan] || "Shops";
+
+      return {
+        displayName: shop.name,
+        amount: 0, // Amount might be hidden for shops or we could use price
+        tier: tier,
+        isAnonymous: false,
+        createdAt: shop.subscription.currentPeriodStart || shop.createdAt,
+        isShopSponsor: true,
+        shopId: shop._id,
+      };
+    });
+
+    // Combine and sort
+    const allEntries = [...donorEntries, ...shopEntries].sort((a, b) => {
+      // Priority based on tier as in frontend
+      const tierPriority = {
+        "Yellow Jersey": 1,
+        Breakaway: 2,
+        Peloton: 3,
+        "GC Podium": 4,
+        Shops: 5,
+        Climber: 6,
+        Sprinter: 7,
+        Commuter: 8,
+        Domestique: 9,
+      };
+
+      const aPriority = tierPriority[a.tier] || 10;
+      const bPriority = tierPriority[b.tier] || 10;
+
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+      }
+
+      // If same tier, sort by date (newest first)
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
     res.json({
       success: true,
-      count: formattedEntries.length,
-      data: formattedEntries,
+      count: allEntries.length,
+      data: allEntries,
     });
   } catch (error) {
     console.error("Error fetching name wall entries:", error);
@@ -956,6 +1011,7 @@ export const getNameWallEntries = async (req, res) => {
     });
   }
 };
+
 
 // Add this function to your donationController.js
 
