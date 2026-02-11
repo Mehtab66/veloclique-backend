@@ -11,6 +11,7 @@ import {
   updateGearPickDetails,
   deleteGearPick,
   getGearPickById,
+  deleteGearPickImage,
 } from "../controllers/gearpickController.js";
 import { upload } from "../middleware/upload.js";
 import { authenticate, optionalAuth } from "../middleware/authMiddleware.js";
@@ -30,7 +31,7 @@ router.get("/:id", optionalAuth, getGearPickById); // GET /api/gear-picks/:id
 
 
 // Protected routes
-router.post("/", authenticate, submitGearPick); // POST /api/gear-picks
+router.post("/", authenticate, upload.array("images", 5), submitGearPick); // POST /api/gear-picks
 router.post("/:id/vote", authenticate, voteOnGearPick); // POST /api/gear-picks/:id/vote
 
 // Admin routes
@@ -40,4 +41,5 @@ router.put("/:id/status", authenticate, isAdmin, updateGearPickStatus); // PUT /
 router.post("/:id/image", authenticate, isAdmin, upload.array("images", 5), uploadGearPickImage);
 router.put("/:id/details", authenticate, isAdmin, updateGearPickDetails);
 router.delete("/:id", authenticate, isAdmin, deleteGearPick);
+router.delete("/:id/image/*", authenticate, deleteGearPickImage);
 export default router;

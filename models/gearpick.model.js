@@ -38,6 +38,11 @@ const GearPickSchema = new mongoose.Schema(
       required: true,
       maxlength: 200,
     },
+    description: {
+      type: String,
+      default: "",
+      maxlength: 1000,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

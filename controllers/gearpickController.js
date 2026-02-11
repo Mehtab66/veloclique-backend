@@ -6,7 +6,7 @@ import cloudinary from "../config/cloudinary.js";
 // @access  Private
 export const submitGearPick = async (req, res) => {
   try {
-    const { gearName, subtitle, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation, description } = req.body;
 
     // Validate required fields
     if (!gearName || !category || !recommendation) {
@@ -16,16 +16,44 @@ export const submitGearPick = async (req, res) => {
       });
     }
 
-    const gearPick = new GearPick({
+    const gearPickData = {
       gearName,
       subtitle: subtitle || "",
       category,
       productLink: productLink || "",
       recommendation,
+      description: description || "",
       userId: req.user._id,
       status: "pending",
-    });
+      images: [],
+    };
 
+    // If images are provided, upload to Cloudinary
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(
+          `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+          {
+            folder: "veloclique/gearpicks",
+            resource_type: "image",
+          }
+        )
+      );
+
+      const uploadResults = await Promise.all(uploadPromises);
+
+      gearPickData.images = uploadResults.map((result) => ({
+        publicId: result.public_id,
+        url: result.secure_url,
+      }));
+
+      // For backward compatibility
+      if (gearPickData.images.length > 0) {
+        gearPickData.image = gearPickData.images[0];
+      }
+    }
+
+    const gearPick = new GearPick(gearPickData);
     const createdGearPick = await gearPick.save();
 
     res.status(201).json({
@@ -372,12 +400,58 @@ export const uploadGearPickImage = async (req, res) => {
   }
 };
 
+export const deleteGearPickImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const publicId = req.params[0]; // Capture from wildcard route
+
+    const gearPick = await GearPick.findById(id);
+
+    if (!gearPick) {
+      return res.status(404).json({
+        success: false,
+        message: "Gear pick not found",
+      });
+    }
+
+    // Delete from Cloudinary
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch (cloudinaryError) {
+      console.error("Cloudinary deletion error:", cloudinaryError);
+      // Continue even if Cloudinary fails, to keep DB in sync
+    }
+
+    // Update database
+    gearPick.images = gearPick.images.filter((img) => img.publicId !== publicId);
+
+    // Update primary image if the deleted one was the primary
+    if (gearPick.image && gearPick.image.publicId === publicId) {
+      gearPick.image = gearPick.images.length > 0 ? gearPick.images[0] : null;
+    }
+
+    await gearPick.save();
+
+    res.json({
+      success: true,
+      message: "Image deleted successfully",
+      data: gearPick.images,
+    });
+  } catch (error) {
+    console.error("Delete gear pick image error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 // @desc    Create gear pick as admin (with approved status)
 // @route   POST /api/gear-picks/admin/create
 // @access  Admin
 export const createGearPickAsAdmin = async (req, res) => {
   try {
-    const { gearName, subtitle, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation, description } = req.body;
 
     // Validate required fields
     if (!gearName || !category || !recommendation) {
@@ -394,6 +468,7 @@ export const createGearPickAsAdmin = async (req, res) => {
       category,
       productLink: productLink || "",
       recommendation,
+      description: description || "",
       userId: req.user._id,
       status: "approved", // Admin-created picks are automatically approved
       images: [],
@@ -449,7 +524,7 @@ export const createGearPickAsAdmin = async (req, res) => {
 // @access  Admin
 export const updateGearPickDetails = async (req, res) => {
   try {
-    const { gearName, subtitle, category, productLink, recommendation } = req.body;
+    const { gearName, subtitle, category, productLink, recommendation, description } = req.body;
 
     if (!gearName || !category || !recommendation) {
       return res.status(400).json({
@@ -472,6 +547,7 @@ export const updateGearPickDetails = async (req, res) => {
     gearPick.category = category;
     gearPick.productLink = productLink || "";
     gearPick.recommendation = recommendation;
+    gearPick.description = description || "";
 
     const updatedGearPick = await gearPick.save();
 
